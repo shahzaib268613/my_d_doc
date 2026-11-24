@@ -1,0 +1,1 @@
+export { WhyMyDiabetesDoc } from './WhyMyDiabetesDoc'

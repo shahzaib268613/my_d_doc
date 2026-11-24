@@ -1,0 +1,1 @@
+export { BrandPartnerships } from './BrandPartnerships'
