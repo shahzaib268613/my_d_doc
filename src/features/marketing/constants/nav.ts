@@ -1,30 +1,23 @@
 import type { NavItem } from '../types/NavItem'
 
-/** Most destinations stay disabled (hash). Home + Blog are live for v1. */
+/** Header destinations stay disabled (hash) for now. */
 export const navItems: NavItem[] = [
-  { label: 'Home', to: '/v1' },
+  { label: 'Home', to: '#' },
   { label: 'About', to: '#' },
-  { label: 'Blog', to: '/blog' },
+  { label: 'Blog', to: '#' },
   { label: 'Brand Partnerships', to: '#' },
   { label: 'Speaking Engagements', to: '#' },
 ]
 
-/** Blog nav is active on Home v1/v4 and public blog pages — not on v2. */
-export function isBlogNavEnabled(pathname: string) {
-  return (
-    pathname === '/v1' ||
-    pathname === '/v3' ||
-    pathname === '/home3' ||
-    pathname.startsWith('/blog')
-  )
+/** Blog nav — currently disabled in the header. */
+export function isBlogNavEnabled(_pathname: string) {
+  return false
 }
 
-/** Home is always navigable on marketing pages. */
-export function isNavItemEnabled(item: NavItem, pathname: string) {
+/** Header nav items are non-navigable until destinations go live. */
+export function isNavItemEnabled(item: NavItem, _pathname: string) {
   if (item.to === '#' || !item.to) return false
-  if (item.label === 'Home') return true
-  if (item.label === 'Blog') return isBlogNavEnabled(pathname)
-  return true
+  return false
 }
 
 export const footerNavItems: NavItem[] = [

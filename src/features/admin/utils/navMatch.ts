@@ -7,7 +7,10 @@ export function isNavPathActive(pathname: string, to: string) {
   if (path === target) return true
 
   if (target === '/admin/blogs') {
-    return /^\/admin\/blogs\/edit(\/|$)/.test(path)
+    return (
+      path === '/admin/blogs' ||
+      /^\/admin\/blogs\/edit(\/|$)/.test(path)
+    )
   }
 
   return false

@@ -27,6 +27,26 @@ export const adminRouteDefs: AdminRouteDef[] = [
     },
   },
   {
+    path: 'blogs/listings',
+    meta: {
+      title: 'Blog Listings',
+      breadcrumbs: crumb(
+        { label: 'Blog Management', to: `${ADMIN_BASE}/blogs` },
+        { label: 'Blog Listings' },
+      ),
+    },
+  },
+  {
+    path: 'blogs/categories',
+    meta: {
+      title: 'Blog Categories',
+      breadcrumbs: crumb(
+        { label: 'Blog Management', to: `${ADMIN_BASE}/blogs` },
+        { label: 'Blog Categories' },
+      ),
+    },
+  },
+  {
     path: 'blogs/edit/:id',
     meta: {
       title: 'Edit Blog',

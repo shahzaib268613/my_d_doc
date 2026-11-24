@@ -26,6 +26,7 @@ import { cn } from '@/shared/utils/cn'
 import { blogApi } from '../api/blogApi'
 import type { BlogStatus } from '../types/blog'
 import { useAdminBlog, useBlogMutations } from '../hooks/useAdminBlogs'
+import { useBlogCategories } from '../hooks/useBlogCategories'
 import { useDebounce } from '../hooks/useDebounce'
 import { normalizeSlugInput, slugifyTitle } from '../utils/slug'
 import {
@@ -80,6 +81,9 @@ export function BlogFormPage({
   const { toast } = useToast()
   const blogQuery = useAdminBlog(id)
   const { create, update } = useBlogMutations()
+  const { activeNames } = useBlogCategories()
+  const categoryOptions =
+    activeNames.length > 0 ? activeNames : blogCategories.map((category) => category.title)
   const contentRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -511,11 +515,15 @@ export function BlogFormPage({
                 <AdminSelect
                   id="category"
                   fullWidth
-                  value={form.category}
+                  value={
+                    categoryOptions.includes(form.category)
+                      ? form.category
+                      : (categoryOptions[0] ?? '')
+                  }
                   aria-label="Category"
-                  options={blogCategories.map((category) => ({
-                    value: category.title,
-                    label: category.title,
+                  options={categoryOptions.map((name) => ({
+                    value: name,
+                    label: name,
                   }))}
                   onChange={(value) => setField('category', value)}
                 />

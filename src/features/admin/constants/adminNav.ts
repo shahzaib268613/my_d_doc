@@ -43,7 +43,7 @@ export const adminNavSections: AdminNavSection[] = [
       },
       {
         id: 'blog',
-        label: 'Blog Management',
+        label: 'Blogs Management',
         icon: Newspaper,
         children: [
           { id: 'blog-all', label: 'All Blogs', to: `${ADMIN_BASE}/blogs` },
@@ -51,13 +51,13 @@ export const adminNavSections: AdminNavSection[] = [
             id: 'blog-listings',
             label: 'Blog Listings',
             icon: List,
-            enabled: false,
+            to: `${ADMIN_BASE}/blogs/listings`,
           },
           {
             id: 'blog-categories',
             label: 'Blog Categories',
             icon: Tags,
-            enabled: false,
+            to: `${ADMIN_BASE}/blogs/categories`,
           },
         ],
       },

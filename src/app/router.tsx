@@ -12,7 +12,9 @@ import {
   CampaignEditorPage,
 } from '@/features/newsletter'
 import { AllBlogsPage } from '@/features/blog/admin/AllBlogsPage'
+import { BlogCategoriesPage } from '@/features/blog/admin/BlogCategoriesPage'
 import { BlogDraftsPage } from '@/features/blog/admin/BlogDraftsPage'
+import { BlogListingsPage } from '@/features/blog/admin/BlogListingsPage'
 import { PublishedBlogsPage } from '@/features/blog/admin/PublishedBlogsPage'
 import { ScheduledBlogsPage } from '@/features/blog/admin/ScheduledBlogsPage'
 import { EditBlogPage } from '@/features/blog/admin/EditBlogPage'
@@ -64,6 +66,10 @@ function adminElementForPath(path: string) {
   switch (path) {
     case 'blogs':
       return <AllBlogsPage />
+    case 'blogs/listings':
+      return <BlogListingsPage />
+    case 'blogs/categories':
+      return <BlogCategoriesPage />
     case 'blogs/drafts':
       return <BlogDraftsPage />
     case 'blogs/published':
@@ -71,7 +77,7 @@ function adminElementForPath(path: string) {
     case 'blogs/scheduled':
       return <ScheduledBlogsPage />
     case 'blogs/create':
-      return <Navigate to="/admin/blogs" replace />
+      return <Navigate to="/admin/blogs/listings" replace />
     case 'blogs/edit/:id':
       return <EditBlogPage />
     case 'newsletter':

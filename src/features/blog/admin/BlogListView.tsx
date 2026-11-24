@@ -14,6 +14,7 @@ import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useToast } from '@/shared/hooks/useToast'
 import type { Blog, BlogStatus } from '../types/blog'
 import { useAdminBlogs, useBlogMutations } from '../hooks/useAdminBlogs'
+import { useBlogCategories } from '../hooks/useBlogCategories'
 import { useDebounce } from '../hooks/useDebounce'
 import { BLOG_STATUS_FILTER_OPTIONS } from '../utils/blogStatusLabels'
 import { BlogPageHero, type BlogHeroVariant } from './BlogPageHero'
@@ -116,6 +117,9 @@ export function BlogListView({ variant }: Props) {
   const meta = LIST_META[variant]
   const [searchParams] = useSearchParams()
   const { toast } = useToast()
+  const { activeNames } = useBlogCategories()
+  const categoryOptions =
+    activeNames.length > 0 ? activeNames : blogCategories.map((category) => category.title)
 
   const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [statusFilter, setStatusFilter] = useState<BlogStatus | 'all'>('all')
@@ -245,9 +249,9 @@ export function BlogListView({ variant }: Props) {
               value={categoryFilter}
               options={[
                 { value: 'all', label: 'All Categories' },
-                ...blogCategories.map((category) => ({
-                  value: category.title,
-                  label: category.title,
+                ...categoryOptions.map((name) => ({
+                  value: name,
+                  label: name,
                 })),
               ]}
               onChange={setCategoryFilter}
@@ -318,6 +322,7 @@ export function BlogListView({ variant }: Props) {
         page={page}
         pageCount={showPagination ? totalPages : 1}
         onPageChange={setPage}
+        sticky={false}
       />
 
       <ConfirmDialog
