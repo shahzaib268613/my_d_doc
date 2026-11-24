@@ -94,21 +94,20 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => {
             const enabled = isNavItemEnabled(item, location.pathname)
-            const to =
-              item.label === 'Home' ? homeTo : enabled ? item.to : '#'
+            const to = enabled ? item.to : '#'
             return (
               <NavLink
                 key={item.label}
                 to={to}
                 end={item.to === '/blog'}
                 onClick={(event) => {
-                  if (!enabled && item.label !== 'Home') event.preventDefault()
+                  if (!enabled) event.preventDefault()
                 }}
                 className={({ isActive }) =>
                   cn(
                     'rounded-lg px-3.5 py-2.5 text-[0.9375rem] font-medium no-underline transition-colors duration-[var(--duration-fast)] hover:bg-soft hover:text-inverse',
                     enabled && isActive ? 'bg-soft text-inverse' : 'text-foreground/90',
-                    !enabled && item.label !== 'Home' && 'cursor-default',
+                    !enabled && 'cursor-default',
                   )
                 }
               >
@@ -176,18 +175,20 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
           <Container className="flex flex-col gap-2 py-4">
             {navItems.map((item) => {
               const enabled = isNavItemEnabled(item, location.pathname)
-              const to =
-                item.label === 'Home' ? homeTo : enabled ? item.to : '#'
+              const to = enabled ? item.to : '#'
               return (
                 <NavLink
                   key={item.label}
                   to={to}
                   end={item.to === '/blog'}
                   onClick={(event) => {
-                    if (!enabled && item.label !== 'Home') event.preventDefault()
+                    if (!enabled) event.preventDefault()
                     setOpenPath(null)
                   }}
-                  className="min-h-[var(--spacing-touch)] rounded-md px-3 py-3 text-lg font-medium no-underline hover:bg-soft hover:text-inverse"
+                  className={cn(
+                    'min-h-[var(--spacing-touch)] rounded-md px-3 py-3 text-lg font-medium no-underline hover:bg-soft hover:text-inverse',
+                    !enabled && 'cursor-default',
+                  )}
                 >
                   {item.label}
                 </NavLink>

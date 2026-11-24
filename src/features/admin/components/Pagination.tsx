@@ -27,7 +27,7 @@ export function Pagination({
         'flex flex-wrap items-center justify-between gap-3 border-t border-[#DCE8F7]',
         sticky
           ? 'sticky bottom-0 z-20 mt-auto -mx-3 shrink-0 bg-[#F4F8FF] px-3 py-1.5 sm:-mx-5 sm:px-5 lg:-mx-6 lg:px-6'
-          : 'pt-2',
+          : 'pt-2 pb-4',
         className,
       )}
     >
