@@ -19,7 +19,7 @@ const NewsletterContext = createContext<NewsletterContextValue | null>(null)
 
 export function NewsletterProvider({ children }: { children: ReactNode }) {
   const addSubscriber = useCallback((input: CreateSubscriberInput) => {
-    return newsletterStorage.add(input)
+    return newsletterStorage.addSubscriber(input)
   }, [])
 
   const value = useMemo(() => ({ addSubscriber }), [addSubscriber])
