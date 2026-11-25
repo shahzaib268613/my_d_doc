@@ -1,8 +1,8 @@
 import type { NavItem } from '../types/NavItem'
 
-/** Header destinations stay disabled (hash) for now. */
+/** Header destinations stay disabled (hash) until the page is live. */
 export const navItems: NavItem[] = [
-  { label: 'Home', to: '#' },
+  { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
   { label: 'Blog', to: '/blog' },
   { label: 'Brand Partnerships', to: '#' },
@@ -29,7 +29,7 @@ export const footerNavItems: NavItem[] = [
 
 /** Footer column 2 — Quick Links */
 export const footerQuickLinks: NavItem[] = [
-  { label: 'Home', to: '/v1' },
+  { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
   { label: 'Blog', to: '/blog' },
   { label: 'Contact', to: '#' },

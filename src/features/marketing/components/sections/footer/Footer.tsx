@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router-dom'
 import logoUrl from '../../../assets/logo.jpg'
 import { siteConfig } from '@/shared/config/site'
 import { Container, SocialIcons } from '@/shared/components/ui'
-import { cn } from '@/shared/utils/cn'
 import { newsletterContent } from '../../../constants/newsletter'
 import {
   footerQuickLinks,
@@ -47,36 +46,18 @@ function FooterLinkList({
 
 export function Footer() {
   const { pathname } = useLocation()
-  const isV3 = pathname === '/v3'
   const year = new Date().getFullYear()
 
   return (
-    <footer
-      className={cn(
-        'relative overflow-hidden bg-[image:var(--gradient-inverse)] text-inverse-foreground',
-        isV3 && 'marketing-v4',
-      )}
-    >
+    <footer className="relative overflow-hidden bg-[image:var(--gradient-inverse)] text-inverse-foreground">
       <div
-        className={cn(
-          'pointer-events-none absolute -left-16 top-8 size-48 rounded-full blur-2xl',
-          isV3 ? 'bg-[#021b44]/55' : 'bg-primary/25',
-        )}
+        className="pointer-events-none absolute -left-16 top-8 size-48 rounded-full bg-primary/25 blur-2xl"
         aria-hidden="true"
       />
       <div
-        className={cn(
-          'pointer-events-none absolute -right-10 bottom-8 size-56 rounded-full blur-2xl',
-          isV3 ? 'bg-[#061d46]/50' : 'bg-primary/20',
-        )}
+        className="pointer-events-none absolute -right-10 bottom-8 size-56 rounded-full bg-primary/20 blur-2xl"
         aria-hidden="true"
       />
-      {isV3 ? (
-        <div
-          className="pointer-events-none absolute left-1/3 top-0 size-64 rounded-full bg-[#2f7fb0]/20 blur-3xl"
-          aria-hidden="true"
-        />
-      ) : null}
 
       <Container className="relative grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:py-16">
         <div className="sm:col-span-2 lg:col-span-1">
@@ -114,7 +95,7 @@ export function Footer() {
             className="mt-5"
             buttonStyle={{
               backgroundColor: '#ffffff',
-              color: isV3 ? '#021b44' : '#1b2f43',
+              color: '#1b2f43',
             }}
           />
         </div>

@@ -30,14 +30,6 @@ const HomePage = lazy(async () => {
   const module = await import('@/features/marketing/pages/HomePage')
   return { default: module.HomePage }
 })
-const HomePage2 = lazy(async () => {
-  const module = await import('@/features/marketing/pages/HomePage2')
-  return { default: module.HomePage2 }
-})
-const HomePage4 = lazy(async () => {
-  const module = await import('@/features/marketing/pages/HomePage4')
-  return { default: module.HomePage4 }
-})
 
 function Loading() {
   return (
@@ -103,7 +95,6 @@ const adminChildren = adminRouteDefs.map((def) =>
 )
 
 const router = createBrowserRouter([
-  { path: '/', element: <Navigate to="/admin" replace /> },
   { path: '/sign-in', element: <Navigate to="/admin" replace /> },
   {
     path: '/admin',
@@ -114,32 +105,19 @@ const router = createBrowserRouter([
     element: <MarketingLayout />,
     children: [
       {
-        path: '/v1',
+        path: '/',
         element: (
           <Suspense fallback={<Loading />}>
             <HomePage latestPosts={<LatestPosts />} />
           </Suspense>
         ),
       },
-      {
-        path: '/v2',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <HomePage2 />
-          </Suspense>
-        ),
-      },
-      {
-        path: '/v3',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <HomePage4 latestPosts={<LatestPosts />} />
-          </Suspense>
-        ),
-      },
-      { path: '/home2', element: <Navigate to="/v2" replace /> },
-      { path: '/home3', element: <Navigate to="/v1" replace /> },
-      { path: '/home4', element: <Navigate to="/v3" replace /> },
+      { path: '/v1', element: <Navigate to="/" replace /> },
+      { path: '/v2', element: <Navigate to="/" replace /> },
+      { path: '/v3', element: <Navigate to="/" replace /> },
+      { path: '/home2', element: <Navigate to="/" replace /> },
+      { path: '/home3', element: <Navigate to="/" replace /> },
+      { path: '/home4', element: <Navigate to="/" replace /> },
       { path: '/about', element: <AboutPage /> },
       { path: '/blog', element: <BlogPage /> },
       { path: '/blog/:slug', element: <BlogPostPage /> },

@@ -14,7 +14,6 @@ type Props = {
 
 export function Navbar({ isAdmin = false, onSignOut }: Props) {
   const location = useLocation()
-  const isV4 = location.pathname === '/v3'
   const [openPath, setOpenPath] = useState<string | null>(null)
   const open = openPath === location.pathname
   const menuId = useId()
@@ -43,50 +42,31 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
 
   function subscribeTarget() {
     setOpenPath(null)
-    if (
-      location.pathname === '/v1' ||
-      location.pathname === '/v2' ||
-      location.pathname === '/v3'
-    ) {
+    if (location.pathname === '/') {
       document.getElementById('newsletter')?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       })
       return
     }
-    window.location.assign('/v1#newsletter')
+    window.location.assign('/#newsletter')
   }
 
-  const homeTo = isV4 ? '/v3' : '/v1'
-
-  const bar = (
-    <>
-      <Container
-        className={cn(
-          'flex items-center justify-between gap-3',
-          isV4 ? 'min-h-[4.25rem] px-3 sm:min-h-[4.5rem] sm:px-4' : 'min-h-20',
-        )}
-      >
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/95 shadow-sm backdrop-blur-md">
+      <Container className="flex min-h-20 items-center justify-between gap-3">
         <Link
-          to={homeTo}
+          to="/"
           className="flex min-h-[var(--spacing-touch)] items-center gap-2.5 no-underline"
         >
           <img
             src={logoUrl}
             alt={siteConfig.name}
-            className={cn(
-              'rounded-full object-cover ring-2 ring-soft',
-              isV4 ? 'size-10 sm:size-11' : 'size-12 sm:size-14',
-            )}
+            className="size-12 rounded-full object-cover ring-2 ring-soft sm:size-14"
             width={56}
             height={56}
           />
-          <span
-            className={cn(
-              'font-display font-bold tracking-tight text-inverse',
-              isV4 ? 'text-base sm:text-lg' : 'text-lg sm:text-xl',
-            )}
-          >
+          <span className="font-display text-lg font-bold tracking-tight text-inverse sm:text-xl">
             {siteConfig.name}
           </span>
         </Link>
@@ -99,7 +79,7 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
               <NavLink
                 key={item.label}
                 to={to}
-                end={item.to === '/blog'}
+                end={item.to === '/' || item.to === '/blog'}
                 onClick={(event) => {
                   if (!enabled) event.preventDefault()
                 }}
@@ -162,12 +142,7 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
       {open ? (
         <div
           id={menuId}
-          className={cn(
-            'lg:hidden',
-            isV4
-              ? 'border-t border-border/60 bg-white/80 backdrop-blur-xl'
-              : 'border-t border-border bg-surface',
-          )}
+          className="border-t border-border bg-surface lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation"
@@ -180,7 +155,7 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
                 <NavLink
                   key={item.label}
                   to={to}
-                  end={item.to === '/blog'}
+                  end={item.to === '/' || item.to === '/blog'}
                   onClick={(event) => {
                     if (!enabled) event.preventDefault()
                     setOpenPath(null)
@@ -216,28 +191,6 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
           </Container>
         </div>
       ) : null}
-    </>
-  )
-
-  if (isV4) {
-    return (
-      <header className="pointer-events-none fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4">
-        <div
-          className={cn(
-            'pointer-events-auto mx-auto w-full max-w-[85rem] overflow-hidden rounded-2xl',
-            'border border-white/55 bg-white/70 shadow-[0_8px_28px_rgba(2,27,68,0.14)]',
-            'backdrop-blur-xl backdrop-saturate-150',
-          )}
-        >
-          {bar}
-        </div>
-      </header>
-    )
-  }
-
-  return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/95 shadow-sm backdrop-blur-md">
-      {bar}
     </header>
   )
 }
