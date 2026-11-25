@@ -27,10 +27,12 @@ export function Testimonials() {
           <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             What patients say
           </h2>
+        </Reveal>
 
-          <ul className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-            {testimonials.map((item) => (
-              <li key={`${item.name}-${item.text}`} className="min-w-0">
+        <ul className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+          {testimonials.map((item, index) => (
+            <li key={`${item.name}-${item.text}`} className="min-w-0">
+              <Reveal delayMs={(index % 3) * 70}>
                 <figure>
                   <StarRating rating={item.rating} />
                   <blockquote className="mt-3 text-base leading-relaxed text-muted-foreground">
@@ -40,10 +42,10 @@ export function Testimonials() {
                     {item.name}
                   </figcaption>
                 </figure>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
       </Container>
     </Section>
   )
