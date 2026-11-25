@@ -4,20 +4,21 @@ import type { NavItem } from '../types/NavItem'
 export const navItems: NavItem[] = [
   { label: 'Home', to: '#' },
   { label: 'About', to: '#' },
-  { label: 'Blog', to: '#' },
+  { label: 'Blog', to: '/blog' },
   { label: 'Brand Partnerships', to: '#' },
   { label: 'Speaking Engagements', to: '#' },
 ]
 
-/** Blog nav — currently disabled in the header. */
-export function isBlogNavEnabled(_pathname: string) {
-  return false
+/** Blog nav is active on public blog routes. */
+export function isBlogNavEnabled(pathname: string) {
+  return pathname.startsWith('/blog')
 }
 
-/** Header nav items are non-navigable until destinations go live. */
-export function isNavItemEnabled(item: NavItem, _pathname: string) {
+/** Real destinations are navigable; hash placeholders stay inactive. */
+export function isNavItemEnabled(item: NavItem, pathname: string) {
   if (item.to === '#' || !item.to) return false
-  return false
+  if (item.label === 'Blog') return isBlogNavEnabled(pathname) || item.to === '/blog'
+  return true
 }
 
 export const footerNavItems: NavItem[] = [
