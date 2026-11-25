@@ -20,6 +20,7 @@ import { ScheduledBlogsPage } from '@/features/blog/admin/ScheduledBlogsPage'
 import { EditBlogPage } from '@/features/blog/admin/EditBlogPage'
 import { BlogDashboardPage } from '@/features/blog/admin/BlogDashboardPage'
 import { LatestPosts } from '@/features/blog/components/LatestPosts'
+import { AboutPage } from '@/features/about'
 import { BlogPage } from '@/features/blog/pages/BlogPage'
 import { BlogPostPage } from '@/features/blog/pages/BlogPostPage'
 import { Container, Section, Spinner } from '@/shared/components/ui'
@@ -139,6 +140,7 @@ const router = createBrowserRouter([
       { path: '/home2', element: <Navigate to="/v2" replace /> },
       { path: '/home3', element: <Navigate to="/v1" replace /> },
       { path: '/home4', element: <Navigate to="/v3" replace /> },
+      { path: '/about', element: <AboutPage /> },
       { path: '/blog', element: <BlogPage /> },
       { path: '/blog/:slug', element: <BlogPostPage /> },
     ],
