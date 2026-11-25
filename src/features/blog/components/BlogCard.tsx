@@ -51,10 +51,10 @@ export function BlogCard({ post, size = 'default' }: Props) {
             size === 'tall' ? 'p-4' : 'p-5',
           )}
         >
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <Badge className="w-fit max-w-full truncate">{post.category}</Badge>
-            <p className="text-xs text-muted-foreground">
-              {formatDate(post.publishedAt)} · {post.readingTimeMinutes} min read
+          <div className="flex min-w-0 items-center justify-between gap-2">
+            <Badge className="w-fit min-w-0 max-w-[65%] truncate">{post.category}</Badge>
+            <p className="shrink-0 text-right text-xs text-muted-foreground">
+              {formatDate(post.publishedAt)}
             </p>
           </div>
           <h3

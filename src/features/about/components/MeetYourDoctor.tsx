@@ -21,15 +21,21 @@ export function MeetYourDoctor() {
               </div>
             </div>
 
-            <figure className="w-full max-w-[22rem] justify-self-center lg:max-w-none lg:justify-self-end">
+            <figure className="relative w-full max-w-[22rem] justify-self-center lg:max-w-none lg:justify-self-end">
               {aboutDoctor.photoUrl ? (
-                <img
-                  src={aboutDoctor.photoUrl}
-                  alt={aboutDoctor.photoAlt}
-                  className="aspect-[4/5] w-full rounded-2xl object-cover shadow-sm ring-1 ring-border"
-                  width={352}
-                  height={440}
-                />
+                <>
+                  <img
+                    src={aboutDoctor.photoUrl}
+                    alt={aboutDoctor.photoAlt}
+                    className="aspect-[4/5] w-full object-cover"
+                    width={352}
+                    height={440}
+                  />
+                  <span
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface via-surface/70 to-transparent"
+                    aria-hidden="true"
+                  />
+                </>
               ) : (
                 <div
                   className="flex aspect-[4/5] w-full items-center justify-center rounded-2xl bg-soft font-display text-5xl font-bold tracking-wide text-primary ring-1 ring-primary/15"
