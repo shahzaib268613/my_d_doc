@@ -9,8 +9,10 @@ type Props = HTMLAttributes<HTMLDivElement> & {
 
 export function Reveal({ children, className, delayMs = 0, style, ...props }: Props) {
   const { ref, visible, reducedMotion } = useScrollReveal<HTMLDivElement>({
-    threshold: 0.12,
-    rootMargin: '0px 0px -8% 0px',
+    // Reveal as soon as a sliver enters the viewport so tall About sections
+    // are not left as empty opacity-0 blocks while scrolling.
+    threshold: 0.01,
+    rootMargin: '0px 0px 12% 0px',
   })
 
   return (

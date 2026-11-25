@@ -42,27 +42,27 @@ export const siteConfig = {
     {
       platform: 'instagram',
       label: 'Instagram',
-      href: null, // TODO(content)
+      href: 'https://www.instagram.com/mydiabetesdoc/',
     },
     {
       platform: 'facebook',
       label: 'Facebook',
-      href: null, // TODO(content)
+      href: 'https://www.facebook.com/mydiabetesdoc/?rdid=WO2CkB2dV9ICi2Pm',
     },
     {
       platform: 'tiktok',
       label: 'TikTok',
-      href: null, // TODO(content)
+      href: 'https://www.tiktok.com/@mydiabetesdoc?_r=1&_t=ZT-97RHmccHHHK',
     },
     {
       platform: 'x',
       label: 'X',
-      href: null, // TODO(content)
+      href: 'https://x.com/mydiabetesdoc77?s=21',
     },
     {
       platform: 'linkedin',
       label: 'LinkedIn',
-      href: null, // TODO(content)
+      href: 'https://www.linkedin.com/company/mydiabetesdoc',
     },
   ] satisfies readonly SocialLink[],
 } as const

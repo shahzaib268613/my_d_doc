@@ -1,3 +1,5 @@
+import doctorPortrait from '../assets/doctor.png'
+
 export const aboutMeta = {
   title: 'About | My Diabetes Doc',
   description:
@@ -14,8 +16,7 @@ export const aboutDoctor = {
   name: 'Dr. Jonas Leibowitz, MD',
   role: 'Endocrinologist and founder of My Diabetes Doc',
   initials: 'JL',
-  // Set when the client provides a portrait; null shows the initials fallback.
-  photoUrl: null as string | null,
+  photoUrl: doctorPortrait,
   photoAlt: 'Dr. Jonas Leibowitz, MD',
   paragraphs: [
     'Living with diabetes means making decisions every day, and good care should make those decisions clearer, not harder.',
