@@ -92,7 +92,8 @@ export function AdminSidebar({
         collapsed && 'lg:w-[4.5rem]',
       )}
       style={{
-        background: 'linear-gradient(180deg, #021b44 0%, #041633 48%, #061d46 100%)',
+        background:
+          'linear-gradient(180deg, var(--inverse) 0%, var(--admin-sidebar-deep) 48%, var(--admin-sidebar-mid) 100%)',
       }}
     >
       <div className="flex h-16 shrink-0 items-center gap-2 border-b border-white/10 px-3">
@@ -100,7 +101,7 @@ export function AdminSidebar({
           to="/admin"
           onClick={closeMobile}
           className={cn(
-            'flex min-w-0 flex-1 items-center gap-2.5 no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+            'flex min-w-0 flex-1 items-center gap-2.5 no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
             collapsed && 'lg:hidden',
           )}
         >
@@ -112,17 +113,17 @@ export function AdminSidebar({
             height={36}
           />
           <span id={brandTitleId} className="min-w-0 leading-tight">
-            <span className="block truncate text-sm font-bold text-white">
+            <span className="block truncate text-sm font-bold text-inverse-foreground">
               {siteConfig.name}
             </span>
-            <span className="block truncate text-[0.6875rem] font-medium text-white/55">
+            <span className="block truncate text-[0.6875rem] font-medium text-inverse-muted">
               Admin Panel
             </span>
           </span>
         </Link>
         <IconButton
           label="Close menu"
-          className="ml-auto text-white hover:bg-white/10 focus-visible:outline-[#2f7fb0] lg:hidden"
+          className="ml-auto text-inverse-foreground hover:bg-white/10 focus-visible:outline-ring lg:hidden"
           onClick={closeMobile}
         >
           <X className="size-5" />
@@ -130,7 +131,7 @@ export function AdminSidebar({
         <IconButton
           label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className={cn(
-            'hidden text-white/90 hover:bg-white/10 focus-visible:outline-[#2f7fb0] lg:inline-flex',
+            'hidden text-inverse-foreground/90 hover:bg-white/10 focus-visible:outline-ring lg:inline-flex',
             collapsed ? 'mx-auto' : 'ml-auto shrink-0',
           )}
           onClick={() => onCollapsedChange(!collapsed)}
@@ -229,7 +230,7 @@ export function AdminSidebar({
         ))}
       </nav>
 
-      <div className="shrink-0 border-t border-white/10 bg-[#021027]/35 p-2">
+      <div className="shrink-0 border-t border-white/10 bg-black/25 p-2">
         <SidebarMenuItem
           label="Logout"
           icon={LogOut}

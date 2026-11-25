@@ -1,16 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { blogApi } from '../api/blogApi'
-import type { AdminBlogQuery, BlogWritePayload } from '../types/blog'
+import { blogApi } from '@/features/blog/api/blogApi'
+import { blogQueryKeys } from '@/features/blog/hooks/blogQueryKeys'
+import type { AdminBlogQuery, BlogWritePayload } from '@/features/blog/types/blog'
 
-export const blogQueryKeys = {
-  all: ['blogs'] as const,
-  adminLists: () => [...blogQueryKeys.all, 'admin'] as const,
-  adminList: (query: AdminBlogQuery) => [...blogQueryKeys.adminLists(), query] as const,
-  counts: () => [...blogQueryKeys.all, 'counts'] as const,
-  adminDetail: (id: string) => [...blogQueryKeys.all, 'admin', id] as const,
-  publicLists: () => [...blogQueryKeys.all, 'public'] as const,
-  publicDetail: (slug: string) => [...blogQueryKeys.all, 'public', slug] as const,
-}
+export { blogQueryKeys }
 
 export function useAdminBlogs(query: AdminBlogQuery) {
   return useQuery({

@@ -19,7 +19,7 @@ type Props = {
 }
 
 const focusRing =
-  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary'
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring'
 
 export function SidebarMenuItem({
   label,
@@ -38,8 +38,8 @@ export function SidebarMenuItem({
     'group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors duration-[var(--duration-fast)]',
     focusRing,
     active
-      ? 'bg-white text-[#021b44] shadow-sm'
-      : 'text-white/85 hover:bg-white/10 hover:text-white',
+      ? 'bg-surface text-inverse shadow-sm'
+      : 'text-inverse-foreground/85 hover:bg-white/10 hover:text-inverse-foreground',
     collapsed && 'lg:justify-center lg:px-2',
   )
 
@@ -67,8 +67,8 @@ export function SidebarMenuItem({
           'group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors duration-[var(--duration-fast)]',
           focusRing,
           expanded || active
-            ? 'bg-white/10 text-white'
-            : 'text-white/85 hover:bg-white/10 hover:text-white',
+            ? 'bg-white/10 text-inverse-foreground'
+            : 'text-inverse-foreground/85 hover:bg-white/10 hover:text-inverse-foreground',
           collapsed && 'lg:justify-center lg:px-2',
         )}
         aria-expanded={expanded}
@@ -111,8 +111,8 @@ export function SidebarMenuItem({
           focusRing,
           collapsed && 'lg:justify-center lg:px-2',
           isActive || active
-            ? 'bg-white text-[#021b44] shadow-sm'
-            : 'text-white/85 hover:bg-white/10 hover:text-white',
+            ? 'bg-surface text-inverse shadow-sm'
+            : 'text-inverse-foreground/85 hover:bg-white/10 hover:text-inverse-foreground',
         )
       }
     >

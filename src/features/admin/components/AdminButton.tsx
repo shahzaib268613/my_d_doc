@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Button } from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
 
 type Size = 'sm' | 'md' | 'lg'
@@ -10,26 +10,13 @@ type Props = {
   className?: string
   size?: Size
   variant?: Variant
-  /** When set, renders a React Router link with the same styles */
+  /** When set, renders an anchor with the same styles */
   to?: string
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>
 
-const sizeClasses: Record<Size, string> = {
-  sm: 'min-h-9 gap-1.5 px-4 text-sm',
-  md: 'min-h-11 gap-2 px-5 text-sm',
-  lg: 'min-h-11 gap-2 px-6 text-sm',
-}
-
-const variantClasses: Record<Variant, string> = {
-  solid:
-    'bg-[#061D46] text-white shadow-sm hover:bg-[#092B5C]',
-  outline:
-    'border border-[#061D46] bg-transparent text-[#061D46] shadow-none hover:bg-[#EAF3FF]',
-}
-
 /**
- * Reusable admin primary CTA (navy brand).
- * Use as `<AdminButton>` or `<AdminButton to="/path">` for navigation.
+ * Admin CTA wrapper around shared Button (inverse / outline).
+ * Prefer importing Button from shared/components/ui for new code.
  */
 export function AdminButton({
   children,
@@ -40,25 +27,20 @@ export function AdminButton({
   type = 'button',
   ...props
 }: Props) {
-  const styles = cn(
-    'inline-flex items-center justify-center rounded-lg font-semibold no-underline transition-colors',
-    'disabled:pointer-events-none disabled:opacity-50',
-    sizeClasses[size],
-    variantClasses[variant],
-    className,
-  )
+  const sharedVariant = variant === 'solid' ? 'inverse' : 'outline'
+  const styles = cn('rounded-lg', className)
 
   if (to) {
     return (
-      <Link to={to} className={styles}>
+      <Button href={to} variant={sharedVariant} size={size} className={styles}>
         {children}
-      </Link>
+      </Button>
     )
   }
 
   return (
-    <button type={type} className={styles} {...props}>
+    <Button type={type} variant={sharedVariant} size={size} className={styles} {...props}>
       {children}
-    </button>
+    </Button>
   )
 }

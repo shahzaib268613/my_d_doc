@@ -1,6 +1,6 @@
 import { FileEdit, FileText, Newspaper } from 'lucide-react'
 import { StatCard } from '@/features/admin/components/StatCard'
-import type { BlogCounts } from '../types/blog'
+import type { BlogCounts } from '@/features/blog/types/blog'
 
 type Props = {
   counts?: BlogCounts

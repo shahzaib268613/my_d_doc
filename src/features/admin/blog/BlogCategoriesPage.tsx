@@ -2,15 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
 import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
-import { Pagination } from '@/features/admin/components/Pagination'
-import { SearchInput } from '@/features/admin/components/SearchInput'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
-import { ConfirmDialog } from '@/shared/components/ui'
+import { ConfirmDialog, Pagination, SearchInput } from '@/shared/components/ui'
 import { useToast } from '@/shared/hooks/useToast'
-import { CategoryStorageError } from '../api/categoryStorage'
-import { useAdminBlogs } from '../hooks/useAdminBlogs'
-import { useBlogCategories } from '../hooks/useBlogCategories'
-import type { CategoryWriteInput, ManagedBlogCategory } from '../types/category'
+import { CategoryStorageError } from './api/categoryStorage'
+import { useAdminBlogs } from './hooks/useAdminBlogs'
+import { useBlogCategories } from './hooks/useBlogCategories'
+import type { CategoryWriteInput, ManagedBlogCategory } from './types/category'
 import { BlogPageHero } from './BlogPageHero'
 import { CategoryFormModal } from './CategoryFormModal'
 
@@ -107,9 +105,9 @@ export function BlogCategoriesPage() {
       className: 'min-w-[12rem]',
       cell: (row) => (
         <div className="min-w-0 max-w-md">
-          <p className="font-semibold text-[#1a2b4b]">{row.name}</p>
+          <p className="font-semibold text-foreground">{row.name}</p>
           {row.description ? (
-            <p className="mt-0.5 whitespace-normal break-words text-xs leading-relaxed text-[#71839F]">
+            <p className="mt-0.5 whitespace-normal break-words text-xs leading-relaxed text-muted-foreground">
               {row.description}
             </p>
           ) : null}
@@ -120,14 +118,14 @@ export function BlogCategoriesPage() {
       id: 'slug',
       header: 'Slug',
       cell: (row) => (
-        <span className="whitespace-nowrap font-mono text-xs text-[#5B6B82]">{row.slug}</span>
+        <span className="whitespace-nowrap font-mono text-xs text-muted-foreground">{row.slug}</span>
       ),
     },
     {
       id: 'count',
       header: 'Blog Count',
       cell: (row) => (
-        <span className="tabular-nums text-sm font-semibold text-[#1a2b4b]">
+        <span className="tabular-nums text-sm font-semibold text-foreground">
           {row.blogCount}
         </span>
       ),
@@ -153,7 +151,7 @@ export function BlogCategoriesPage() {
             type="button"
             title="Edit"
             aria-label={`Edit ${row.name}`}
-            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-[#DCE8F7] bg-white text-[#10264A] shadow-sm hover:bg-[#F4F8FF]"
+            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-border bg-surface text-foreground shadow-sm hover:bg-background"
             onClick={() => {
               setEditing(row)
               setCreateOpen(true)
@@ -165,7 +163,7 @@ export function BlogCategoriesPage() {
             type="button"
             title="Delete"
             aria-label={`Delete ${row.name}`}
-            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-[#DCE8F7] bg-white text-[#B42318] shadow-sm hover:bg-[#FFF5F5]"
+            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-border bg-surface text-danger shadow-sm hover:bg-danger/10"
             onClick={() => setDeleteTarget(row)}
           >
             <Trash2 className="size-4" aria-hidden="true" />
@@ -186,9 +184,11 @@ export function BlogCategoriesPage() {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <SearchInput
+            variant="outlined"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={setSearch}
             placeholder="Search categories..."
+            ariaLabel="Search categories"
             className="sm:max-w-xs"
           />
           <AdminButton
@@ -210,15 +210,16 @@ export function BlogCategoriesPage() {
           rows={rows}
           rowKey={(row) => row.id}
           emptyMessage="No categories yet. Create your first category."
-          className="rounded-lg border-[#DCE8F7] shadow-sm [&_thead]:bg-[#F4F8FF] [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-[#5B6B82] [&_td]:px-4 [&_td]:py-3.5 [&_td]:align-top"
+          className="rounded-lg border-border shadow-sm [&_thead]:bg-background [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_td]:px-4 [&_td]:py-3.5 [&_td]:align-top"
         />
       </div>
 
       <Pagination
-        page={page}
-        pageCount={pageCount}
+        mode="simple"
+        showPageInfo
+        currentPage={page}
+        totalPages={pageCount}
         onPageChange={setPage}
-        sticky={false}
       />
 
       <CategoryFormModal

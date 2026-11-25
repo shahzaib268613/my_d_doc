@@ -1,7 +1,6 @@
 import { useId, useState, type FormEvent } from 'react'
-import { Button, Input } from '@/shared/components/ui'
+import { Button, FilterSelect, Input } from '@/shared/components/ui'
 import { FormField } from '@/features/admin/components/FormField'
-import { FilterDropdown } from '@/features/admin/components/FilterDropdown'
 import type { NewsletterSubscriber, SubscriberStatus } from '../types'
 
 export type SubscriberFormValues = {
@@ -76,7 +75,8 @@ export function SubscriberForm({
         </FormField>
       </div>
       {showStatus ? (
-        <FilterDropdown
+        <FilterSelect
+          variant="outlined"
           label="Status"
           value={status}
           onChange={(value) => setStatus(value as SubscriberStatus)}

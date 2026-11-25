@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
 import { cn } from '@/shared/utils/cn'
 
-type Variant = 'primary' | 'outline' | 'ghost'
+type Variant = 'primary' | 'outline' | 'ghost' | 'inverse'
 type Size = 'sm' | 'md' | 'lg'
 
 type SharedProps = {
@@ -51,6 +51,8 @@ export function Button({
       'border border-border bg-surface text-foreground shadow-[var(--shadow-button)] hover:border-primary/40 hover:bg-soft hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
     variant === 'ghost' &&
       'bg-transparent text-foreground shadow-none hover:bg-soft hover:shadow-[var(--shadow-button)] active:shadow-none',
+    variant === 'inverse' &&
+      'bg-inverse text-inverse-foreground shadow-[var(--shadow-button)] hover:bg-inverse/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
     className,
   )
 

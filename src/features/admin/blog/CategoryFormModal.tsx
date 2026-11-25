@@ -1,11 +1,10 @@
 import { useEffect, useId, useState, type FormEvent } from 'react'
 import { X } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
-import { AdminSelect } from '@/features/admin/components/AdminSelect'
 import { FormField } from '@/features/admin/components/FormField'
-import { IconButton, Input, Textarea } from '@/shared/components/ui'
-import { normalizeSlugInput, slugifyTitle } from '../utils/slug'
-import type { CategoryStatus, CategoryWriteInput, ManagedBlogCategory } from '../types/category'
+import { FilterSelect, IconButton, Input, Textarea } from '@/shared/components/ui'
+import { normalizeSlugInput, slugifyTitle } from './utils/slug'
+import type { CategoryStatus, CategoryWriteInput, ManagedBlogCategory } from './types/category'
 
 type Props = {
   open: boolean
@@ -81,23 +80,23 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
       <button
         type="button"
         aria-label="Close dialog"
-        className="absolute inset-0 bg-[#021b44]/55 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-overlay backdrop-blur-[2px]"
         onClick={onClose}
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 flex max-h-[min(90dvh,36rem)] w-full max-w-[min(32rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-t-2xl border border-[#DCE8F7] bg-white shadow-lg sm:rounded-xl"
+        className="relative z-10 flex max-h-[min(90dvh,36rem)] w-full max-w-[min(32rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-t-2xl border border-border bg-surface shadow-lg sm:rounded-xl"
       >
-        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-[#DCE8F7] px-4 py-3 sm:px-5">
-          <h2 id={titleId} className="text-lg font-bold text-[#021b44]">
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
+          <h2 id={titleId} className="text-lg font-bold text-inverse">
             {isEdit ? 'Edit Category' : 'Create Category'}
           </h2>
           <IconButton
             label="Close"
             onClick={onClose}
-            className="shrink-0 text-[#5B6B82] hover:bg-[#EAF3FF] hover:text-[#021b44]"
+            className="shrink-0 text-muted-foreground hover:bg-soft hover:text-inverse"
           >
             <X className="size-5" />
           </IconButton>
@@ -106,7 +105,7 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
         <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
           <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4 sm:p-5">
             {error ? (
-              <p className="rounded-lg border border-[#F5C2C0] bg-[#FFF5F5] px-3 py-2 text-sm text-[#B42318]">
+              <p className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
                 {error}
               </p>
             ) : null}
@@ -124,7 +123,7 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
                   }))
                 }}
                 placeholder="e.g. Blood Sugar Management"
-                className="rounded-lg border-[#D6E3F3]"
+                className="rounded-lg border-border"
               />
             </FormField>
 
@@ -140,7 +139,7 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
                   }))
                 }}
                 placeholder="blood-sugar-management"
-                className="rounded-lg border-[#D6E3F3] font-mono text-sm"
+                className="rounded-lg border-border font-mono text-sm"
               />
             </FormField>
 
@@ -153,16 +152,18 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
                 }
                 rows={3}
                 placeholder="Short description of this category"
-                className="rounded-lg border-[#D6E3F3]"
+                className="rounded-lg border-border"
               />
             </FormField>
 
             <FormField id="category-status" label="Status">
-              <AdminSelect
+              <FilterSelect
                 id="category-status"
+                variant="outlined"
+                hideLabel
                 fullWidth
+                label="Category status"
                 value={form.status}
-                aria-label="Category status"
                 options={[
                   { value: 'active', label: 'Active' },
                   { value: 'inactive', label: 'Inactive' },
@@ -177,7 +178,7 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
             </FormField>
           </div>
 
-          <div className="flex shrink-0 justify-end gap-2 border-t border-[#DCE8F7] px-4 py-3 sm:px-5">
+          <div className="flex shrink-0 justify-end gap-2 border-t border-border px-4 py-3 sm:px-5">
             <AdminButton type="button" variant="outline" onClick={onClose}>
               Cancel
             </AdminButton>

@@ -95,46 +95,10 @@
   color-scheme: light;
 }
 
-/* Homepage v4 — deep navy accents (keeps /v1 on classic slate inverse) */
-.marketing-v4 {
-  --inverse: #021b44;
-  --inverse-foreground: #f5f9fc;
-  --inverse-muted: color-mix(in srgb, #f5f9fc 72%, transparent);
-  --overlay: color-mix(in srgb, #021b44 48%, transparent);
-  --gradient-primary: linear-gradient(
-    135deg,
-    #2f7fb0 0%,
-    color-mix(in srgb, #021b44 35%, #2f7fb0) 100%
-  );
-  --gradient-inverse: linear-gradient(
-    145deg,
-    #021b44 0%,
-    #041633 48%,
-    color-mix(in srgb, #2f7fb0 40%, #021b44) 100%
-  );
-}
-
-/* Scoped admin dashboard theme (Blog Management reference palette) */
+/* Admin shell inherits website brand tokens from :root (same product look). */
 .admin-dashboard {
-  --background: #f4f8ff;
-  --surface: #ffffff;
-  --foreground: #10264a;
-  --muted-foreground: #71839f;
-  --primary: #0875f9;
-  --primary-foreground: #ffffff;
-  --soft: #eaf3ff;
-  --muted: #e3edf9;
-  --border: #dce8f7;
-  --ring: #0875f9;
-  --inverse: #021b44;
-  --inverse-foreground: #ffffff;
-  --inverse-muted: color-mix(in srgb, #ffffff 68%, transparent);
-  --overlay: color-mix(in srgb, #021b44 48%, transparent);
-  --shadow-sm-token: 0 1px 2px color-mix(in srgb, #10264a 6%, transparent);
-  --shadow-md-token: 0 4px 16px color-mix(in srgb, #10264a 8%, transparent);
-  --shadow-lg-token: 0 10px 28px color-mix(in srgb, #10264a 10%, transparent);
-  --admin-sidebar-deep: #041633;
-  --admin-sidebar-mid: #061d46;
+  --admin-sidebar-deep: var(--inverse);
+  --admin-sidebar-mid: color-mix(in srgb, var(--inverse) 86%, var(--primary));
 }
 
 @layer base {

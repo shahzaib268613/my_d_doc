@@ -2,9 +2,9 @@ import type { ReactNode } from 'react'
 import { ImageIcon } from 'lucide-react'
 import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
-import type { Blog } from '../types/blog'
-import { formatBlogDate } from '../utils/formatDate'
-import { blogStatusLabel, blogStatusTone } from '../utils/blogStatusLabels'
+import type { Blog } from '@/features/blog/types/blog'
+import { formatBlogDate } from '@/features/blog/utils/formatDate'
+import { blogStatusLabel, blogStatusTone } from './utils/blogStatusLabels'
 import { BlogRowActions } from './BlogRowActions'
 
 type Props = {
@@ -44,7 +44,7 @@ export function BlogTable({
       header: (
         <input
           type="checkbox"
-          className="size-4 rounded border-[#C9D7EA] accent-[#0875F9]"
+          className="size-4 rounded border-border accent-primary"
           checked={allSelected}
           onChange={onToggleSelectAll}
           aria-label="Select all blogs on this page"
@@ -54,7 +54,7 @@ export function BlogTable({
       cell: (blog) => (
         <input
           type="checkbox"
-          className="size-4 rounded border-[#C9D7EA] accent-[#0875F9]"
+          className="size-4 rounded border-border accent-primary"
           checked={selectedIds!.has(blog.id)}
           onChange={() => onToggleSelect!(blog.id)}
           aria-label={`Select ${blog.title}`}
@@ -73,10 +73,10 @@ export function BlogTable({
           <img
             src={blog.coverImage}
             alt=""
-            className="h-12 w-[4.25rem] rounded-lg object-cover ring-1 ring-[#DCE8F7]"
+            className="h-12 w-[4.25rem] rounded-lg object-cover ring-1 ring-border"
           />
         ) : (
-          <span className="inline-flex h-12 w-[4.25rem] items-center justify-center rounded-lg bg-[#F4F8FF] text-[#0875F9] ring-1 ring-[#DCE8F7]">
+          <span className="inline-flex h-12 w-[4.25rem] items-center justify-center rounded-lg bg-background text-primary ring-1 ring-border">
             <ImageIcon className="size-4" aria-hidden="true" />
           </span>
         ),
@@ -87,8 +87,8 @@ export function BlogTable({
       className: 'min-w-[16rem]',
       cell: (blog) => (
         <div className="min-w-0 max-w-md">
-          <p className="truncate text-sm font-semibold text-[#1a2b4b]">{blog.title}</p>
-          <p className="mt-0.5 line-clamp-1 text-xs text-[#71839F]">
+          <p className="truncate text-sm font-semibold text-foreground">{blog.title}</p>
+          <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
             {blog.excerpt || `/${blog.slug}`}
           </p>
         </div>
@@ -114,7 +114,7 @@ export function BlogTable({
     id: 'published',
     header: 'Published On',
     cell: (blog) => (
-      <span className="whitespace-nowrap text-sm text-[#71839F]">
+      <span className="whitespace-nowrap text-sm text-muted-foreground">
         {formatBlogDate(blog.publishedAt ?? blog.updatedAt)}
       </span>
     ),
@@ -141,7 +141,7 @@ export function BlogTable({
       rows={blogs}
       rowKey={(blog) => blog.id}
       emptyMessage={emptyContent ?? 'No blogs match this filter.'}
-      className="rounded-lg border-[#DCE8F7] shadow-sm [&_thead]:bg-[#F4F8FF] [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-[#5B6B82] [&_td]:px-4 [&_td]:py-3.5"
+      className="rounded-lg border-border shadow-sm [&_thead]:bg-background [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_td]:px-4 [&_td]:py-3.5"
     />
   )
 }

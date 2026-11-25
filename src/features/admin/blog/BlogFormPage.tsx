@@ -13,26 +13,25 @@ import {
   Video,
 } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
-import { AdminSelect } from '@/features/admin/components/AdminSelect'
 import { FormField } from '@/features/admin/components/FormField'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { blogCategories } from '@/shared/config/blogCategories'
-import { Input } from '@/shared/components/ui'
+import { FilterSelect, Input } from '@/shared/components/ui'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useToast } from '@/shared/hooks/useToast'
 import { cn } from '@/shared/utils/cn'
-import { blogApi } from '../api/blogApi'
-import type { BlogStatus } from '../types/blog'
-import { useAdminBlog, useBlogMutations } from '../hooks/useAdminBlogs'
-import { useBlogCategories } from '../hooks/useBlogCategories'
-import { useDebounce } from '../hooks/useDebounce'
-import { normalizeSlugInput, slugifyTitle } from '../utils/slug'
+import { blogApi } from '@/features/blog/api/blogApi'
+import type { BlogStatus } from '@/features/blog/types/blog'
+import { useAdminBlog, useBlogMutations } from './hooks/useAdminBlogs'
+import { useBlogCategories } from './hooks/useBlogCategories'
+import { useDebounce } from '@/shared/hooks/useDebounce'
+import { normalizeSlugInput, slugifyTitle } from './utils/slug'
 import {
   BLOG_STATUS_FORM_OPTIONS,
   toFormStatus,
-} from '../utils/blogStatusLabels'
+} from './utils/blogStatusLabels'
 import { BlogPageHero } from './BlogPageHero'
 
 type FormState = {
@@ -56,7 +55,7 @@ const emptyForm: FormState = {
 }
 
 const fieldClass =
-  'w-full rounded-lg border border-[#D6E3F3] bg-white px-3.5 py-2.5 text-sm text-[#10264A] outline-none ring-0 focus:border-[#D6E3F3] focus:outline-none focus:ring-0 placeholder:text-[#9AA8BC]'
+  'w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-foreground outline-none ring-0 focus:border-border focus:outline-none focus:ring-0 placeholder:text-muted-foreground'
 
 export type BlogFormPageProps = {
   /** page = full route view; modal = embed in dialog (create) */
@@ -277,7 +276,7 @@ export function BlogFormPage({
     if (!file) return
     setFormError(null)
     try {
-      const { compressCoverImage } = await import('../utils/compressCoverImage')
+      const { compressCoverImage } = await import('./utils/compressCoverImage')
       const dataUrl = await compressCoverImage(file)
       setField('coverImage', dataUrl)
     } catch (error) {
@@ -308,7 +307,7 @@ export function BlogFormPage({
 
   const saving = create.isPending || update.isPending
   const toolbarBtn =
-    'inline-flex size-9 items-center justify-center rounded-md text-[#5B6B82] transition-colors hover:bg-[#EAF3FF] hover:text-primary'
+    'inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-soft hover:text-primary'
 
   return (
     <div className={cn('min-w-0', isModal ? 'space-y-4' : 'space-y-5')}>
@@ -324,7 +323,7 @@ export function BlogFormPage({
         {formError ? (
           <div
             role="alert"
-            className="mb-4 rounded-lg border border-[#F5C2C7] bg-[#FFF5F5] px-4 py-3 text-sm font-medium text-[#B42318]"
+            className="mb-4 rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm font-medium text-danger"
           >
             {formError}
           </div>
@@ -339,14 +338,14 @@ export function BlogFormPage({
         >
           <section
             className={cn(
-              'min-w-0 space-y-4 rounded-[14px] border border-[#DCE8F7] bg-white shadow-sm',
+              'min-w-0 space-y-4 rounded-[14px] border border-border bg-surface shadow-sm',
               isModal ? 'p-4 sm:p-5' : 'p-5 sm:p-6',
             )}
           >
             <FormField id="title" label="Blog Title" required error={errors.title}>
               <Input
                 id="title"
-                className="rounded-lg border-[#D6E3F3] outline-none ring-0 focus:border-[#D6E3F3] focus:outline-none focus:ring-0"
+                className="rounded-lg border-border outline-none ring-0 focus:border-border focus:outline-none focus:ring-0"
                 placeholder="Enter blog title..."
                 value={form.title}
                 onChange={(event) => handleTitleChange(event.target.value)}
@@ -362,7 +361,7 @@ export function BlogFormPage({
             >
               <Input
                 id="slug"
-                className="rounded-lg border-[#D6E3F3] font-mono text-[0.8125rem] outline-none ring-0 focus:border-[#D6E3F3] focus:outline-none focus:ring-0"
+                className="rounded-lg border-border font-mono text-[0.8125rem] outline-none ring-0 focus:border-border focus:outline-none focus:ring-0"
                 placeholder="my-custom-blog-url"
                 value={form.slug}
                 onChange={(event) => handleSlugChange(event.target.value)}
@@ -373,9 +372,9 @@ export function BlogFormPage({
                 autoComplete="off"
                 spellCheck={false}
               />
-              <p className="mt-1.5 text-xs text-[#5B6B82]">
+              <p className="mt-1.5 text-xs text-muted-foreground">
                 Live URL:{' '}
-                <span className="font-mono text-[#021b44]">
+                <span className="font-mono text-inverse">
                   /blog/{slugifyTitle(form.slug) || '…'}
                 </span>
               </p>
@@ -393,8 +392,8 @@ export function BlogFormPage({
             </FormField>
 
             <FormField id="content" label="Content" required error={errors.content}>
-              <div className="overflow-hidden rounded-lg border border-[#D6E3F3]">
-                <div className="flex flex-wrap gap-0.5 border-b border-[#D6E3F3] bg-[#F7FAFE] px-2 py-1.5">
+              <div className="overflow-hidden rounded-lg border border-border">
+                <div className="flex flex-wrap gap-0.5 border-b border-border bg-background px-2 py-1.5">
                   <button type="button" className={toolbarBtn} title="Bold" onClick={() => wrapSelection('<strong>', '</strong>')}>
                     <Bold className="size-4" />
                   </button>
@@ -404,14 +403,14 @@ export function BlogFormPage({
                   <button type="button" className={toolbarBtn} title="Underline" onClick={() => wrapSelection('<u>', '</u>')}>
                     <Underline className="size-4" />
                   </button>
-                  <span className="mx-1 w-px self-stretch bg-[#D6E3F3]" aria-hidden="true" />
+                  <span className="mx-1 w-px self-stretch bg-border" aria-hidden="true" />
                   <button type="button" className={toolbarBtn} title="Bullet list" onClick={() => wrapSelection('<ul><li>', '</li></ul>')}>
                     <List className="size-4" />
                   </button>
                   <button type="button" className={toolbarBtn} title="Numbered list" onClick={() => wrapSelection('<ol><li>', '</li></ol>')}>
                     <ListOrdered className="size-4" />
                   </button>
-                  <span className="mx-1 w-px self-stretch bg-[#D6E3F3]" aria-hidden="true" />
+                  <span className="mx-1 w-px self-stretch bg-border" aria-hidden="true" />
                   <button type="button" className={toolbarBtn} title="Link" onClick={() => wrapSelection('<a href="">', '</a>')}>
                     <Link2 className="size-4" />
                   </button>
@@ -430,7 +429,7 @@ export function BlogFormPage({
                   ref={contentRef}
                   rows={isModal ? 4 : 5}
                   className={cn(
-                    'w-full resize-none border-0 bg-white px-3.5 py-3 text-sm text-[#10264A] outline-none ring-0 focus:outline-none focus:ring-0 placeholder:text-[#9AA8BC]',
+                    'w-full resize-none border-0 bg-surface px-3.5 py-3 text-sm text-foreground outline-none ring-0 focus:outline-none focus:ring-0 placeholder:text-muted-foreground',
                     isModal ? 'min-h-[100px]' : 'min-h-[120px]',
                   )}
                   placeholder="Write your content here..."
@@ -457,9 +456,9 @@ export function BlogFormPage({
           </section>
 
           <aside className={cn('min-w-0', !isModal && 'xl:sticky xl:top-24 xl:self-start')}>
-            <div className="space-y-4 rounded-[14px] border border-[#DCE8F7] bg-white p-5 shadow-sm">
+            <div className="space-y-4 rounded-[14px] border border-border bg-surface p-5 shadow-sm">
               <div className="space-y-3">
-                <p className="text-sm font-semibold text-[#10264A]">Featured Image</p>
+                <p className="text-sm font-semibold text-foreground">Featured Image</p>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -469,7 +468,7 @@ export function BlogFormPage({
                 />
                 <div
                   className={cn(
-                    'flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#061D46]/25 bg-[#F4F8FF] px-4 text-center',
+                    'flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-inverse/25 bg-background px-4 text-center',
                     isModal ? 'py-4' : 'py-6',
                   )}
                   onDragOver={(event) => event.preventDefault()}
@@ -478,8 +477,8 @@ export function BlogFormPage({
                     void onPickFile(event.dataTransfer.files?.[0])
                   }}
                 >
-                  <CloudUpload className="size-8 text-[#061D46]" aria-hidden="true" />
-                  <p className="text-sm text-[#5B6B82]">Drag & drop an image here or</p>
+                  <CloudUpload className="size-8 text-inverse" aria-hidden="true" />
+                  <p className="text-sm text-muted-foreground">Drag & drop an image here or</p>
                   <AdminButton
                     type="button"
                     size="sm"
@@ -493,17 +492,19 @@ export function BlogFormPage({
                   <img
                     src={form.coverImage}
                     alt=""
-                    className="max-h-40 w-full rounded-xl border border-[#DCE8F7] object-cover"
+                    className="max-h-40 w-full rounded-xl border border-border object-cover"
                   />
                 ) : null}
               </div>
 
               <FormField id="status" label="Status">
-                <AdminSelect
+                <FilterSelect
                   id="status"
+                  variant="outlined"
+                  hideLabel
                   fullWidth
+                  label="Status"
                   value={form.status}
-                  aria-label="Status"
                   options={[...BLOG_STATUS_FORM_OPTIONS]}
                   onChange={(value) =>
                     setField('status', value as Extract<BlogStatus, 'draft' | 'published'>)
@@ -512,15 +513,17 @@ export function BlogFormPage({
               </FormField>
 
               <FormField id="category" label="Category">
-                <AdminSelect
+                <FilterSelect
                   id="category"
+                  variant="outlined"
+                  hideLabel
                   fullWidth
+                  label="Category"
                   value={
                     categoryOptions.includes(form.category)
                       ? form.category
                       : (categoryOptions[0] ?? '')
                   }
-                  aria-label="Category"
                   options={categoryOptions.map((name) => ({
                     value: name,
                     label: name,

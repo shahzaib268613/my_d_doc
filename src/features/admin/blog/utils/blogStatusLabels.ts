@@ -1,5 +1,5 @@
 import type { StatusTone } from '@/features/admin/components/StatusBadge'
-import type { BlogStatus } from '../types/blog'
+import type { BlogStatus } from '@/features/blog/types/blog'
 
 /** UI labels only — API still uses draft | published | scheduled. */
 export type BlogStatusUiLabel = 'Active' | 'Inactive'

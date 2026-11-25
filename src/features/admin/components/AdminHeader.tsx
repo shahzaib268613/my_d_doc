@@ -64,10 +64,10 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
         </IconButton>
 
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-base font-bold tracking-tight text-[#021b44] sm:text-lg">
+          <h1 className="truncate font-display text-base font-bold tracking-tight text-foreground sm:text-lg">
             {meta.title}
           </h1>
-          <p className="mt-0.5 hidden truncate text-xs text-[#71839F] sm:block">
+          <p className="mt-0.5 hidden truncate text-xs text-muted-foreground sm:block">
             {subtitle}
           </p>
         </div>

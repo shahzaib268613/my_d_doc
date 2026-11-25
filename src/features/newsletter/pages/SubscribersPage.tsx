@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react'
 import { Download, Plus, UserCheck, UserRound, Users } from 'lucide-react'
-import { Button, Card, ConfirmDialog } from '@/shared/components/ui'
+import {
+  Button,
+  Card,
+  ConfirmDialog,
+  FilterSelect,
+  Pagination,
+  SearchInput,
+} from '@/shared/components/ui'
 import { AdminToolbar } from '@/features/admin/components/AdminToolbar'
-import { FilterDropdown } from '@/features/admin/components/FilterDropdown'
 import { PageHeader } from '@/features/admin/components/PageHeader'
-import { Pagination } from '@/features/admin/components/Pagination'
-import { SearchInput } from '@/features/admin/components/SearchInput'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { useNewsletter } from '../hooks/useNewsletter'
@@ -145,18 +149,22 @@ export function SubscribersPage({ lockedStatus, title, description }: Props) {
             <AdminToolbar className="mb-0">
               <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-end">
                 <SearchInput
+                  variant="outlined"
                   value={query}
-                  onChange={(event) => {
-                    setQuery(event.target.value)
+                  onChange={(value) => {
+                    setQuery(value)
                     setPage(1)
                   }}
                   placeholder="Search name or email"
+                  ariaLabel="Search name or email"
                   className="w-full sm:max-w-xs"
                 />
                 {!lockedStatus ? (
-                  <FilterDropdown
-                    label="Status"
+                  <FilterSelect
+                    variant="outlined"
                     hideLabel
+                    label="Status"
+                    className="min-w-[10rem]"
                     value={statusFilter}
                     onChange={(value) => {
                       setStatusFilter(value as StatusFilter)
@@ -220,7 +228,14 @@ export function SubscribersPage({ lockedStatus, title, description }: Props) {
         </Card>
       </div>
 
-      <Pagination page={safePage} pageCount={Math.max(1, pageCount)} onPageChange={setPage} />
+      <Pagination
+        mode="simple"
+        showPageInfo
+        sticky
+        currentPage={safePage}
+        totalPages={Math.max(1, pageCount)}
+        onPageChange={setPage}
+      />
 
       <SubscriberModal
         open={modalOpen}

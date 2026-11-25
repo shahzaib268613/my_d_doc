@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { cn } from '@/shared/utils/cn'
-import type { BlogCounts } from '../types/blog'
+import type { BlogCounts } from '@/features/blog/types/blog'
 
 const tabs = [
   { id: 'all', label: 'All Blogs', to: `${ADMIN_BASE}/blogs`, countKey: 'all' as const },

@@ -1,11 +1,9 @@
 import { FileText, Users } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
-import { EmptyState } from '@/shared/components/ui'
+import { EmptyState, FilterSelect, SearchInput } from '@/shared/components/ui'
 import { getAdminRouteMeta } from '../constants/adminRoutes'
 import { AdminToolbar } from '../components/AdminToolbar'
-import { FilterDropdown } from '../components/FilterDropdown'
 import { PageHeader } from '../components/PageHeader'
-import { SearchInput } from '../components/SearchInput'
 import { StatCard } from '../components/StatCard'
 
 export function AdminPlaceholderPage() {
@@ -35,11 +33,20 @@ export function AdminPlaceholderPage() {
         </ul>
       ) : (
         <AdminToolbar>
-          <SearchInput disabled aria-disabled="true" placeholder="Search (coming soon)" />
-          <FilterDropdown
-            label="Status"
+          <SearchInput
+            variant="outlined"
+            disabled
+            value=""
+            onChange={() => {}}
+            placeholder="Search (coming soon)"
+            ariaLabel="Search (coming soon)"
+          />
+          <FilterSelect
+            variant="outlined"
             hideLabel
             disabled
+            label="Status"
+            className="min-w-[10rem]"
             value="all"
             onChange={() => {}}
             options={[

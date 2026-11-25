@@ -2,21 +2,24 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
-import { AdminSelect } from '@/features/admin/components/AdminSelect'
 import { useBlogCreateModal } from './BlogCreateModalContext'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
-import { Pagination } from '@/features/admin/components/Pagination'
-import { SearchInput } from '@/features/admin/components/SearchInput'
 import { blogCategories } from '@/shared/config/blogCategories'
-import { Button, ConfirmDialog } from '@/shared/components/ui'
+import {
+  Button,
+  ConfirmDialog,
+  FilterSelect,
+  Pagination,
+  SearchInput,
+} from '@/shared/components/ui'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useToast } from '@/shared/hooks/useToast'
-import type { Blog, BlogStatus } from '../types/blog'
-import { useAdminBlogs, useBlogMutations } from '../hooks/useAdminBlogs'
-import { useBlogCategories } from '../hooks/useBlogCategories'
-import { useDebounce } from '../hooks/useDebounce'
-import { BLOG_STATUS_FILTER_OPTIONS } from '../utils/blogStatusLabels'
+import type { Blog, BlogStatus } from '@/features/blog/types/blog'
+import { useAdminBlogs, useBlogMutations } from './hooks/useAdminBlogs'
+import { useBlogCategories } from './hooks/useBlogCategories'
+import { useDebounce } from '@/shared/hooks/useDebounce'
+import { BLOG_STATUS_FILTER_OPTIONS } from './utils/blogStatusLabels'
 import { BlogPageHero, type BlogHeroVariant } from './BlogPageHero'
 import { BlogTable } from './BlogTable'
 
@@ -231,21 +234,30 @@ export function BlogListView({ variant }: Props) {
 
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <SearchInput
+            variant="outlined"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={setSearch}
             placeholder="Search blogs..."
+            ariaLabel="Search blogs"
             className="xl:max-w-xs"
           />
           <div className="flex min-w-0 flex-wrap items-center gap-2.5">
             {meta.showStatusFilter ? (
-              <AdminSelect
+              <FilterSelect
+                variant="outlined"
+                hideLabel
+                label="Filter by status"
+                className="min-w-[10.5rem]"
                 value={statusFilter}
                 options={[...BLOG_STATUS_FILTER_OPTIONS]}
                 onChange={(value) => setStatusFilter(value as BlogStatus | 'all')}
-                aria-label="Filter by status"
               />
             ) : null}
-            <AdminSelect
+            <FilterSelect
+              variant="outlined"
+              hideLabel
+              label="Filter by category"
+              className="min-w-[10.5rem]"
               value={categoryFilter}
               options={[
                 { value: 'all', label: 'All Categories' },
@@ -255,13 +267,15 @@ export function BlogListView({ variant }: Props) {
                 })),
               ]}
               onChange={setCategoryFilter}
-              aria-label="Filter by category"
             />
-            <AdminSelect
+            <FilterSelect
+              variant="outlined"
+              hideLabel
+              label="Sort blogs"
+              className="min-w-[10.5rem]"
               value={sort}
               options={[...SORT_OPTIONS]}
               onChange={(value) => setSort(value as SortKey)}
-              aria-label="Sort blogs"
             />
 
             {meta.showAddNewButton ? (
@@ -305,8 +319,8 @@ export function BlogListView({ variant }: Props) {
               onDelete={setDeleteTarget}
               emptyContent={
                 <div className="flex flex-col items-center justify-center gap-3 py-10">
-                  <p className="text-base font-semibold text-[#1a2b4b]">{meta.emptyTitle}</p>
-                  <p className="max-w-sm text-sm text-[#71839F]">{meta.emptyDescription}</p>
+                  <p className="text-base font-semibold text-foreground">{meta.emptyTitle}</p>
+                  <p className="max-w-sm text-sm text-muted-foreground">{meta.emptyDescription}</p>
                   <AdminButton type="button" className="mt-1" onClick={openCreateBlog}>
                     <Plus className="size-4" aria-hidden="true" />
                     Add New Blog
@@ -319,10 +333,11 @@ export function BlogListView({ variant }: Props) {
       </div>
 
       <Pagination
-        page={page}
-        pageCount={showPagination ? totalPages : 1}
+        mode="simple"
+        showPageInfo
+        currentPage={page}
+        totalPages={showPagination ? totalPages : 1}
         onPageChange={setPage}
-        sticky={false}
       />
 
       <ConfirmDialog

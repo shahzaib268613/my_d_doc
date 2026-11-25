@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
-import { BlogCreateModalProvider } from '@/features/blog/admin/BlogCreateModalContext'
+import { BlogCreateModalProvider } from '@/features/admin/blog'
 import { ContentContainer } from './ContentContainer'
 import { AdminHeader } from './AdminHeader'
 import { AdminSidebar } from './AdminSidebar'

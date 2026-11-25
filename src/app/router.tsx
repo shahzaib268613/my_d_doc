@@ -11,14 +11,16 @@ import {
   CampaignsPage,
   CampaignEditorPage,
 } from '@/features/newsletter'
-import { AllBlogsPage } from '@/features/blog/admin/AllBlogsPage'
-import { BlogCategoriesPage } from '@/features/blog/admin/BlogCategoriesPage'
-import { BlogDraftsPage } from '@/features/blog/admin/BlogDraftsPage'
-import { BlogListingsPage } from '@/features/blog/admin/BlogListingsPage'
-import { PublishedBlogsPage } from '@/features/blog/admin/PublishedBlogsPage'
-import { ScheduledBlogsPage } from '@/features/blog/admin/ScheduledBlogsPage'
-import { EditBlogPage } from '@/features/blog/admin/EditBlogPage'
-import { BlogDashboardPage } from '@/features/blog/admin/BlogDashboardPage'
+import {
+  AllBlogsPage,
+  BlogCategoriesPage,
+  BlogDashboardPage,
+  BlogDraftsPage,
+  BlogListingsPage,
+  EditBlogPage,
+  PublishedBlogsPage,
+  ScheduledBlogsPage,
+} from '@/features/admin/blog'
 import { LatestPosts } from '@/features/blog/components/LatestPosts'
 import { AboutPage } from '@/features/about'
 import { BlogPage } from '@/features/blog/pages/BlogPage'

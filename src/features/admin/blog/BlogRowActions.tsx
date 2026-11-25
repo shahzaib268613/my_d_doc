@@ -4,7 +4,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { cn } from '@/shared/utils/cn'
-import type { Blog } from '../types/blog'
+import type { Blog } from '@/features/blog/types/blog'
 
 type Props = {
   blog: Blog
@@ -15,7 +15,7 @@ type Props = {
 }
 
 const iconBtn =
-  'inline-flex size-9 items-center justify-center rounded-[10px] border border-[#DCE8F7] bg-white text-[#10264A] shadow-sm no-underline transition-colors hover:bg-[#F4F8FF] focus-visible:outline-none'
+  'inline-flex size-9 items-center justify-center rounded-[10px] border border-border bg-surface text-foreground shadow-sm no-underline transition-colors hover:bg-background focus-visible:outline-none'
 
 type MenuPos = { top: number; left: number; openUp: boolean }
 
@@ -101,32 +101,32 @@ export function BlogRowActions({
               width: 176,
               zIndex: 90,
             }}
-            className="overflow-hidden rounded-lg border border-[#DCE8F7] bg-white py-1 shadow-[0_10px_28px_rgba(2,27,68,0.14)]"
+            className="overflow-hidden rounded-lg border border-border bg-surface py-1 shadow-lg"
           >
             {isPublished ? (
               <button
                 type="button"
                 role="menuitem"
-                className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-[#10264A] hover:bg-[#F4F8FF]"
+                className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground hover:bg-background"
                 onClick={() => {
                   setOpen(false)
                   onUnpublish(blog)
                 }}
               >
-                <Undo2 className="size-4 text-[#2f7fb0]" aria-hidden="true" />
+                <Undo2 className="size-4 text-primary" aria-hidden="true" />
                 Unpublish
               </button>
             ) : (
               <button
                 type="button"
                 role="menuitem"
-                className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-[#10264A] hover:bg-[#F4F8FF]"
+                className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground hover:bg-background"
                 onClick={() => {
                   setOpen(false)
                   onPublish(blog)
                 }}
               >
-                <Upload className="size-4 text-[#2f7fb0]" aria-hidden="true" />
+                <Upload className="size-4 text-primary" aria-hidden="true" />
                 Publish
               </button>
             )}
@@ -134,7 +134,7 @@ export function BlogRowActions({
               type="button"
               role="menuitem"
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-[#B42318] hover:bg-[#FFF5F5]',
+                'flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-danger hover:bg-danger/10',
               )}
               onClick={() => {
                 setOpen(false)

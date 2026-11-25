@@ -2,24 +2,27 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ImageIcon, Pencil, Plus, Trash2 } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
-import { AdminSelect } from '@/features/admin/components/AdminSelect'
 import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
-import { Pagination } from '@/features/admin/components/Pagination'
-import { SearchInput } from '@/features/admin/components/SearchInput'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
-import { Button, ConfirmDialog } from '@/shared/components/ui'
+import {
+  Button,
+  ConfirmDialog,
+  FilterSelect,
+  Pagination,
+  SearchInput,
+} from '@/shared/components/ui'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { siteConfig } from '@/shared/config/site'
 import { useToast } from '@/shared/hooks/useToast'
-import type { Blog, BlogStatus } from '../types/blog'
-import { useAdminBlogs, useBlogMutations } from '../hooks/useAdminBlogs'
-import { useBlogCategories } from '../hooks/useBlogCategories'
-import { useDebounce } from '../hooks/useDebounce'
-import { BLOG_STATUS_FILTER_OPTIONS, blogStatusLabel, blogStatusTone } from '../utils/blogStatusLabels'
-import { formatBlogDate } from '../utils/formatDate'
+import type { Blog, BlogStatus } from '@/features/blog/types/blog'
+import { useAdminBlogs, useBlogMutations } from './hooks/useAdminBlogs'
+import { useBlogCategories } from './hooks/useBlogCategories'
+import { useDebounce } from '@/shared/hooks/useDebounce'
+import { BLOG_STATUS_FILTER_OPTIONS, blogStatusLabel, blogStatusTone } from './utils/blogStatusLabels'
+import { formatBlogDate } from '@/features/blog/utils/formatDate'
 import { useBlogCreateModal } from './BlogCreateModalContext'
 import { BlogPageHero } from './BlogPageHero'
 
@@ -81,10 +84,10 @@ export function BlogListingsPage() {
           <img
             src={blog.coverImage}
             alt=""
-            className="h-12 w-[4.25rem] rounded-lg object-cover ring-1 ring-[#DCE8F7]"
+            className="h-12 w-[4.25rem] rounded-lg object-cover ring-1 ring-border"
           />
         ) : (
-          <span className="inline-flex h-12 w-[4.25rem] items-center justify-center rounded-lg bg-[#F4F8FF] text-[#0875F9] ring-1 ring-[#DCE8F7]">
+          <span className="inline-flex h-12 w-[4.25rem] items-center justify-center rounded-lg bg-background text-primary ring-1 ring-border">
             <ImageIcon className="size-4" aria-hidden="true" />
           </span>
         ),
@@ -95,8 +98,8 @@ export function BlogListingsPage() {
       className: 'min-w-[14rem]',
       cell: (blog) => (
         <div className="min-w-0 max-w-md">
-          <p className="truncate text-sm font-semibold text-[#1a2b4b]">{blog.title}</p>
-          <p className="mt-0.5 line-clamp-1 text-xs text-[#71839F]">/{blog.slug}</p>
+          <p className="truncate text-sm font-semibold text-foreground">{blog.title}</p>
+          <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">/{blog.slug}</p>
         </div>
       ),
     },
@@ -104,14 +107,14 @@ export function BlogListingsPage() {
       id: 'category',
       header: 'Category',
       cell: (blog) => (
-        <span className="text-sm text-[#5B6B82]">{blog.category || '—'}</span>
+        <span className="text-sm text-muted-foreground">{blog.category || '—'}</span>
       ),
     },
     {
       id: 'author',
       header: 'Author',
       cell: () => (
-        <span className="whitespace-nowrap text-sm text-[#5B6B82]">
+        <span className="whitespace-nowrap text-sm text-muted-foreground">
           {siteConfig.doctor.name}
         </span>
       ),
@@ -131,7 +134,7 @@ export function BlogListingsPage() {
       id: 'date',
       header: 'Date',
       cell: (blog) => (
-        <span className="whitespace-nowrap text-sm text-[#71839F]">
+        <span className="whitespace-nowrap text-sm text-muted-foreground">
           {formatBlogDate(blog.publishedAt ?? blog.updatedAt)}
         </span>
       ),
@@ -146,7 +149,7 @@ export function BlogListingsPage() {
             to={`${ADMIN_BASE}/blogs/edit/${blog.id}`}
             title="Edit"
             aria-label={`Edit ${blog.title}`}
-            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-[#DCE8F7] bg-white text-[#10264A] shadow-sm no-underline hover:bg-[#F4F8FF]"
+            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-border bg-surface text-foreground shadow-sm no-underline hover:bg-background"
           >
             <Pencil className="size-4" aria-hidden="true" />
           </Link>
@@ -155,7 +158,7 @@ export function BlogListingsPage() {
             title="Delete"
             aria-label={`Delete ${blog.title}`}
             disabled={busyId === blog.id}
-            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-[#DCE8F7] bg-white text-[#B42318] shadow-sm hover:bg-[#FFF5F5] disabled:opacity-50"
+            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-border bg-surface text-danger shadow-sm hover:bg-danger/10 disabled:opacity-50"
             onClick={() => setDeleteTarget(blog)}
           >
             <Trash2 className="size-4" aria-hidden="true" />
@@ -175,26 +178,34 @@ export function BlogListingsPage() {
 
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
         <SearchInput
+          variant="outlined"
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={setSearch}
           placeholder="Search blogs..."
+          ariaLabel="Search blogs"
           className="xl:max-w-xs"
         />
         <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-          <AdminSelect
+          <FilterSelect
+            variant="outlined"
+            hideLabel
+            label="Filter by status"
+            className="min-w-[10.5rem]"
             value={statusFilter}
             options={[...BLOG_STATUS_FILTER_OPTIONS]}
             onChange={(value) => setStatusFilter(value as BlogStatus | 'all')}
-            aria-label="Filter by status"
           />
-          <AdminSelect
+          <FilterSelect
+            variant="outlined"
+            hideLabel
+            label="Filter by category"
+            className="min-w-[10.5rem]"
             value={categoryFilter}
             options={[
               { value: 'all', label: 'All Categories' },
               ...activeNames.map((name) => ({ value: name, label: name })),
             ]}
             onChange={setCategoryFilter}
-            aria-label="Filter by category"
           />
           <AdminButton
             type="button"
@@ -229,8 +240,8 @@ export function BlogListingsPage() {
             rowKey={(blog) => blog.id}
             emptyMessage={
               <div className="flex flex-col items-center justify-center gap-3 py-10">
-                <p className="text-base font-semibold text-[#1a2b4b]">No blogs found</p>
-                <p className="max-w-sm text-sm text-[#71839F]">
+                <p className="text-base font-semibold text-foreground">No blogs found</p>
+                <p className="max-w-sm text-sm text-muted-foreground">
                   Try another filter or add your first article.
                 </p>
                 <AdminButton type="button" className="mt-1" onClick={openCreateBlog}>
@@ -239,16 +250,17 @@ export function BlogListingsPage() {
                 </AdminButton>
               </div>
             }
-            className="rounded-lg border-[#DCE8F7] shadow-sm [&_thead]:bg-[#F4F8FF] [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-[#5B6B82] [&_td]:px-4 [&_td]:py-3.5"
+            className="rounded-lg border-border shadow-sm [&_thead]:bg-background [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_td]:px-4 [&_td]:py-3.5"
           />
         )}
       </div>
 
       <Pagination
-        page={page}
-        pageCount={showPagination ? totalPages : 1}
+        mode="simple"
+        showPageInfo
+        currentPage={page}
+        totalPages={showPagination ? totalPages : 1}
         onPageChange={setPage}
-        sticky={false}
       />
 
       <ConfirmDialog

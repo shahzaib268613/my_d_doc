@@ -15,9 +15,9 @@ import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { Button } from '@/shared/components/ui'
 import { useBlogCreateModal } from './BlogCreateModalContext'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
-import { useAdminBlogs, useBlogCounts } from '../hooks/useAdminBlogs'
-import { formatBlogDate } from '../utils/formatDate'
-import { blogStatusLabel, blogStatusTone } from '../utils/blogStatusLabels'
+import { useAdminBlogs, useBlogCounts } from './hooks/useAdminBlogs'
+import { formatBlogDate } from '@/features/blog/utils/formatDate'
+import { blogStatusLabel, blogStatusTone } from './utils/blogStatusLabels'
 
 export function BlogDashboardPage() {
   const { openCreateBlog } = useBlogCreateModal()
@@ -55,23 +55,28 @@ export function BlogDashboardPage() {
   return (
     <div className="min-w-0 space-y-6">
       {/* Welcome banner */}
-      <section className="relative overflow-hidden rounded-[16px] bg-[linear-gradient(135deg,#061D46_0%,#092B5C_55%,#0875F9_140%)] px-5 py-6 text-white shadow-md sm:px-7 sm:py-7">
+      <section
+        className="relative overflow-hidden rounded-2xl px-5 py-6 text-inverse-foreground shadow-md sm:px-7 sm:py-7"
+        style={{ backgroundImage: 'var(--gradient-inverse)' }}
+      >
         <div className="relative z-10 max-w-xl">
-          <p className="text-sm font-medium text-white/70">{today}</p>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+          <p className="text-sm font-medium text-inverse-muted">{today}</p>
+          <h1 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl">
             Welcome back, Admin!
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-white/75 sm:text-base">
+          <p className="mt-2 text-sm leading-relaxed text-inverse-muted sm:text-base">
             Manage diabetes education content, track publishing, and keep your library fresh.
           </p>
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="lg"
             onClick={openCreateBlog}
-            className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-[12px] bg-white px-4 text-sm font-semibold text-[#061D46] shadow-sm hover:bg-soft"
+            className="mt-5 rounded-xl border-0 bg-surface text-inverse shadow-sm hover:bg-soft"
           >
             <FilePlus2 className="size-4" aria-hidden="true" />
             Add New Blog
-          </button>
+          </Button>
         </div>
         <div
           className="pointer-events-none absolute -right-6 bottom-0 hidden h-40 w-48 rounded-[20px] bg-white/10 sm:block lg:right-8 lg:h-44 lg:w-56"
@@ -89,19 +94,19 @@ export function BlogDashboardPage() {
             label: 'Total Blogs',
             value: counts?.all ?? 0,
             icon: Newspaper,
-            tint: 'bg-[#EAF3FF] text-[#0875F9]',
+            tint: 'bg-soft text-primary',
           },
           {
             label: 'Inactive',
             value: counts?.draft ?? 0,
             icon: FileEdit,
-            tint: 'bg-[#EEF2F7] text-[#71839F]',
+            tint: 'bg-muted text-muted-foreground',
           },
           {
             label: 'Active',
             value: counts?.published ?? 0,
             icon: FileText,
-            tint: 'bg-[#E8F8F0] text-[#1F7A5C]',
+            tint: 'bg-success/15 text-success',
           },
         ].map((stat) => (
           <li

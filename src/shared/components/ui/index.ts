@@ -1,4 +1,6 @@
+/** Reuse components from shared/components/ui before creating a new one. */
 export { Badge } from './Badge'
+export type { BadgeVariant } from './Badge'
 export { Button } from './Button'
 export type { ButtonProps } from './Button'
 export { Card } from './Card'

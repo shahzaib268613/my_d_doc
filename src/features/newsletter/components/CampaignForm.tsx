@@ -1,8 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
 import { Info, Mail } from 'lucide-react'
-import { Button, Input, Textarea } from '@/shared/components/ui'
+import { Button, FilterSelect, Input, Textarea } from '@/shared/components/ui'
 import { FormField } from '@/features/admin/components/FormField'
-import { FilterDropdown } from '@/features/admin/components/FilterDropdown'
 import type { CampaignStatus, NewsletterCampaign } from '../types'
 
 export type CampaignFormValues = {
@@ -91,7 +90,8 @@ export function CampaignForm({ initial, submitLabel, onSubmit, onCancel }: Props
               className="min-h-40"
             />
           </FormField>
-          <FilterDropdown
+          <FilterSelect
+            variant="outlined"
             label="Status"
             value={status}
             onChange={(value) => setStatus(value as CampaignStatus)}
