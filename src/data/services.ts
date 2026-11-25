@@ -1,5 +1,5 @@
-import glucoseMeterImage from '../features/about/assets/Type-1-diabetes.jpg'
-import insulinAndMonitorImage from '../features/about/assets/Type-2-diabetes.jpg'
+import glucoseMeterImage from '../features/about/assets/type-1-diabetes.jpg'
+import insulinAndMonitorImage from '../features/about/assets/type-2-diabetes.jpg'
 
 type ServiceBase = {
   title: string
