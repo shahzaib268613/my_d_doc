@@ -1,49 +1,64 @@
-export type ServiceGroup = 'diabetes' | 'related'
+import glucoseMeterImage from '../features/about/assets/Type-1-diabetes.jpg'
+import insulinAndMonitorImage from '../features/about/assets/Type-2-diabetes.jpg'
 
-export type Service = {
+type ServiceBase = {
   title: string
   description: string
-  /** Set only when a matching in-project page already exists. */
   href?: string
-  group: ServiceGroup
-  /** Public path under `/images/services/` for diabetes cards. */
-  image?: string
-  imageAlt?: string
-  /** Short “Who it’s for” line (diabetes cards). */
-  whoFor?: string
-  /**
-   * Lucide icon name used by the About page for related endocrine items.
-   * Kept as a string so this data file stays framework-agnostic.
-   */
-  icon?:
-    | 'Activity'
-    | 'Scale'
-    | 'HeartPulse'
-    | 'FlaskConical'
-    | 'Bone'
-    | 'Brain'
 }
 
-/**
- * About page care offerings. `href` is set only when a matching in-project
- * page already exists — none of these have dedicated routes yet.
- */
+export type RelatedServiceIcon =
+  | 'Activity'
+  | 'Scale'
+  | 'HeartPulse'
+  | 'Bone'
+  | 'Brain'
+
+export type DiabetesService = ServiceBase & {
+  group: 'diabetes'
+  image: string
+  imageAlt: string
+  whoFor: string
+}
+
+export type RelatedService = ServiceBase & {
+  group: 'related'
+  icon: RelatedServiceIcon
+}
+
+export type Service = DiabetesService | RelatedService
+
+export const whatWeHelpWithCopy = {
+  title: 'What we help with',
+  intro:
+    'Our focus is diabetes care, along with related hormone conditions that affect blood sugar and overall health.',
+  diabetesHeading: 'Diabetes care',
+  relatedHeading: 'Related endocrine care',
+  whoForLabel: "Who it's for:",
+  learnMore: 'Learn more',
+} as const
+
 export const services: Service[] = [
   {
     title: 'Type 2 diabetes',
-    description: 'Medication, nutrition and lifestyle planning for steadier blood sugar.',
+    description:
+      'Medication, nutrition and lifestyle planning to keep your blood sugar steady.',
     group: 'diabetes',
-    image: '/images/services/type-2-diabetes.jpg',
-    imageAlt: 'Digital blood glucose meter reading 103 mg/dL beside a white lancing device',
-    whoFor: 'For people newly diagnosed, or looking for steadier blood sugar.',
+    image: glucoseMeterImage,
+    imageAlt:
+      'Black blood glucose meter next to a white lancing pen on a blue-grey surface',
+    whoFor:
+      'People newly diagnosed with type 2 diabetes, or those whose numbers need better control.',
   },
   {
     title: 'Type 1 diabetes',
-    description: 'Insulin therapy, glucose monitoring and day-to-day management support.',
+    description:
+      'Insulin therapy, glucose monitoring and day-to-day management support.',
     group: 'diabetes',
-    image: '/images/services/type-1-diabetes.jpg',
-    imageAlt: 'Insulin pen and continuous glucose monitor sensor on a light clinical tabletop',
-    whoFor: 'For people on insulin therapy, with or without a glucose monitor.',
+    image: insulinAndMonitorImage,
+    imageAlt:
+      'Insulin pen next to a white continuous glucose monitor sensor on a blue-grey surface',
+    whoFor: 'People on insulin therapy, with or without a glucose monitor.',
   },
   {
     title: 'Thyroid',
@@ -68,7 +83,7 @@ export const services: Service[] = [
     title: 'Testosterone deficiency',
     description: 'Testing and treatment for low testosterone.',
     group: 'related',
-    icon: 'FlaskConical',
+    icon: 'Activity',
   },
   {
     title: 'Osteoporosis',
