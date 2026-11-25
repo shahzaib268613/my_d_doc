@@ -24,6 +24,7 @@ type Props = {
   id?: string
   disabled?: boolean
   placeholder?: string
+  searchable?: boolean
   /** Alias for accessibility when the visible label is hidden. */
   ariaLabel?: string
   /** Visually hide the label (still available to screen readers). */
@@ -60,6 +61,7 @@ export function FilterSelect({
   id,
   disabled = false,
   placeholder,
+  searchable = false,
   ariaLabel,
   hideLabel = false,
   variant = 'outlined',
@@ -70,11 +72,14 @@ export function FilterSelect({
   const [open, setOpen] = useState(false)
   const [highlight, setHighlight] = useState(-1)
   const [menuPos, setMenuPos] = useState<MenuPosition | null>(null)
+  const [query, setQuery] = useState('')
   const [typeBuffer, setTypeBuffer] = useState('')
   const typeTimerRef = useRef<number | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const menuRef = useRef<HTMLUListElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
   const generatedId = useId()
   const selectId = id ?? generatedId
   const listId = `${selectId}-listbox`
@@ -82,12 +87,20 @@ export function FilterSelect({
   const selected = options.find((option) => option.value === value)
   const accessibleName = ariaLabel ?? label
   const isOpen = open && !disabled
+  const visibleOptions = searchable
+    ? options.filter((option) =>
+        option.label.toLowerCase().includes(query.trim().toLowerCase()),
+      )
+    : options
 
   function measureMenuPosition(): MenuPosition | null {
     const button = buttonRef.current
     if (!button) return null
     const rect = button.getBoundingClientRect()
-    const menuHeight = Math.min(240, options.length * 44 + 16)
+    const menuHeight = Math.min(
+      240,
+      visibleOptions.length * 44 + (searchable ? 68 : 16),
+    )
     const spaceBelow = window.innerHeight - rect.bottom
     const openUp = spaceBelow < menuHeight + 12 && rect.top > spaceBelow
     return {
@@ -100,9 +113,10 @@ export function FilterSelect({
 
   function openMenu() {
     if (disabled) return
+    setQuery('')
     const selectedIndex = Math.max(
       0,
-      options.findIndex((option) => option.value === value),
+      visibleOptions.findIndex((option) => option.value === value),
     )
     setHighlight(selectedIndex)
     setMenuPos(measureMenuPosition())
@@ -111,6 +125,7 @@ export function FilterSelect({
 
   function closeMenu(focusTrigger = false) {
     setOpen(false)
+    setQuery('')
     if (focusTrigger) buttonRef.current?.focus()
   }
 
@@ -129,7 +144,11 @@ export function FilterSelect({
       window.removeEventListener('scroll', onReposition, true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- measure while open
-  }, [isOpen, options.length])
+  }, [isOpen, visibleOptions.length])
+
+  useEffect(() => {
+    if (isOpen && searchable) searchRef.current?.focus()
+  }, [isOpen, searchable])
 
   useEffect(() => {
     if (!isOpen) return
@@ -163,7 +182,7 @@ export function FilterSelect({
 
   useEffect(() => {
     if (!isOpen || highlight < 0) return
-    const optionEl = menuRef.current?.querySelector<HTMLElement>(
+    const optionEl = listRef.current?.querySelector<HTMLElement>(
       `[data-option-index="${highlight}"]`,
     )
     optionEl?.scrollIntoView({ block: 'nearest' })
@@ -175,10 +194,10 @@ export function FilterSelect({
   }
 
   function moveHighlight(delta: number) {
-    if (options.length === 0) return
+    if (visibleOptions.length === 0) return
     setHighlight((current) => {
       const base = current < 0 ? (delta > 0 ? -1 : 0) : current
-      return (base + delta + options.length) % options.length
+      return (base + delta + visibleOptions.length) % visibleOptions.length
     })
   }
 
@@ -188,12 +207,31 @@ export function FilterSelect({
     if (typeTimerRef.current) window.clearTimeout(typeTimerRef.current)
     typeTimerRef.current = window.setTimeout(() => setTypeBuffer(''), 500)
 
-    const matchIndex = options.findIndex((option) =>
+    const matchIndex = visibleOptions.findIndex((option) =>
       option.label.toLowerCase().startsWith(nextBuffer),
     )
     if (matchIndex >= 0) {
       setHighlight(matchIndex)
-      if (!isOpen) selectValue(options[matchIndex]!.value)
+      if (!isOpen) selectValue(visibleOptions[matchIndex]!.value)
+    }
+  }
+
+  function onSearchKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault()
+        moveHighlight(1)
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        moveHighlight(-1)
+        break
+      case 'Enter':
+        event.preventDefault()
+        if (highlight >= 0 && visibleOptions[highlight]) {
+          selectValue(visibleOptions[highlight]!.value)
+        }
+        break
     }
   }
 
@@ -215,8 +253,8 @@ export function FilterSelect({
       case ' ':
         event.preventDefault()
         if (!isOpen) openMenu()
-        else if (highlight >= 0 && options[highlight]) {
-          selectValue(options[highlight]!.value)
+        else if (highlight >= 0 && visibleOptions[highlight]) {
+          selectValue(visibleOptions[highlight]!.value)
         }
         break
       case 'Home':
@@ -228,7 +266,7 @@ export function FilterSelect({
       case 'End':
         if (isOpen) {
           event.preventDefault()
-          setHighlight(options.length - 1)
+          setHighlight(visibleOptions.length - 1)
         }
         break
       case 'Escape':
@@ -249,11 +287,8 @@ export function FilterSelect({
   const menu =
     isOpen && menuPos
       ? createPortal(
-          <ul
+          <div
             ref={menuRef}
-            id={listId}
-            role="listbox"
-            aria-label={accessibleName}
             style={{
               position: 'fixed',
               top: menuPos.openUp ? undefined : menuPos.top,
@@ -264,36 +299,70 @@ export function FilterSelect({
               width: Math.max(menuPos.width, 168),
               zIndex: 80,
             }}
-            className="max-h-60 overflow-auto rounded-lg border border-border bg-surface py-1 shadow-lg"
+            className="max-h-60 overflow-hidden rounded-lg border border-border bg-surface shadow-lg"
           >
-            {options.map((option, index) => {
-              const isSelected = option.value === value
-              const isHighlighted = index === highlight
-              return (
-                <li key={option.value} role="option" aria-selected={isSelected}>
-                  <button
-                    type="button"
-                    data-option-index={index}
-                    className={cn(
-                      'flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-sm transition-colors',
-                      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring',
-                      isSelected
-                        ? 'bg-soft font-semibold text-foreground'
-                        : 'font-medium text-muted-foreground hover:bg-soft hover:text-foreground',
-                      isHighlighted && !isSelected && 'bg-soft/80 text-foreground',
-                    )}
-                    onMouseEnter={() => setHighlight(index)}
-                    onClick={() => selectValue(option.value)}
-                  >
-                    <span className="min-w-0 truncate">{option.label}</span>
-                    {isSelected ? (
-                      <Check className="size-4 shrink-0 text-primary" aria-hidden="true" />
-                    ) : null}
-                  </button>
+            {searchable ? (
+              <div className="border-b border-border p-2">
+                <input
+                  ref={searchRef}
+                  type="search"
+                  value={query}
+                  aria-label={`Search ${label.toLowerCase()} options`}
+                  placeholder={`Search ${label.toLowerCase()}...`}
+                  onChange={(event) => {
+                    setQuery(event.target.value)
+                    setHighlight(0)
+                  }}
+                  onKeyDown={onSearchKeyDown}
+                  className="min-h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
+                />
+              </div>
+            ) : null}
+            <ul
+              ref={listRef}
+              id={listId}
+              role="listbox"
+              aria-label={accessibleName}
+              className={cn(
+                'overflow-auto py-1',
+                searchable ? 'max-h-[11.5rem]' : 'max-h-60',
+              )}
+            >
+              {visibleOptions.length > 0 ? (
+                visibleOptions.map((option, index) => {
+                  const isSelected = option.value === value
+                  const isHighlighted = index === highlight
+                  return (
+                    <li key={option.value} role="option" aria-selected={isSelected}>
+                      <button
+                        type="button"
+                        data-option-index={index}
+                        className={cn(
+                          'flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-sm transition-colors',
+                          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring',
+                          isSelected
+                            ? 'bg-soft font-semibold text-foreground'
+                            : 'font-medium text-muted-foreground hover:bg-soft hover:text-foreground',
+                          isHighlighted && !isSelected && 'bg-soft/80 text-foreground',
+                        )}
+                        onMouseEnter={() => setHighlight(index)}
+                        onClick={() => selectValue(option.value)}
+                      >
+                        <span className="min-w-0 truncate">{option.label}</span>
+                        {isSelected ? (
+                          <Check className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                        ) : null}
+                      </button>
+                    </li>
+                  )
+                })
+              ) : (
+                <li role="option" aria-disabled="true" className="px-3.5 py-2.5 text-sm text-muted-foreground">
+                  No options found
                 </li>
-              )
-            })}
-          </ul>,
+              )}
+            </ul>
+          </div>,
           document.body,
         )
       : null

@@ -151,11 +151,22 @@ export function BlogPage() {
             ariaLabel="Search articles"
           />
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end md:w-auto md:justify-end">
+            {filtersActive ? (
+              <Button
+                type="button"
+                variant="ghost"
+                className="shrink-0 self-start px-2 text-sm font-semibold text-primary sm:self-end"
+                onClick={clearFilters}
+              >
+                Clear filters
+              </Button>
+            ) : null}
             <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
               <FilterSelect
                 className="sm:w-44 lg:w-52"
                 label="Category"
                 value={selectedCategory}
+                searchable
                 onChange={(value) =>
                   writeParams({
                     category: value ? categoryToParam(value) : '',
@@ -181,16 +192,6 @@ export function BlogPage() {
                 ]}
               />
             </div>
-            {filtersActive ? (
-              <Button
-                type="button"
-                variant="ghost"
-                className="shrink-0 self-start px-2 text-sm font-semibold text-primary sm:self-end"
-                onClick={clearFilters}
-              >
-                Clear filters
-              </Button>
-            ) : null}
           </div>
         </div>
 
