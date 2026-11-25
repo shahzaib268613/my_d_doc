@@ -1,3 +1,5 @@
+import { clinicConfig } from './clinic'
+
 export type SocialPlatform =
   | 'youtube'
   | 'instagram'
@@ -26,6 +28,10 @@ export const siteConfig = {
     name: 'Dr. Jonas Leibowitz',
     title: 'Endocrinologist',
     credentials: '30+ years of clinical experience',
+  },
+  clinic: {
+    address: clinicConfig.address,
+    phone: clinicConfig.phones.appointments.label,
   },
   socialLinks: [
     {

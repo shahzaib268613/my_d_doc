@@ -3,7 +3,7 @@ import type { NavItem } from '../types/NavItem'
 /** Header destinations stay disabled (hash) for now. */
 export const navItems: NavItem[] = [
   { label: 'Home', to: '#' },
-  { label: 'About', to: '#' },
+  { label: 'About', to: '/about' },
   { label: 'Blog', to: '#' },
   { label: 'Brand Partnerships', to: '#' },
   { label: 'Speaking Engagements', to: '#' },
@@ -14,10 +14,10 @@ export function isBlogNavEnabled(_pathname: string) {
   return false
 }
 
-/** Header nav items are non-navigable until destinations go live. */
+/** Real destinations are navigable; hash placeholders stay inactive. */
 export function isNavItemEnabled(item: NavItem, _pathname: string) {
   if (item.to === '#' || !item.to) return false
-  return false
+  return true
 }
 
 export const footerNavItems: NavItem[] = [
@@ -30,7 +30,7 @@ export const footerNavItems: NavItem[] = [
 /** Footer column 2 — Quick Links */
 export const footerQuickLinks: NavItem[] = [
   { label: 'Home', to: '/v1' },
-  { label: 'About', to: '#' },
+  { label: 'About', to: '/about' },
   { label: 'Blog', to: '/blog' },
   { label: 'Contact', to: '#' },
 ]
