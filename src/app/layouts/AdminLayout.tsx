@@ -9,7 +9,7 @@ export function AdminLayout() {
 
   const handleLogout = useCallback(() => {
     clearAdminSession()
-    navigate('/v1', { replace: true })
+    navigate('/', { replace: true })
   }, [navigate])
 
   return (
