@@ -84,6 +84,58 @@ export const dummyPosts: Post[] = [
     publishedAt: '2026-10-28T10:00:00.000Z',
     readingTimeMinutes: 4,
   },
+  {
+    id: 'dummy-7',
+    title: 'What HbA1c Really Tells You',
+    slug: 'what-hba1c-really-tells-you',
+    excerpt:
+      'A clear look at the three-month average, how it relates to daily readings, and when to discuss changes with your clinician.',
+    body: '<p>HbA1c is one useful signal among several. Pair it with your meter or CGM trends for a fuller picture.</p>',
+    category: 'Blood Sugar Management',
+    coverImageUrl: heroBgDark,
+    status: 'published',
+    publishedAt: '2026-10-22T10:00:00.000Z',
+    readingTimeMinutes: 5,
+  },
+  {
+    id: 'dummy-8',
+    title: 'Smart Snacks Between Meals',
+    slug: 'smart-snacks-between-meals',
+    excerpt:
+      'Protein-forward snack ideas that help avoid sharp spikes while keeping energy steady through the afternoon.',
+    body: '<p>Pair carbohydrate with protein or fat, and keep portions realistic for your day.</p>',
+    category: 'Nutrition & Meal Planning',
+    coverImageUrl: doctorPortrait,
+    status: 'published',
+    publishedAt: '2026-10-16T10:00:00.000Z',
+    readingTimeMinutes: 3,
+  },
+  {
+    id: 'dummy-9',
+    title: 'Foot Checks You Can Do at Home',
+    slug: 'foot-checks-you-can-do-at-home',
+    excerpt:
+      'A simple daily routine for spotting redness, cuts, or numbness early—before they become bigger problems.',
+    body: '<p>Look between toes, check pressure points, and call your care team if something looks new or sore.</p>',
+    category: 'Complications & Prevention',
+    coverImageUrl: heroBg,
+    status: 'published',
+    publishedAt: '2026-10-10T10:00:00.000Z',
+    readingTimeMinutes: 4,
+  },
+  {
+    id: 'dummy-10',
+    title: 'Talking With Family About Diabetes',
+    slug: 'talking-with-family-about-diabetes',
+    excerpt:
+      'How to explain what support helps—and what does not—when the people around you want to be involved.',
+    body: '<p>Share specific asks: meal timing, quiet encouragement, or help getting to appointments.</p>',
+    category: 'Living Well With Diabetes',
+    coverImageUrl: doctorPortraitV2,
+    status: 'published',
+    publishedAt: '2026-10-04T10:00:00.000Z',
+    readingTimeMinutes: 5,
+  },
 ]
 
 export function getDummyPosts(limit?: number) {

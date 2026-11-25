@@ -4,14 +4,14 @@ import type { NavItem } from '../types/NavItem'
 export const navItems: NavItem[] = [
   { label: 'Home', to: '#' },
   { label: 'About', to: '/about' },
-  { label: 'Blog', to: '#' },
+  { label: 'Blog', to: '/blog' },
   { label: 'Brand Partnerships', to: '#' },
   { label: 'Speaking Engagements', to: '#' },
 ]
 
-/** Blog nav — currently disabled in the header. */
-export function isBlogNavEnabled(_pathname: string) {
-  return false
+/** Blog nav is active on public blog routes. */
+export function isBlogNavEnabled(pathname: string) {
+  return pathname.startsWith('/blog')
 }
 
 /** Real destinations are navigable; hash placeholders stay inactive. */

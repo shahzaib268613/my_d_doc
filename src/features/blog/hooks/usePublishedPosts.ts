@@ -5,7 +5,7 @@ import {
   getDummyPosts,
   getDummyPostsByCategory,
 } from '../data/dummyPosts'
-import { blogQueryKeys } from './useAdminBlogs'
+import { blogQueryKeys } from './blogQueryKeys'
 import { mapBlogToPost } from '../utils/mapBlogToPost'
 
 /** Latest published blogs; falls back to dummy posts when API is empty/unavailable. */
@@ -38,6 +38,22 @@ export function usePublishedPostsByCategory(categoryTitle: string | undefined) {
         return posts.length > 0 ? posts : getDummyPostsByCategory(categoryTitle)
       } catch {
         return getDummyPostsByCategory(categoryTitle)
+      }
+    },
+  })
+}
+
+/** Full published list for the public blog index (client-side filter/sort/paginate). */
+export function usePublishedPostsList() {
+  return useQuery({
+    queryKey: [...blogQueryKeys.publicLists(), { all: true, limit: 100 }],
+    queryFn: async () => {
+      try {
+        const page = await blogApi.getPublishedBlogs({ page: 1, limit: 100 })
+        const posts = page.items.map(mapBlogToPost)
+        return posts.length > 0 ? posts : getDummyPosts()
+      } catch {
+        return getDummyPosts()
       }
     },
   })
