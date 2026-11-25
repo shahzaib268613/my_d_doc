@@ -46,10 +46,10 @@ export function usePublishedPostsByCategory(categoryTitle: string | undefined) {
 /** Full published list for the public blog index (client-side filter/sort/paginate). */
 export function usePublishedPostsList() {
   return useQuery({
-    queryKey: [...blogQueryKeys.publicLists(), { all: true, limit: 100 }],
+    queryKey: [...blogQueryKeys.publicLists(), { all: true, limit: 50 }],
     queryFn: async () => {
       try {
-        const page = await blogApi.getPublishedBlogs({ page: 1, limit: 100 })
+        const page = await blogApi.getPublishedBlogs({ page: 1, limit: 50 })
         const posts = page.items.map(mapBlogToPost)
         return posts.length > 0 ? posts : getDummyPosts()
       } catch {

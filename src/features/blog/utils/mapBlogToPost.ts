@@ -19,6 +19,11 @@ export function mapBlogToPost(blog: BlogListItem | Blog): Post {
     coverImageUrl: blog.coverImage,
     status: blog.status === 'published' ? 'published' : 'draft',
     publishedAt: blog.publishedAt,
+    updatedAt: blog.updatedAt,
+    author: blog.author,
+    heroImageAlt: blog.heroImageAlt,
+    tags: blog.tags ?? [],
+    faqs: blog.faqs,
     readingTimeMinutes: body
       ? readingTimeMinutes(body)
       : Math.max(1, Math.ceil((blog.excerpt || '').split(/\s+/).filter(Boolean).length / 200)),

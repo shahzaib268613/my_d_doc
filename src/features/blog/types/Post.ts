@@ -1,5 +1,10 @@
 export type PostStatus = 'draft' | 'published'
 
+export type PostFaq = {
+  question: string
+  answer: string
+}
+
 export type Post = {
   id: string
   title: string
@@ -10,5 +15,10 @@ export type Post = {
   coverImageUrl: string | null
   status: PostStatus
   publishedAt: string | null
+  updatedAt?: string | null
+  author?: string
+  heroImageAlt?: string
+  tags?: string[]
+  faqs?: PostFaq[]
   readingTimeMinutes: number
 }

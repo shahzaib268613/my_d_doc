@@ -12,6 +12,9 @@ export type Blog = {
   status: BlogStatus
   publishedAt: string | null
   scheduledAt: string | null
+  author?: string
+  heroImageAlt?: string
+  faqs?: { question: string; answer: string }[]
   views: number
   createdAt: string
   updatedAt: string
