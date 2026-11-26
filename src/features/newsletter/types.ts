@@ -44,9 +44,13 @@ export type NewsletterEmailLog = {
   subscriberId: string | null
   recipient: string
   subject: string
+  /** HTML body of the latest send for this recipient. */
+  message: string | null
   status: 'sent' | 'failed' | 'pending'
   error: string | null
   createdAt: string
+  /** Total emails sent to this recipient (grouped log row). */
+  sendCount: number
 }
 
 export type ComposeMode =

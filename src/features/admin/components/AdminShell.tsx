@@ -37,15 +37,9 @@ export function AdminShell({ children, onLogout }: Props) {
           <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
             <div
               id="admin-main-scroll"
-              className="scrollbar-page flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain px-3 pt-4 sm:px-5 sm:pt-5 lg:px-6 lg:pt-6"
+              className="scrollbar-page flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain px-3 py-3 sm:px-5 sm:py-5 lg:px-6 lg:py-6"
             >
-              {/*
-                No bottom padding here so sticky Pagination can sit flush with the
-                sidebar logout footer (same --admin-footer-height). Top padding only.
-              */}
-              <ContentContainer className="flex min-h-full flex-1 flex-col">
-                {children}
-              </ContentContainer>
+              <ContentContainer>{children}</ContentContainer>
             </div>
           </main>
         </div>

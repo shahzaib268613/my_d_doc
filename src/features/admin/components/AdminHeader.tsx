@@ -1,10 +1,11 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { Bell, ChevronDown, LogOut, Menu, User } from 'lucide-react'
+import { ChevronDown, LogOut, Menu, User } from 'lucide-react'
 import { siteConfig } from '@/shared/config/site'
 import { IconButton } from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
 import { getAdminRouteMeta } from '../constants/adminRoutes'
 import { ADMIN_BASE } from '../constants/adminNav'
+import { AdminNotificationsMenu } from './AdminNotificationsMenu'
 
 type Props = {
   pathname: string
@@ -54,7 +55,7 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
 
   return (
     <header className="sticky top-0 z-30 shrink-0 border-b border-border bg-surface">
-      <div className="flex min-h-16 items-center gap-3 px-3 sm:gap-4 sm:px-6">
+      <div className="flex min-h-14 items-center gap-2 px-3 sm:min-h-16 sm:gap-4 sm:px-6">
         <IconButton
           label="Open navigation"
           className="shrink-0 focus-visible:outline-primary lg:hidden"
@@ -64,7 +65,7 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
         </IconButton>
 
         <div className="min-w-0 flex-1">
-          <h1 className="truncate font-display text-base font-bold tracking-tight text-foreground sm:text-lg">
+          <h1 className="truncate font-display text-sm font-bold tracking-tight text-foreground sm:text-lg">
             {meta.title}
           </h1>
           <p className="mt-0.5 hidden truncate text-xs text-muted-foreground sm:block">
@@ -72,19 +73,14 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
           </p>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
-          <IconButton label="Notifications" className="relative focus-visible:outline-primary">
-            <Bell className="size-5 text-foreground" />
-            <span className="absolute right-1.5 top-1.5 inline-flex min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[0.625rem] font-bold leading-4 text-white">
-              4
-            </span>
-          </IconButton>
+        <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-2">
+          <AdminNotificationsMenu />
 
           <div className="relative" ref={rootRef}>
             <button
               type="button"
               className={cn(
-                'inline-flex min-h-11 max-w-full items-center gap-2 rounded-full border border-border bg-surface px-2 py-1.5 text-sm font-semibold text-foreground transition-colors hover:bg-soft sm:px-2.5',
+                'inline-flex min-h-10 max-w-full items-center gap-2 rounded-full border border-border bg-surface px-1.5 py-1 text-sm font-semibold text-foreground transition-colors hover:bg-soft sm:min-h-11 sm:px-2.5 sm:py-1.5',
                 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
               )}
               aria-expanded={profileOpen}

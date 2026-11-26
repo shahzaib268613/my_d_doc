@@ -14,7 +14,7 @@ export { FormField } from './components/FormField'
 export { LoadingState } from './components/LoadingState'
 export { ErrorState } from './components/ErrorState'
 export { ResponsiveDrawer } from './components/ResponsiveDrawer'
-/** Prefer shared UI: SearchInput, FilterSelect, Pagination from `@/shared/components/ui`. */
+/** Prefer shared UI: ReusableTable, SearchInput, FilterSelect from `@/shared/components/ui`. */
 export { AdminToolbar } from './components/AdminToolbar'
 export { AdminPlaceholderPage } from './pages/AdminPlaceholderPage'
 export { adminNavSections, ADMIN_BASE } from './constants/adminNav'

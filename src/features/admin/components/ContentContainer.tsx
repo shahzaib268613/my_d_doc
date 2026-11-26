@@ -12,8 +12,7 @@ export function ContentContainer({ children, className, narrow = false, ...props
   return (
     <div
       className={cn(
-        // Fill the admin main pane so page footers (pagination) can sit at the bottom.
-        'mx-auto flex w-full min-h-[calc(100dvh-6rem)] min-w-0 max-w-full flex-1 flex-col',
+        'mx-auto w-full min-w-0 max-w-full',
         narrow ? 'max-w-3xl' : 'max-w-[90rem]',
         className,
       )}

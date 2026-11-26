@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ImageIcon, Pencil, Plus, Trash2 } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
-import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
@@ -11,7 +10,8 @@ import {
   ReusableButton,
   ConfirmDialog,
   FilterSelect,
-  Pagination,
+  ReusableTable,
+  type ReusableTableColumn,
   SearchInput,
 } from '@/shared/components/ui'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
@@ -29,7 +29,7 @@ import { BlogPageHero } from './BlogPageHero'
 export function BlogListingsPage() {
   const { toast } = useToast()
   const { openCreateBlog } = useBlogCreateModal()
-  const { activeNames } = useBlogCategories()
+  const { names } = useBlogCategories()
   const { remove } = useBlogMutations()
 
   const [search, setSearch] = useState('')
@@ -61,7 +61,6 @@ export function BlogListingsPage() {
   }, [listQuery.data?.items, categoryFilter])
 
   const totalPages = listQuery.data?.totalPages ?? 1
-  const showPagination = !listQuery.isPending && !listQuery.isError && items.length > 0
 
   async function confirmDelete() {
     if (!deleteTarget) return
@@ -74,7 +73,7 @@ export function BlogListingsPage() {
     }
   }
 
-  const columns: DataTableColumn<Blog>[] = [
+  const columns: ReusableTableColumn<Blog>[] = [
     {
       id: 'image',
       header: 'Featured Image',
@@ -169,64 +168,24 @@ export function BlogListingsPage() {
   ]
 
   return (
-    <div className="flex min-h-full min-w-0 flex-1 flex-col gap-5">
+    <div className="flex min-w-0 flex-col gap-5">
       <BlogPageHero
         variant="all"
         title="Blog Listings"
         description="Browse, filter, and manage every blog from one listings table."
       />
 
-      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-        <SearchInput
-          variant="outlined"
-          value={search}
-          onChange={setSearch}
-          placeholder="Search blogs..."
-          ariaLabel="Search blogs"
-          className="xl:max-w-xs"
-        />
-        <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-          <FilterSelect
-            variant="outlined"
-            hideLabel
-            label="Filter by status"
-            className="min-w-[10.5rem]"
-            value={statusFilter}
-            options={[...BLOG_STATUS_FILTER_OPTIONS]}
-            onChange={(value) => setStatusFilter(value as BlogStatus | 'all')}
-          />
-          <FilterSelect
-            variant="outlined"
-            hideLabel
-            label="Filter by category"
-            className="min-w-[10.5rem]"
-            value={categoryFilter}
-            options={[
-              { value: 'all', label: 'All Categories' },
-              ...activeNames.map((name) => ({ value: name, label: name })),
-            ]}
-            onChange={setCategoryFilter}
-          />
-          <AdminButton
-            type="button"
-            size="md"
-            className="min-h-10 shrink-0 rounded-lg px-4"
-            onClick={openCreateBlog}
-          >
-            <Plus className="size-4" aria-hidden="true" />
-            Add New Blog
-          </AdminButton>
-        </div>
-      </div>
-
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0">
         {listQuery.isPending ? (
-          <LoadingState label="Loading blogs" className="rounded-[16px]" />
+          <LoadingState
+            label="Loading blogs"
+            className="rounded-[0.875rem] border border-border/70"
+          />
         ) : listQuery.isError ? (
           <ErrorState
             title="Could not load blogs"
             description={getApiErrorMessage(listQuery.error)}
-            className="rounded-[16px]"
+            className="rounded-[0.875rem] border border-border/70"
             action={
               <ReusableButton type="button" size="sm" onClick={() => void listQuery.refetch()}>
                 Retry
@@ -234,12 +193,56 @@ export function BlogListingsPage() {
             }
           />
         ) : (
-          <DataTable
+          <ReusableTable
             columns={columns}
             rows={items}
             rowKey={(blog) => blog.id}
+            toolbar={
+              <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+                <SearchInput
+                  variant="outlined"
+                  value={search}
+                  onChange={setSearch}
+                  placeholder="Search blogs..."
+                  ariaLabel="Search blogs"
+                  className="xl:max-w-xs"
+                />
+                <div className="flex min-w-0 flex-wrap items-center gap-2.5">
+                  <FilterSelect
+                    variant="outlined"
+                    hideLabel
+                    label="Filter by status"
+                    className="min-w-[10.5rem]"
+                    value={statusFilter}
+                    options={[...BLOG_STATUS_FILTER_OPTIONS]}
+                    onChange={(value) => setStatusFilter(value as BlogStatus | 'all')}
+                  />
+                  <FilterSelect
+                    variant="outlined"
+                    hideLabel
+                    label="Filter by category"
+                    className="min-w-[10.5rem]"
+                    value={categoryFilter}
+                    options={[
+                      { value: 'all', label: 'All Categories' },
+                      ...names.map((name) => ({ value: name, label: name })),
+                    ]}
+                    onChange={setCategoryFilter}
+                  />
+                  <AdminButton
+                    type="button"
+                    size="md"
+                    className="min-h-10 shrink-0 px-4"
+                    onClick={openCreateBlog}
+                  >
+                    <Plus className="size-4" aria-hidden="true" />
+                    Add New Blog
+                  </AdminButton>
+                </div>
+              </div>
+            }
             emptyMessage={
-              <div className="flex flex-col items-center justify-center gap-3 py-10">
+              <div className="flex flex-col items-center justify-center gap-3 py-6">
                 <p className="text-base font-semibold text-foreground">No blogs found</p>
                 <p className="max-w-sm text-sm text-muted-foreground">
                   Try another filter or add your first article.
@@ -250,18 +253,14 @@ export function BlogListingsPage() {
                 </AdminButton>
               </div>
             }
-            className="rounded-lg border-border shadow-sm [&_thead]:bg-background [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_td]:px-4 [&_td]:py-3.5"
+            pagination={{
+              currentPage: page,
+              totalPages: Math.max(1, totalPages),
+              onPageChange: setPage,
+            }}
           />
         )}
       </div>
-
-      <Pagination
-        mode="simple"
-        showPageInfo
-        currentPage={page}
-        totalPages={showPagination ? totalPages : 1}
-        onPageChange={setPage}
-      />
 
       <ConfirmDialog
         open={Boolean(deleteTarget)}

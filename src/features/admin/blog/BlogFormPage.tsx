@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   Bold,
@@ -17,7 +17,6 @@ import { FormField } from '@/features/admin/components/FormField'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
-import { blogCategories } from '@/shared/config/blogCategories'
 import { FilterSelect, Input } from '@/shared/components/ui'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useToast } from '@/shared/hooks/useToast'
@@ -50,7 +49,7 @@ const emptyForm: FormState = {
   excerpt: '',
   content: '',
   coverImage: '',
-  category: blogCategories[0]?.title ?? '',
+  category: '',
   status: 'published',
 }
 
@@ -80,9 +79,7 @@ export function BlogFormPage({
   const { toast } = useToast()
   const blogQuery = useAdminBlog(id)
   const { create, update } = useBlogMutations()
-  const { activeNames } = useBlogCategories()
-  const categoryOptions =
-    activeNames.length > 0 ? activeNames : blogCategories.map((category) => category.title)
+  const { activeNames, names: allCategoryNames } = useBlogCategories()
   const contentRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -92,6 +89,17 @@ export function BlogFormPage({
   /** Once the admin edits the slug, title changes must not overwrite it. */
   const [slugManual, setSlugManual] = useState(false)
   const debouncedSlug = useDebounce(form.slug, 400)
+
+  const categoryOptions = useMemo(() => {
+    if (
+      form.category &&
+      !activeNames.includes(form.category) &&
+      allCategoryNames.includes(form.category)
+    ) {
+      return [form.category, ...activeNames]
+    }
+    return activeNames
+  }, [activeNames, allCategoryNames, form.category])
 
   useEffect(() => {
     if (!isEdit) {
@@ -111,7 +119,7 @@ export function BlogFormPage({
       excerpt: blog.excerpt,
       content: blog.content,
       coverImage: blog.coverImage ?? '',
-      category: blog.category || blogCategories[0]?.title || '',
+      category: blog.category || '',
       status: toFormStatus(blog.status),
     })
     setSlugManual(true)

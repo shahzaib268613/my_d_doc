@@ -299,7 +299,7 @@ export function FilterSelect({
               width: Math.max(menuPos.width, 168),
               zIndex: 80,
             }}
-            className="max-h-60 overflow-hidden rounded-lg border border-border bg-surface shadow-lg"
+            className="max-h-60 overflow-hidden rounded-sm border border-border bg-surface shadow-lg"
           >
             {searchable ? (
               <div className="border-b border-border p-2">
@@ -314,7 +314,7 @@ export function FilterSelect({
                     setHighlight(0)
                   }}
                   onKeyDown={onSearchKeyDown}
-                  className="min-h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
+                  className="min-h-9 w-full rounded-sm border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
                 />
               </div>
             ) : null}
@@ -404,9 +404,9 @@ export function FilterSelect({
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
           size === 'md' && 'min-h-10',
           size === 'sm' && 'min-h-8 text-xs',
-          variant === 'filled' && 'rounded-md border-0 bg-soft px-3 py-2 pr-2.5',
+          variant === 'filled' && 'rounded-sm border-0 bg-soft px-3 py-2 pr-2.5',
           variant === 'outlined' &&
-            'rounded-lg border border-border bg-surface py-2 pl-3.5 pr-2.5 shadow-sm',
+            'rounded-sm border border-border bg-surface py-2 pl-3.5 pr-2.5 shadow-sm',
           isOpen && variant === 'outlined' && 'border-primary/40',
           error && 'border-danger',
         )}

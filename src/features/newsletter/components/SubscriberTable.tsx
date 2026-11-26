@@ -1,6 +1,9 @@
 import { Eye, Mail, Trash2 } from 'lucide-react'
-import { ReusableButton } from '@/shared/components/ui'
-import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
+import {
+  ReusableButton,
+  ReusableTable,
+  type ReusableTableColumn,
+} from '@/shared/components/ui'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import { cn } from '@/shared/utils/cn'
 import type { NewsletterSubscriber } from '../types'
@@ -13,6 +16,10 @@ type Props = {
   onView: (subscriber: NewsletterSubscriber) => void
   onSendEmail: (subscriber: NewsletterSubscriber) => void
   onDelete: (subscriber: NewsletterSubscriber) => void
+  emptyMessage?: React.ReactNode
+  currentPage?: number
+  totalPages?: number
+  onPageChange?: (page: number) => void
 }
 
 function formatDate(value: string) {
@@ -41,10 +48,14 @@ export function SubscriberTable({
   onView,
   onSendEmail,
   onDelete,
+  emptyMessage = 'No subscribers yet.',
+  currentPage,
+  totalPages,
+  onPageChange,
 }: Props) {
   const allSelected = rows.length > 0 && rows.every((row) => selectedIds.has(row.id))
 
-  const columns: DataTableColumn<NewsletterSubscriber>[] = [
+  const columns: ReusableTableColumn<NewsletterSubscriber>[] = [
     {
       id: 'select',
       header: (
@@ -161,12 +172,17 @@ export function SubscriberTable({
   ]
 
   return (
-    <DataTable
+    <ReusableTable
+      shell={false}
       columns={columns}
       rows={rows}
       rowKey={(row) => row.id}
-      emptyMessage="No subscribers yet."
-      className="rounded-[0.875rem] border-border/70 shadow-none"
+      emptyMessage={emptyMessage}
+      pagination={
+        currentPage != null && totalPages != null && onPageChange
+          ? { currentPage, totalPages, onPageChange }
+          : undefined
+      }
     />
   )
 }

@@ -1,16 +1,19 @@
 import { z } from 'zod'
 
 const envSchema = z.object({
-  VITE_SUPABASE_URL: z.string().url('VITE_SUPABASE_URL must be a valid URL'),
-  VITE_SUPABASE_ANON_KEY: z.string().min(1, 'VITE_SUPABASE_ANON_KEY is required'),
+  VITE_API_URL: z.string().url('VITE_API_URL must be a valid URL').default('http://localhost:3000'),
+  VITE_SITE_URL: z
+    .string()
+    .url('VITE_SITE_URL must be a valid URL')
+    .default('http://localhost:5173'),
 })
 
 export type Env = z.infer<typeof envSchema>
 
 function readEnv(): Env {
   const parsed = envSchema.safeParse({
-    VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-    VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
+    VITE_API_URL: import.meta.env.VITE_API_URL || undefined,
+    VITE_SITE_URL: import.meta.env.VITE_SITE_URL || undefined,
   })
 
   if (!parsed.success) {
@@ -23,7 +26,7 @@ function readEnv(): Env {
 
 let cachedEnv: Env | undefined
 
-/** Validated public env. Call only when Supabase features are used. */
+/** Validated public frontend env. */
 export function getEnv(): Env {
   if (!cachedEnv) {
     cachedEnv = readEnv()

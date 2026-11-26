@@ -64,11 +64,16 @@ export function ConfirmDialog({
           {description}
         </p>
         <div className="mt-6 flex flex-wrap justify-end gap-3">
-          <ReusableButton id={cancelId} variant="outline" onClick={onCancel}>
+          <ReusableButton id={cancelId} type="button" variant="outline" onClick={onCancel}>
             {cancelLabel}
           </ReusableButton>
           <ReusableButton
-            className={cn(danger && 'bg-danger text-primary-foreground hover:opacity-90')}
+            type="button"
+            variant={danger ? 'primary' : 'navy'}
+            className={cn(
+              danger &&
+                'bg-danger text-primary-foreground shadow-[var(--shadow-button)] hover:bg-danger/90 hover:shadow-[var(--shadow-button-hover)]',
+            )}
             onClick={onConfirm}
           >
             {confirmLabel}

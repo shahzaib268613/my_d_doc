@@ -1,10 +1,15 @@
 import { FileText, Users } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
-import { EmptyState, FilterSelect, SearchInput } from '@/shared/components/ui'
+import {
+  EmptyState,
+  FilterSelect,
+  SearchInput,
+  StatsCard,
+  StatsCardGrid,
+} from '@/shared/components/ui'
 import { getAdminRouteMeta } from '../constants/adminRoutes'
 import { AdminToolbar } from '../components/AdminToolbar'
 import { PageHeader } from '../components/PageHeader'
-import { StatCard } from '../components/StatCard'
 
 export function AdminPlaceholderPage() {
   const { pathname } = useLocation()
@@ -20,17 +25,35 @@ export function AdminPlaceholderPage() {
       />
 
       {isDashboard ? (
-        <ul className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <StatsCardGrid className="mb-6">
           <li>
-            <StatCard label="Published posts" value="—" icon={FileText} hint="Coming soon" />
+            <StatsCard
+              label="Published posts"
+              value="—"
+              icon={FileText}
+              tone="primary"
+              hint="Coming soon"
+            />
           </li>
           <li>
-            <StatCard label="Drafts" value="—" icon={FileText} hint="Coming soon" />
+            <StatsCard
+              label="Drafts"
+              value="—"
+              icon={FileText}
+              tone="muted"
+              hint="Coming soon"
+            />
           </li>
           <li>
-            <StatCard label="Subscribers" value="—" icon={Users} hint="Coming soon" />
+            <StatsCard
+              label="Subscribers"
+              value="—"
+              icon={Users}
+              tone="success"
+              hint="Coming soon"
+            />
           </li>
-        </ul>
+        </StatsCardGrid>
       ) : (
         <AdminToolbar>
           <SearchInput
@@ -38,29 +61,23 @@ export function AdminPlaceholderPage() {
             disabled
             value=""
             onChange={() => {}}
-            placeholder="Search (coming soon)"
-            ariaLabel="Search (coming soon)"
+            placeholder="Search…"
+            ariaLabel="Search"
           />
           <FilterSelect
-            variant="outlined"
+            label="Status"
             hideLabel
             disabled
-            label="Status"
-            className="min-w-[10rem]"
             value="all"
+            options={[{ value: 'all', label: 'All statuses' }]}
             onChange={() => {}}
-            options={[
-              { value: 'all', label: 'All statuses' },
-              { value: 'published', label: 'Published' },
-              { value: 'draft', label: 'Draft' },
-            ]}
           />
         </AdminToolbar>
       )}
 
       <EmptyState
         title={`${meta.title} coming soon`}
-        description="Reusable admin components are in place. Module tools and data will appear here next."
+        description="Layout and navigation are in place. Connect data and actions in the next iteration."
       />
     </div>
   )

@@ -1,10 +1,24 @@
-import { useContext } from 'react'
-import { ToastContext } from '@/shared/components/ui/toast-context'
+import { toast as sonnerToast } from 'sonner'
 
+export type ToastTone = 'info' | 'success' | 'danger'
+
+/**
+ * Thin wrapper around sonner. Dismisses any visible toasts before showing a new one.
+ */
 export function useToast() {
-  const context = useContext(ToastContext)
-  if (!context) {
-    throw new Error('useToast must be used within ToastProvider')
+  function toast(message: string, tone: ToastTone = 'info') {
+    sonnerToast.dismiss()
+
+    if (tone === 'success') {
+      sonnerToast.success(message)
+      return
+    }
+    if (tone === 'danger') {
+      sonnerToast.error(message)
+      return
+    }
+    sonnerToast.message(message)
   }
-  return context
+
+  return { toast }
 }

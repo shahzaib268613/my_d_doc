@@ -2,9 +2,8 @@ import { useEffect, useId, useState, type FormEvent } from 'react'
 import { X } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
 import { FormField } from '@/features/admin/components/FormField'
-import { FilterSelect, IconButton, Input, Textarea } from '@/shared/components/ui'
-import { normalizeSlugInput, slugifyTitle } from './utils/slug'
-import type { CategoryStatus, CategoryWriteInput, ManagedBlogCategory } from './types/category'
+import { FilterSelect, IconButton, Input } from '@/shared/components/ui'
+import type { CategoryWriteInput, ManagedBlogCategory } from './types/category'
 
 type Props = {
   open: boolean
@@ -15,16 +14,18 @@ type Props = {
 
 const empty: CategoryWriteInput = {
   name: '',
-  slug: '',
-  description: '',
   status: 'active',
 }
+
+const STATUS_OPTIONS = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+]
 
 export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) {
   const titleId = useId()
   const isEdit = Boolean(category)
   const [form, setForm] = useState<CategoryWriteInput>(empty)
-  const [slugManual, setSlugManual] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -32,14 +33,10 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
     if (category) {
       setForm({
         name: category.name,
-        slug: category.slug,
-        description: category.description,
         status: category.status,
       })
-      setSlugManual(true)
     } else {
       setForm(empty)
-      setSlugManual(false)
     }
     setError(null)
   }, [open, category])
@@ -65,8 +62,6 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
     try {
       onSubmit({
         name: form.name.trim(),
-        slug: slugifyTitle(form.slug || form.name),
-        description: form.description.trim(),
         status: form.status,
       })
       onClose()
@@ -114,64 +109,27 @@ export function CategoryFormModal({ open, category, onClose, onSubmit }: Props) 
               <Input
                 id="category-name"
                 value={form.name}
-                onChange={(event) => {
-                  const name = event.target.value
-                  setForm((current) => ({
-                    ...current,
-                    name,
-                    slug: slugManual ? current.slug : normalizeSlugInput(name),
-                  }))
-                }}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, name: event.target.value }))
+                }
                 placeholder="e.g. Blood Sugar Management"
                 className="rounded-lg border-border"
               />
             </FormField>
 
-            <FormField id="category-slug" label="Slug" required>
-              <Input
-                id="category-slug"
-                value={form.slug}
-                onChange={(event) => {
-                  setSlugManual(true)
-                  setForm((current) => ({
-                    ...current,
-                    slug: normalizeSlugInput(event.target.value),
-                  }))
-                }}
-                placeholder="blood-sugar-management"
-                className="rounded-lg border-border font-mono text-sm"
-              />
-            </FormField>
-
-            <FormField id="category-description" label="Description">
-              <Textarea
-                id="category-description"
-                value={form.description}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, description: event.target.value }))
-                }
-                rows={3}
-                placeholder="Short description of this category"
-                className="rounded-lg border-border"
-              />
-            </FormField>
-
-            <FormField id="category-status" label="Status">
+            <FormField id="category-status" label="Status" required>
               <FilterSelect
                 id="category-status"
-                variant="outlined"
+                label="Status"
                 hideLabel
                 fullWidth
-                label="Category status"
+                variant="outlined"
                 value={form.status}
-                options={[
-                  { value: 'active', label: 'Active' },
-                  { value: 'inactive', label: 'Inactive' },
-                ]}
+                options={STATUS_OPTIONS}
                 onChange={(value) =>
                   setForm((current) => ({
                     ...current,
-                    status: value as CategoryStatus,
+                    status: value === 'inactive' ? 'inactive' : 'active',
                   }))
                 }
               />

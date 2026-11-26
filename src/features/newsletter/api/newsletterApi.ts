@@ -121,7 +121,18 @@ export const newsletterApi = {
       '/newsletter/logs',
       { params: query },
     )
-    return data
+    return {
+      ...data,
+      items: (data.items ?? []).map((item) => ({
+        ...item,
+        message: item.message ?? null,
+        sendCount: Number(item.sendCount ?? 1),
+        createdAt:
+          typeof item.createdAt === 'string'
+            ? item.createdAt
+            : new Date(item.createdAt as unknown as string).toISOString(),
+      })),
+    }
   },
 
   async unsubscribe(token: string) {

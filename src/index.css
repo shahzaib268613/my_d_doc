@@ -100,7 +100,7 @@
   --admin-sidebar-deep: var(--inverse);
   --admin-sidebar-mid: color-mix(in srgb, var(--inverse) 86%, var(--primary));
   /* Shared height for sidebar logout footer + sticky pagination bar */
-  --admin-footer-height: 3.5rem;
+  --admin-footer-height: 5.25rem;
 }
 
 @layer base {
@@ -308,6 +308,50 @@
   @media (prefers-reduced-motion: reduce) {
     .ui-btn-shine:hover::before,
     .ui-btn-shine:focus-visible::before {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  @keyframes ui-progress-shine-sweep {
+    from {
+      transform: translateX(-120%) skewX(-16deg);
+    }
+    to {
+      transform: translateX(220%) skewX(-16deg);
+    }
+  }
+
+  /* Navy send progress fill + continuous shine */
+  .ui-progress-bar {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--inverse);
+    transition: width 400ms var(--ease-reveal, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  .ui-progress-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, #ffffff 55%, transparent) 50%,
+      transparent 100%
+    );
+    animation: ui-progress-shine-sweep 1.4s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-progress-bar {
+      transition: none;
+    }
+
+    .ui-progress-bar::after {
       animation: none;
       opacity: 0;
     }

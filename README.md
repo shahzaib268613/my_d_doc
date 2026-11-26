@@ -26,7 +26,7 @@ Full rules, folder conventions, and handoff checklist: [FRONTEND_ARCHITECTURE.md
 
 Copy `.env.example` to `.env` and set:
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+- `VITE_API_URL` — Nest API base URL (default `http://localhost:3000`)
+- `VITE_SITE_URL` — Frontend origin used for public links (default `http://localhost:5173`)
 
-These are public anon values only. Never commit a service-role key. Env is validated in `src/shared/config/env.ts` (do not read `import.meta.env` elsewhere).
+Env is validated in `src/shared/config/env.ts`.
