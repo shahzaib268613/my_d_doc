@@ -1,6 +1,6 @@
 import { type FormEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, Card, Container, Input, Label, Section } from '@/shared/components/ui'
+import { ReusableButton, Card, Container, Input, Label, Section } from '@/shared/components/ui'
 import { ScrollToTop } from '@/shared/components/ScrollToTop'
 import { setAdminSession } from '../session'
 
@@ -41,9 +41,9 @@ export function SignInPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
+            <ReusableButton type="submit" className="w-full">
               Sign in
-            </Button>
+            </ReusableButton>
           </form>
         </Card>
       </Container>

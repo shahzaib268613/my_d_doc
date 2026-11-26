@@ -113,45 +113,33 @@ export const adminRouteDefs: AdminRouteDef[] = [
       breadcrumbs: crumb({ label: 'Newsletter' }),
     },
   },
+  // Legacy newsletter URLs → single Newsletter page
   {
     path: 'newsletter/subscribers',
     meta: {
-      title: 'All Subscribers',
-      breadcrumbs: crumb(
-        { label: 'Newsletter', to: `${ADMIN_BASE}/newsletter` },
-        { label: 'All Subscribers' },
-      ),
+      title: 'Newsletter',
+      breadcrumbs: crumb({ label: 'Newsletter' }),
     },
   },
   {
     path: 'newsletter/active',
     meta: {
-      title: 'Active Subscribers',
-      breadcrumbs: crumb(
-        { label: 'Newsletter', to: `${ADMIN_BASE}/newsletter` },
-        { label: 'Active Subscribers' },
-      ),
+      title: 'Newsletter',
+      breadcrumbs: crumb({ label: 'Newsletter' }),
     },
   },
   {
     path: 'newsletter/campaigns',
     meta: {
-      title: 'Campaigns',
-      breadcrumbs: crumb(
-        { label: 'Newsletter', to: `${ADMIN_BASE}/newsletter` },
-        { label: 'Campaigns' },
-      ),
+      title: 'Newsletter',
+      breadcrumbs: crumb({ label: 'Newsletter' }),
     },
   },
   {
     path: 'newsletter/campaigns/edit/:id',
     meta: {
-      title: 'Edit Campaign',
-      breadcrumbs: crumb(
-        { label: 'Newsletter', to: `${ADMIN_BASE}/newsletter` },
-        { label: 'Campaigns', to: `${ADMIN_BASE}/newsletter/campaigns` },
-        { label: 'Edit' },
-      ),
+      title: 'Newsletter',
+      breadcrumbs: crumb({ label: 'Newsletter' }),
     },
   },
   {

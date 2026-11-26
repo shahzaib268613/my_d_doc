@@ -12,7 +12,7 @@ import { LoadingState } from '@/features/admin/components/LoadingState'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
-import { Button } from '@/shared/components/ui'
+import { ReusableButton } from '@/shared/components/ui'
 import { useBlogCreateModal } from './BlogCreateModalContext'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useAdminBlogs, useBlogCounts } from './hooks/useAdminBlogs'
@@ -41,9 +41,9 @@ export function BlogDashboardPage() {
         description={getApiErrorMessage(countsQuery.error)}
         className="rounded-[16px]"
         action={
-          <Button type="button" size="sm" onClick={() => void countsQuery.refetch()}>
+          <ReusableButton type="button" size="sm" onClick={() => void countsQuery.refetch()}>
             Retry
-          </Button>
+          </ReusableButton>
         }
       />
     )
@@ -67,16 +67,16 @@ export function BlogDashboardPage() {
           <p className="mt-2 text-sm leading-relaxed text-inverse-muted sm:text-base">
             Manage diabetes education content, track publishing, and keep your library fresh.
           </p>
-          <Button
+          <ReusableButton
             type="button"
-            variant="outline"
+            variant="white"
             size="lg"
             onClick={openCreateBlog}
-            className="mt-5 rounded-xl border-0 bg-surface text-inverse shadow-sm hover:bg-soft"
+            className="mt-5 rounded-xl"
           >
             <FilePlus2 className="size-4" aria-hidden="true" />
             Add New Blog
-          </Button>
+          </ReusableButton>
         </div>
         <div
           className="pointer-events-none absolute -right-6 bottom-0 hidden h-40 w-48 rounded-[20px] bg-white/10 sm:block lg:right-8 lg:h-44 lg:w-56"

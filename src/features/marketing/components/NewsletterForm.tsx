@@ -1,10 +1,8 @@
 import { useId, useState, type CSSProperties, type FormEvent } from 'react'
 import { z } from 'zod'
-import { Button, Input, Label } from '@/shared/components/ui'
-import {
-  NewsletterStorageError,
-  useNewsletter,
-} from '@/features/newsletter'
+import { ReusableButton, Input, Label } from '@/shared/components/ui'
+import { newsletterApi } from '@/features/newsletter/api/newsletterApi'
+import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { newsletterContent } from '../constants/newsletter'
 import { cn } from '@/shared/utils/cn'
 
@@ -13,9 +11,12 @@ const newsletterSchema = z.object({
   company: z.string().optional(),
 })
 
+type ButtonTone = 'primary' | 'white' | 'navy'
+
 type Props = {
   variant?: 'inline' | 'band' | 'stacked'
   className?: string
+  buttonVariant?: ButtonTone
   buttonClassName?: string
   buttonStyle?: CSSProperties
 }
@@ -23,10 +24,10 @@ type Props = {
 export function NewsletterForm({
   variant = 'band',
   className,
+  buttonVariant = 'primary',
   buttonClassName,
   buttonStyle,
 }: Props) {
-  const { addSubscriber } = useNewsletter()
   const emailId = useId()
   const honeypotId = useId()
   const [email, setEmail] = useState('')
@@ -58,19 +59,17 @@ export function NewsletterForm({
 
     setSubmitting(true)
     try {
-      addSubscriber({
+      await newsletterApi.subscribePublic({
         email: parsed.data.email,
-        source: 'homepage',
       })
       setMessage('You are subscribed. Thank you!')
       setEmail('')
     } catch (err) {
-      if (err instanceof NewsletterStorageError && err.code === 'DUPLICATE') {
+      const apiMessage = getApiErrorMessage(err, '')
+      if (/already subscribed/i.test(apiMessage)) {
         setError('This email is already subscribed.')
-      } else if (err instanceof NewsletterStorageError) {
-        setError(err.message)
       } else {
-        setError('Something went wrong. Please try again.')
+        setError(apiMessage || 'Something went wrong. Please try again.')
       }
     } finally {
       setSubmitting(false)
@@ -112,41 +111,21 @@ export function NewsletterForm({
           />
         </div>
 
-        {buttonStyle ? (
-          <button
-            type="submit"
-            disabled={submitting}
-            style={{
-              backgroundColor: '#ffffff',
-              color: '#1b2f43',
-              ...buttonStyle,
-            }}
-            className={cn(
-              'inline-flex min-h-[var(--spacing-touch)] w-full shrink-0 items-center justify-center rounded-lg px-3.5 text-sm font-semibold transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-50',
-              !stacked && 'sm:w-auto sm:min-w-36',
-              buttonClassName,
-            )}
-          >
-            {submitting
-              ? newsletterContent.submitLoadingLabel
-              : newsletterContent.submitIdleLabel}
-          </button>
-        ) : (
-          <Button
-            type="submit"
-            disabled={submitting}
-            className={cn(
-              'w-full shrink-0',
-              !stacked && 'sm:w-auto sm:min-w-36',
-              stacked && 'rounded-lg font-semibold',
-              buttonClassName,
-            )}
-          >
-            {submitting
-              ? newsletterContent.submitLoadingLabel
-              : newsletterContent.submitIdleLabel}
-          </Button>
-        )}
+        <ReusableButton
+          type="submit"
+          disabled={submitting}
+          variant={buttonVariant}
+          style={buttonStyle}
+          className={cn(
+            'w-full shrink-0',
+            !stacked && 'sm:w-auto sm:min-w-36',
+            buttonClassName,
+          )}
+        >
+          {submitting
+            ? newsletterContent.submitLoadingLabel
+            : newsletterContent.submitIdleLabel}
+        </ReusableButton>
       </div>
 
       <div className="absolute -left-[9999px]" aria-hidden="true">

@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Mail, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import logoUrl from '../../../assets/logo.jpg'
 import { siteConfig } from '@/shared/config/site'
-import { Button, Container, IconButton } from '@/shared/components/ui'
+import { Container, IconButton, ReusableButton } from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
 import { isNavItemEnabled, navItems } from '../../../constants/nav'
 
@@ -100,30 +100,30 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
         <div className="flex items-center gap-1.5 sm:gap-2">
           {isAdmin ? (
             <>
-              <Button href="/admin" variant="ghost" size="sm" className="hidden md:inline-flex">
+              <ReusableButton href="/admin" variant="ghost" size="sm" className="hidden md:inline-flex">
                 Admin
-              </Button>
+              </ReusableButton>
               {onSignOut ? (
-                <Button
+                <ReusableButton
                   variant="ghost"
                   size="sm"
                   className="hidden md:inline-flex"
                   onClick={onSignOut}
                 >
                   Sign out
-                </Button>
+                </ReusableButton>
               ) : null}
             </>
           ) : null}
-          <Button
-            variant="primary"
+          <ReusableButton
+            variant="navy"
             size="md"
-            className="hidden bg-inverse text-white hover:bg-inverse/90 md:inline-flex"
+            showIcon
+            className="hidden md:inline-flex"
             onClick={subscribeTarget}
           >
-            <Mail className="size-4" aria-hidden="true" />
             Subscribe to Newsletter
-          </Button>
+          </ReusableButton>
           <IconButton
             id={menuButtonId}
             label={open ? 'Close menu' : 'Open menu'}
@@ -169,22 +169,23 @@ export function Navbar({ isAdmin = false, onSignOut }: Props) {
                 </NavLink>
               )
             })}
-            <Button
+            <ReusableButton
+              variant="navy"
+              showIcon
               onClick={subscribeTarget}
-              className="mt-2 w-full bg-inverse text-white hover:bg-inverse/90"
+              className="mt-2 w-full"
             >
-              <Mail className="size-4" aria-hidden="true" />
               Subscribe to Newsletter
-            </Button>
+            </ReusableButton>
             {isAdmin ? (
               <div className="mt-2 flex flex-col gap-2">
-                <Button href="/admin" variant="outline" className="w-full">
+                <ReusableButton href="/admin" variant="outline" className="w-full">
                   Admin
-                </Button>
+                </ReusableButton>
                 {onSignOut ? (
-                  <Button variant="ghost" className="w-full" onClick={onSignOut}>
+                  <ReusableButton variant="ghost" className="w-full" onClick={onSignOut}>
                     Sign out
-                  </Button>
+                  </ReusableButton>
                 ) : null}
               </div>
             ) : null}

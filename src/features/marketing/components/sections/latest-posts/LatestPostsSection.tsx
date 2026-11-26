@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
-import { Container, Reveal, Section } from '@/shared/components/ui'
+import { Container, Reveal, Section, ReusableButton } from '@/shared/components/ui'
 
 type Props = {
   children: ReactNode
@@ -33,13 +32,14 @@ export function LatestPostsSection({ children }: Props) {
                 Practical articles on nutrition, blood sugar, and living well with diabetes.
               </p>
             </div>
-            <Link
-              to="/blog"
-              className="inline-flex min-h-[var(--spacing-touch)] shrink-0 items-center gap-1.5 self-start rounded-lg bg-inverse px-4 text-sm font-semibold text-white no-underline shadow-[var(--shadow-button)] transition-colors hover:bg-inverse/90 sm:self-auto"
+            <ReusableButton
+              href="/blog"
+              variant="navy"
+              className="shrink-0 self-start sm:self-auto"
             >
               View all articles
               <ArrowUpRight className="size-4" aria-hidden="true" />
-            </Link>
+            </ReusableButton>
           </div>
           {children}
         </Reveal>

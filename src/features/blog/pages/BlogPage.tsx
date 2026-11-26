@@ -5,7 +5,7 @@ import {
   getBlogCategoryBySlug,
 } from '@/shared/config/blogCategories'
 import {
-  Button,
+  ReusableButton,
   Container,
   EmptyState,
   FilterSelect,
@@ -152,14 +152,14 @@ export function BlogPage() {
           />
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end md:w-auto md:justify-end">
             {filtersActive ? (
-              <Button
+              <ReusableButton
                 type="button"
                 variant="ghost"
                 className="shrink-0 self-start px-2 text-sm font-semibold text-primary sm:self-end"
                 onClick={clearFilters}
               >
                 Clear filters
-              </Button>
+              </ReusableButton>
             ) : null}
             <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
               <FilterSelect
@@ -221,9 +221,9 @@ export function BlogPage() {
               title="No articles found"
               description="Try a different search or clear your filters."
               action={
-                <Button type="button" variant="outline" onClick={clearFilters}>
+                <ReusableButton type="button" variant="outline" onClick={clearFilters}>
                   Clear filters
-                </Button>
+                </ReusableButton>
               }
             />
           ) : (

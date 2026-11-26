@@ -7,7 +7,7 @@ import {
   ArticleHero,
   AuthorBox,
   Badge,
-  Button,
+  ReusableButton,
   Container,
   FaqAccordion,
   RelatedBlogsList,
@@ -86,10 +86,10 @@ function ArticleNotFound() {
           <p className="mt-3 text-muted-foreground">
             It may have been removed or is no longer available.
           </p>
-          <Button href="/blog" variant="outline" className="mt-6">
+          <ReusableButton href="/blog" variant="outline" className="mt-6">
             <ArrowLeft className="size-4" aria-hidden="true" />
             Back to blog
-          </Button>
+          </ReusableButton>
         </div>
       </Container>
     </Section>

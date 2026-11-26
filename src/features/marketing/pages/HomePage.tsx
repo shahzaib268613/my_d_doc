@@ -5,7 +5,7 @@ import { Hero } from '../components/sections/hero'
 import { LatestPostsSection } from '../components/sections/latest-posts'
 import { Newsletter } from '../components/sections/newsletter'
 import { SpeakingEngagements } from '../components/sections/speaking-engagements'
-import { TopicsV2 } from '../components/home-v2'
+import { Topics } from '../components/sections/topics'
 import { WhyMyDiabetesDoc } from '../components/sections/why-my-diabetes-doc'
 
 type Props = {
@@ -16,7 +16,7 @@ export function HomePage({ latestPosts }: Props) {
   return (
     <>
       <Hero />
-      <TopicsV2 />
+      <Topics />
       <WhyMyDiabetesDoc />
       <LatestPostsSection>
         {latestPosts ?? (

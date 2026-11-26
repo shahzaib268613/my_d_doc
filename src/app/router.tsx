@@ -4,13 +4,7 @@ import { MarketingLayout } from './layouts/MarketingLayout'
 import { AdminLayout } from './layouts/AdminLayout'
 import { adminRouteDefs } from '@/features/admin/constants/adminRoutes'
 import { AdminPlaceholderPage } from '@/features/admin/pages/AdminPlaceholderPage'
-import {
-  NewsletterOverviewPage,
-  AllSubscribersPage,
-  ActiveSubscribersPage,
-  CampaignsPage,
-  CampaignEditorPage,
-} from '@/features/newsletter'
+import { NewsletterPage, UnsubscribePage } from '@/features/newsletter'
 import {
   AllBlogsPage,
   BlogCategoriesPage,
@@ -76,15 +70,12 @@ function adminElementForPath(path: string) {
     case 'blogs/edit/:id':
       return <EditBlogPage />
     case 'newsletter':
-      return <NewsletterOverviewPage />
+      return <NewsletterPage />
     case 'newsletter/subscribers':
-      return <AllSubscribersPage />
     case 'newsletter/active':
-      return <ActiveSubscribersPage />
     case 'newsletter/campaigns':
-      return <CampaignsPage />
     case 'newsletter/campaigns/edit/:id':
-      return <CampaignEditorPage mode="edit" />
+      return <Navigate to="/admin/newsletter" replace />
     default:
       return <AdminPlaceholderPage />
   }
@@ -123,6 +114,7 @@ const router = createBrowserRouter([
       { path: '/about', element: <AboutPage /> },
       { path: '/blog', element: <BlogPage /> },
       { path: '/blog/:slug', element: <BlogPostPage /> },
+      { path: '/unsubscribe', element: <UnsubscribePage /> },
     ],
   },
   { path: '*', element: <NotFound /> },

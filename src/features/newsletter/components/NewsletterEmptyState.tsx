@@ -22,15 +22,15 @@ export function NewsletterEmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-xl border border-dashed border-border/80 bg-gradient-to-b from-soft/40 to-surface text-center',
-        compact ? 'px-3 py-6' : 'px-4 py-8 sm:py-10',
+        'flex flex-col items-center justify-center rounded-[0.875rem] border border-dashed border-border/70 bg-soft/20 text-center',
+        compact ? 'px-3 py-8' : 'px-4 py-10 sm:py-12',
         className,
       )}
     >
-      <span className="mb-3 inline-flex size-10 items-center justify-center rounded-xl bg-soft text-primary shadow-sm ring-1 ring-border/60">
-        <Icon className="size-4" aria-hidden="true" />
+      <span className="mb-3 inline-flex size-11 items-center justify-center rounded-[0.75rem] bg-surface text-primary ring-1 ring-border/70">
+        <Icon className="size-4" aria-hidden="true" strokeWidth={1.75} />
       </span>
-      <h2 className="font-display text-base font-semibold text-foreground sm:text-lg">{title}</h2>
+      <h2 className="text-base font-semibold tracking-tight text-foreground">{title}</h2>
       {description ? (
         <p className="mt-1.5 max-w-sm text-[0.8125rem] leading-relaxed text-muted-foreground">
           {description}

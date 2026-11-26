@@ -38,7 +38,7 @@ export function Newsletter() {
                 <NewsletterForm
                   className="relative [&_label]:text-inverse-foreground [&_input]:border-0 [&_input]:bg-inverse-foreground/5 [&_input]:text-inverse-foreground [&_input]:outline-none [&_input]:placeholder:text-inverse-muted [&_input]:focus:border-0 [&_input]:focus:outline-none [&_input]:focus:ring-0 [&_input]:focus-visible:outline-none [&_input]:focus-visible:ring-0 [&_p]:text-inverse-muted"
                   variant="band"
-                  buttonClassName="bg-white text-inverse hover:bg-soft"
+                  buttonVariant="white"
                 />
               </div>
             </div>

@@ -1,6 +1,0 @@
-export { HeroV2 } from './HeroV2'
-export { HighlightsV2 } from './HighlightsV2'
-export { TopicsV2 } from './TopicsV2'
-export { LatestBlogV2 } from './LatestBlogV2'
-export { CollaborateV2 } from './CollaborateV2'
-export { NewsletterV2 } from './NewsletterV2'

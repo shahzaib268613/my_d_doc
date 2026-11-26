@@ -44,7 +44,7 @@ export function AdminSidebar({
   )
 
   const routeOpenIds = useMemo(() => {
-    const open = new Set<string>(['blog'])
+    const open = new Set<string>()
     for (const section of visibleSections) {
       for (const item of section.items) {
         if (
@@ -230,7 +230,7 @@ export function AdminSidebar({
         ))}
       </nav>
 
-      <div className="shrink-0 border-t border-white/10 bg-black/25 p-2">
+      <div className="flex h-[var(--admin-footer-height)] min-h-[var(--admin-footer-height)] shrink-0 items-center border-t border-white/10 bg-black/25 px-2">
         <SidebarMenuItem
           label="Logout"
           icon={LogOut}

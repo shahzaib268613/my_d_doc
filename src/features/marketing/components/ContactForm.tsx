@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Button, Input, Label, Textarea } from '@/shared/components/ui'
+import { ReusableButton, Input, Label, Textarea } from '@/shared/components/ui'
 import { siteConfig } from '@/shared/config/site'
 
 export function ContactForm() {
@@ -23,7 +23,7 @@ export function ContactForm() {
         <Label htmlFor="contact-message">Message</Label>
         <Textarea id="contact-message" required value={message} onChange={(event) => setMessage(event.target.value)} />
       </div>
-      <Button type="submit">Send inquiry</Button>
+      <ReusableButton type="submit">Send inquiry</ReusableButton>
       <p className="text-xs text-muted-foreground">This will open your email app.</p>
     </form>
   )
