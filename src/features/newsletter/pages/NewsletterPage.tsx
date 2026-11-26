@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
   AlertCircle,
-  Download,
   Mail,
   Plus,
   SearchX,
@@ -11,20 +10,18 @@ import {
 import {
   Card,
   ConfirmDialog,
-  Pagination,
   ReusableButton,
   SearchInput,
   Spinner,
+  StatsCard,
+  StatsCardGrid,
 } from '@/shared/components/ui'
-import { PageHeader } from '@/features/admin/components/PageHeader'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
-import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useToast } from '@/shared/hooks/useToast'
-import { newsletterApi } from '../api/newsletterApi'
 import { ComposeEmailModal } from '../components/ComposeEmailModal'
 import { NewsletterEmptyState } from '../components/NewsletterEmptyState'
-import { NewsletterStatCard } from '../components/NewsletterStatCard'
+import { NewsletterPageHero } from '../components/NewsletterPageHero'
 import { NewsletterTabs, type NewsletterTabId } from '../components/NewsletterTabs'
 import { SentLogsSection } from '../components/SentLogsSection'
 import { SubscriberForm } from '../components/SubscriberForm'
@@ -36,21 +33,10 @@ import {
   useNewsletterSubscribers,
 } from '../hooks/useNewsletterAdmin'
 import type { ComposeMode, NewsletterSubscriber } from '../types'
-import { downloadCsv } from '../utils/downloadCsv'
 
 const PAGE_SIZE = 8
 
 type PanelMode = 'list' | 'create' | 'view'
-
-function toCsv(rows: NewsletterSubscriber[]) {
-  const header = ['id', 'name', 'email', 'status', 'createdAt', 'source']
-  const lines = rows.map((item) =>
-    [item.id, item.name ?? '', item.email, item.status, item.createdAt, item.source]
-      .map((value) => `"${String(value).replaceAll('"', '""')}"`)
-      .join(','),
-  )
-  return [header.join(','), ...lines].join('\n')
-}
 
 export function NewsletterPage() {
   const { toast } = useToast()
@@ -187,71 +173,35 @@ export function NewsletterPage() {
       : null
 
   return (
-    <div className="flex min-h-full min-w-0 flex-1 flex-col gap-5">
-      <div className="flex min-w-0 flex-1 flex-col gap-5">
-        <PageHeader
-          className="mb-0 sm:mb-0"
-          title="Newsletter"
-          breadcrumbs={[
-            { label: 'Admin', to: ADMIN_BASE },
-            { label: 'Newsletter' },
-          ]}
-          description="Manage subscribers and send newsletter emails from one place."
-          actions={
-            <div className="flex flex-wrap items-center gap-2">
-              <ReusableButton
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={total === 0}
-                onClick={() => {
-                  void newsletterApi
-                    .listSubscribers({
-                      search: debouncedQuery || undefined,
-                      page: 1,
-                      limit: 100,
-                    })
-                    .then((result) => {
-                      downloadCsv(
-                        'newsletter-subscribers.csv',
-                        toCsv(result.items),
-                      )
-                      toast('CSV downloaded (active subscribers)', 'success')
-                    })
-                    .catch((error) => {
-                      toast(getApiErrorMessage(error, 'Export failed'), 'danger')
-                    })
-                }}
-              >
-                <Download className="size-3.5" aria-hidden="true" strokeWidth={1.75} />
-                Export CSV
-              </ReusableButton>
-              <ReusableButton type="button" size="sm" variant="navy" onClick={openCreate}>
-                <Plus className="size-3.5" aria-hidden="true" strokeWidth={1.75} />
-                Add subscriber
-              </ReusableButton>
-            </div>
-          }
-        />
+    <div className="flex min-w-0 flex-col gap-5">
+      <div className="flex min-w-0 flex-col gap-5">
+        <NewsletterPageHero />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <NewsletterStatCard
-            className="w-full sm:w-auto sm:min-w-[14rem]"
-            label="Total subscribers"
-            value={statsQuery.isLoading && !statsQuery.data ? '—' : total}
-            icon={Users}
-            hint="Active subscribers only"
-          />
-          <NewsletterTabs value={tab} onChange={setTab} />
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <StatsCardGrid className="w-full sm:grid-cols-1 xl:grid-cols-1 sm:max-w-sm">
+            <li>
+              <StatsCard
+                label="Total subscribers"
+                value={statsQuery.isLoading && !statsQuery.data ? '—' : total}
+                icon={Users}
+                tone="primary"
+              />
+            </li>
+          </StatsCardGrid>
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+            <ReusableButton type="button" size="sm" variant="navy" onClick={openCreate}>
+              <Plus className="size-3.5" aria-hidden="true" strokeWidth={1.75} />
+              Add subscriber
+            </ReusableButton>
+            <NewsletterTabs value={tab} onChange={setTab} />
+          </div>
         </div>
 
         {tab === 'logs' ? (
-          <Card className="overflow-hidden rounded-[0.875rem] border-border/70 p-3 shadow-none sm:p-4">
-            <SentLogsSection page={logsPage} onPageChange={setLogsPage} />
-          </Card>
+          <SentLogsSection page={logsPage} onPageChange={setLogsPage} />
         ) : (
           <>
-            <Card className="overflow-hidden rounded-[0.875rem] border-border/70 p-0 shadow-none">
+            <Card className="mb-4 overflow-hidden rounded-[0.875rem] border-border/70 p-0 shadow-none">
               <div className="border-b border-border/70 bg-surface px-3 py-3 sm:px-4">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center">
@@ -328,56 +278,30 @@ export function NewsletterPage() {
 
               <div className="p-3 sm:p-4">
                 {listQuery.isLoading ? (
-                  <div className="flex flex-col items-center justify-center gap-3 py-14">
+                  <div className="flex min-h-[22rem] flex-col items-center justify-center gap-3">
                     <Spinner label="Loading subscribers" />
                     <p className="text-[0.8125rem] text-muted-foreground">
                       Loading subscribers…
                     </p>
                   </div>
                 ) : listQuery.isError ? (
-                  <NewsletterEmptyState
-                    icon={AlertCircle}
-                    title="Could not load subscribers"
-                    description={getApiErrorMessage(listQuery.error)}
-                    action={
-                      <ReusableButton
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        onClick={() => void listQuery.refetch()}
-                      >
-                        Try again
-                      </ReusableButton>
-                    }
-                  />
-                ) : items.length === 0 && isSearching ? (
-                  <NewsletterEmptyState
-                    icon={SearchX}
-                    title="No search results"
-                    description={`No subscribers match “${debouncedQuery}”. Try a different name or email.`}
-                    action={
-                      <ReusableButton
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setQuery('')}
-                      >
-                        Clear search
-                      </ReusableButton>
-                    }
-                  />
-                ) : items.length === 0 ? (
-                  <NewsletterEmptyState
-                    icon={UserRound}
-                    title="No subscribers yet"
-                    description="Add a subscriber manually or wait for homepage sign-ups."
-                    action={
-                      <ReusableButton type="button" size="sm" variant="navy" onClick={openCreate}>
-                        <Plus className="size-3.5" aria-hidden="true" strokeWidth={1.75} />
-                        Add subscriber
-                      </ReusableButton>
-                    }
-                  />
+                  <div className="flex min-h-[22rem] items-center justify-center">
+                    <NewsletterEmptyState
+                      icon={AlertCircle}
+                      title="Could not load subscribers"
+                      description={getApiErrorMessage(listQuery.error)}
+                      action={
+                        <ReusableButton
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => void listQuery.refetch()}
+                        >
+                          Try again
+                        </ReusableButton>
+                      }
+                    />
+                  </div>
                 ) : (
                   <SubscriberTable
                     rows={items}
@@ -393,6 +317,45 @@ export function NewsletterPage() {
                       setComposeOpen(true)
                     }}
                     onDelete={setDeleteTarget}
+                    currentPage={Math.min(page, totalPages)}
+                    totalPages={Math.max(1, totalPages)}
+                    onPageChange={setPage}
+                    emptyMessage={
+                      items.length === 0 && isSearching ? (
+                        <NewsletterEmptyState
+                          icon={SearchX}
+                          title="No search results"
+                          description={`No subscribers match “${debouncedQuery}”. Try a different name or email.`}
+                          action={
+                            <ReusableButton
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setQuery('')}
+                            >
+                              Clear search
+                            </ReusableButton>
+                          }
+                        />
+                      ) : (
+                        <NewsletterEmptyState
+                          icon={UserRound}
+                          title="No subscribers yet"
+                          description="Add a subscriber manually or wait for homepage sign-ups."
+                          action={
+                            <ReusableButton
+                              type="button"
+                              size="sm"
+                              variant="navy"
+                              onClick={openCreate}
+                            >
+                              <Plus className="size-3.5" aria-hidden="true" strokeWidth={1.75} />
+                              Add subscriber
+                            </ReusableButton>
+                          }
+                        />
+                      )
+                    }
                   />
                 )}
               </div>
@@ -400,18 +363,6 @@ export function NewsletterPage() {
           </>
         )}
       </div>
-
-      {tab === 'subscribers' && !listQuery.isLoading && !listQuery.isError ? (
-        <Pagination
-          mode="simple"
-          showPageInfo
-          sticky
-          currentPage={Math.min(page, totalPages)}
-          totalPages={totalPages}
-          onPageChange={setPage}
-          className="justify-end sm:justify-between"
-        />
-      ) : null}
 
       <SubscriberModal
         open={panelMode === 'create' || panelMode === 'view'}

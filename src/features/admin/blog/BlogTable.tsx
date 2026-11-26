@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
 import { ImageIcon } from 'lucide-react'
-import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
+import {
+  ReusableTable,
+  type ReusableTableColumn,
+} from '@/shared/components/ui'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import type { Blog } from '@/features/blog/types/blog'
 import { formatBlogDate } from '@/features/blog/utils/formatDate'
@@ -19,6 +22,11 @@ type Props = {
   onDelete: (blog: Blog) => void
   /** Shown inside the table when there are no rows (placeholder empty state) */
   emptyContent?: ReactNode
+  currentPage?: number
+  totalPages?: number
+  onPageChange?: (page: number) => void
+  toolbar?: ReactNode
+  shell?: boolean
 }
 
 export function BlogTable({
@@ -32,11 +40,16 @@ export function BlogTable({
   onUnpublish,
   onDelete,
   emptyContent,
+  currentPage,
+  totalPages,
+  onPageChange,
+  toolbar,
+  shell = true,
 }: Props) {
   const showCheckbox = Boolean(onToggleSelect && selectedIds)
   const allSelected = showCheckbox && blogs.length > 0 && blogs.every((b) => selectedIds!.has(b.id))
 
-  const columns: DataTableColumn<Blog>[] = []
+  const columns: ReusableTableColumn<Blog>[] = []
 
   if (showCheckbox) {
     columns.push({
@@ -136,12 +149,22 @@ export function BlogTable({
   })
 
   return (
-    <DataTable
+    <ReusableTable
+      shell={shell}
+      toolbar={toolbar}
       columns={columns}
       rows={blogs}
       rowKey={(blog) => blog.id}
       emptyMessage={emptyContent ?? 'No blogs match this filter.'}
-      className="rounded-lg border-border shadow-sm [&_thead]:bg-background [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_td]:px-4 [&_td]:py-3.5"
+      pagination={
+        currentPage != null && totalPages != null && onPageChange
+          ? {
+              currentPage,
+              totalPages,
+              onPageChange,
+            }
+          : undefined
+      }
     />
   )
 }

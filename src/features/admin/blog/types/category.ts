@@ -12,7 +12,6 @@ export type ManagedBlogCategory = {
 
 export type CategoryWriteInput = {
   name: string
-  slug: string
-  description: string
   status: CategoryStatus
+  description?: string
 }

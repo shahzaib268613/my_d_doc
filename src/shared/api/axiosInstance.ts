@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { getEnv } from '@/shared/config/env'
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: getEnv().VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -230,13 +230,60 @@ export function AdminSidebar({
         ))}
       </nav>
 
-      <div className="flex h-[var(--admin-footer-height)] min-h-[var(--admin-footer-height)] shrink-0 items-center border-t border-white/10 bg-black/25 px-2">
-        <SidebarMenuItem
-          label="Logout"
-          icon={LogOut}
-          collapsed={collapsed}
-          onClick={onLogout}
-        />
+      <div
+        className={cn(
+          'flex h-[var(--admin-footer-height)] min-h-[var(--admin-footer-height)] shrink-0 items-center border-t border-white/10 px-3',
+          collapsed && 'lg:justify-center lg:px-2',
+        )}
+      >
+        {collapsed ? (
+          <button
+            type="button"
+            onClick={onLogout}
+            aria-label="Logout"
+            className={cn(
+              'hidden size-12 items-center justify-center rounded-md bg-white shadow-[0_1px_3px_rgba(15,23,42,0.12)] lg:inline-flex',
+              'transition-colors hover:bg-white/95',
+              'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+            )}
+          >
+            <span className="inline-flex size-9 items-center justify-center rounded-sm bg-[#f3ddd4] text-[#9a4a3c]">
+              <LogOut className="size-4" aria-hidden="true" strokeWidth={2} />
+            </span>
+          </button>
+        ) : null}
+
+        <div
+          className={cn(
+            'flex w-full items-center gap-2.5 rounded-md bg-white py-2.5 pl-2.5 pr-2 shadow-[0_1px_3px_rgba(15,23,42,0.12)]',
+            collapsed && 'lg:hidden',
+          )}
+        >
+          <span
+            className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[#e8f1f8] text-sm font-bold text-inverse"
+            aria-hidden="true"
+          >
+            A
+          </span>
+          <div className="min-w-0 flex-1 leading-tight">
+            <p className="truncate text-sm font-bold text-inverse">ADMIN</p>
+            <p className="truncate text-[0.6875rem] font-medium text-muted-foreground">
+              Admin Dashboard
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onLogout}
+            aria-label="Logout"
+            className={cn(
+              'inline-flex size-10 shrink-0 items-center justify-center rounded-sm bg-[#f3ddd4] text-[#9a4a3c]',
+              'transition-colors hover:bg-[#efc9bd]',
+              'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+            )}
+          >
+            <LogOut className="size-4" aria-hidden="true" strokeWidth={2} />
+          </button>
+        </div>
       </div>
     </aside>
   )

@@ -1,5 +1,5 @@
 import { FileEdit, FileText, Newspaper } from 'lucide-react'
-import { StatCard } from '@/features/admin/components/StatCard'
+import { StatsCard, StatsCardGrid } from '@/shared/components/ui'
 import type { BlogCounts } from '@/features/blog/types/blog'
 
 type Props = {
@@ -8,31 +8,31 @@ type Props = {
 
 export function BlogStats({ counts }: Props) {
   return (
-    <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+    <StatsCardGrid>
       <li>
-        <StatCard
+        <StatsCard
           label="Total Blogs"
           value={counts?.all ?? '—'}
           icon={Newspaper}
-          className="rounded-[12px] border border-border bg-surface p-4 shadow-sm"
+          tone="primary"
         />
       </li>
       <li>
-        <StatCard
+        <StatsCard
           label="Inactive"
           value={counts?.draft ?? '—'}
           icon={FileEdit}
-          className="rounded-[12px] border border-border bg-surface p-4 shadow-sm"
+          tone="muted"
         />
       </li>
       <li>
-        <StatCard
+        <StatsCard
           label="Active"
           value={counts?.published ?? '—'}
           icon={FileText}
-          className="rounded-[12px] border border-border bg-surface p-4 shadow-sm"
+          tone="success"
         />
       </li>
-    </ul>
+    </StatsCardGrid>
   )
 }

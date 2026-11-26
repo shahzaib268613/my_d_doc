@@ -204,16 +204,24 @@ export function ComposeEmailModal({
 
             {progress ? (
               <div className="space-y-2 rounded-[0.875rem] border border-border bg-surface p-3.5">
-                <div className="flex items-center justify-between text-[0.8125rem]">
+                <div className="flex items-center justify-between gap-3 text-[0.8125rem]">
                   <span className="text-muted-foreground">Sending progress</span>
                   <span className="font-medium text-foreground">
                     {progress.sent} sent · {progress.failed} failed · {progress.total}{' '}
                     total
+                    <span className="ml-2 tabular-nums text-inverse">{progressPct}%</span>
                   </span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-soft">
+                <div
+                  className="h-2.5 overflow-hidden rounded-full bg-soft"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={progressPct}
+                  aria-label="Sending progress"
+                >
                   <div
-                    className="h-full rounded-full bg-primary transition-[width] duration-300"
+                    className="ui-progress-bar h-full min-w-0 rounded-full"
                     style={{ width: `${progressPct}%` }}
                   />
                 </div>

@@ -44,11 +44,17 @@ export function useBlogCategories() {
     refresh()
   }, [refresh])
 
+  const names = categories.map((category) => category.name)
+  const activeNames = categories
+    .filter((category) => category.status === 'active')
+    .map((category) => category.name)
+
   return {
     categories,
-    activeNames: categories
-      .filter((category) => category.status === 'active')
-      .map((category) => category.name),
+    /** All category names. */
+    names,
+    /** Active category names for blog create/edit selects. */
+    activeNames,
     refresh,
     create,
     update,

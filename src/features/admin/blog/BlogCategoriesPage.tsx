@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
-import { DataTable, type DataTableColumn } from '@/features/admin/components/DataTable'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
-import { ConfirmDialog, Pagination, SearchInput } from '@/shared/components/ui'
+import {
+  ConfirmDialog,
+  ReusableTable,
+  type ReusableTableColumn,
+  SearchInput,
+} from '@/shared/components/ui'
 import { useToast } from '@/shared/hooks/useToast'
 import { CategoryStorageError } from './api/categoryStorage'
 import { useAdminBlogs } from './hooks/useAdminBlogs'
@@ -47,8 +51,7 @@ export function BlogCategoriesPage() {
         if (!q) return true
         return (
           category.name.toLowerCase().includes(q) ||
-          category.slug.toLowerCase().includes(q) ||
-          category.description.toLowerCase().includes(q)
+          category.status.toLowerCase().includes(q)
         )
       })
   }, [categories, blogCounts, search])
@@ -98,32 +101,30 @@ export function BlogCategoriesPage() {
     }
   }
 
-  const columns: DataTableColumn<Row>[] = [
+  const columns: ReusableTableColumn<Row>[] = [
     {
       id: 'name',
       header: 'Category Name',
-      className: 'min-w-[12rem]',
+      className: 'w-1/4',
       cell: (row) => (
-        <div className="min-w-0 max-w-md">
-          <p className="font-semibold text-foreground">{row.name}</p>
-          {row.description ? (
-            <p className="mt-0.5 whitespace-normal break-words text-xs leading-relaxed text-muted-foreground">
-              {row.description}
-            </p>
-          ) : null}
-        </div>
+        <p className="truncate font-semibold text-foreground">{row.name}</p>
       ),
     },
     {
-      id: 'slug',
-      header: 'Slug',
+      id: 'status',
+      header: 'Status',
+      className: 'w-1/4',
       cell: (row) => (
-        <span className="whitespace-nowrap font-mono text-xs text-muted-foreground">{row.slug}</span>
+        <StatusBadge
+          label={row.status === 'active' ? 'Active' : 'Inactive'}
+          tone={row.status === 'active' ? 'success' : 'neutral'}
+        />
       ),
     },
     {
       id: 'count',
       header: 'Blog Count',
+      className: 'w-1/4',
       cell: (row) => (
         <span className="tabular-nums text-sm font-semibold text-foreground">
           {row.blogCount}
@@ -131,22 +132,11 @@ export function BlogCategoriesPage() {
       ),
     },
     {
-      id: 'status',
-      header: 'Status',
-      cell: (row) => (
-        <StatusBadge
-          label={row.status === 'active' ? 'Active' : 'Inactive'}
-          tone={row.status === 'active' ? 'success' : 'neutral'}
-          className="rounded-full px-2.5 py-1 text-[0.7rem]"
-        />
-      ),
-    },
-    {
       id: 'actions',
       header: 'Actions',
-      className: 'text-right',
+      className: 'w-1/4',
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1.5">
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
             title="Edit"
@@ -174,53 +164,51 @@ export function BlogCategoriesPage() {
   ]
 
   return (
-    <div className="flex min-h-full min-w-0 flex-1 flex-col gap-5">
-      <div className="flex min-w-0 flex-1 flex-col gap-5">
+    <div className="flex min-w-0 flex-col gap-5">
+      <div className="flex min-w-0 flex-col gap-5">
         <BlogPageHero
           variant="all"
           title="Blog Categories"
           description="Create and manage categories used when publishing blogs."
         />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <SearchInput
-            variant="outlined"
-            value={search}
-            onChange={setSearch}
-            placeholder="Search categories..."
-            ariaLabel="Search categories"
-            className="sm:max-w-xs"
-          />
-          <AdminButton
-            type="button"
-            size="md"
-            className="min-h-10 shrink-0 rounded-lg px-4"
-            onClick={() => {
-              setEditing(null)
-              setCreateOpen(true)
-            }}
-          >
-            <Plus className="size-4" aria-hidden="true" />
-            Add Category
-          </AdminButton>
-        </div>
-
-        <DataTable
+        <ReusableTable
           columns={columns}
           rows={rows}
           rowKey={(row) => row.id}
+          tableClassName="table-fixed"
           emptyMessage="No categories yet. Create your first category."
-          className="rounded-lg border-border shadow-sm [&_thead]:bg-background [&_th]:px-4 [&_th]:py-3.5 [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_td]:px-4 [&_td]:py-3.5 [&_td]:align-top"
+          toolbar={
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <SearchInput
+                variant="outlined"
+                value={search}
+                onChange={setSearch}
+                placeholder="Search categories..."
+                ariaLabel="Search categories"
+                className="sm:max-w-xs"
+              />
+              <AdminButton
+                type="button"
+                size="md"
+                className="min-h-10 shrink-0 px-4"
+                onClick={() => {
+                  setEditing(null)
+                  setCreateOpen(true)
+                }}
+              >
+                <Plus className="size-4" aria-hidden="true" />
+                Add Category
+              </AdminButton>
+            </div>
+          }
+          pagination={{
+            currentPage: page,
+            totalPages: pageCount,
+            onPageChange: setPage,
+          }}
         />
       </div>
-
-      <Pagination
-        mode="simple"
-        showPageInfo
-        currentPage={page}
-        totalPages={pageCount}
-        onPageChange={setPage}
-      />
 
       <CategoryFormModal
         open={createOpen}

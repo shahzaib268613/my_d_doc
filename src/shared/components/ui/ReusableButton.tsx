@@ -54,7 +54,7 @@ export function ReusableButton({
   const resolvedVariant = variant === 'inverse' ? 'navy' : variant
 
   const styles = cn(
-    'ui-btn-shine inline-flex items-center justify-center rounded-md font-semibold no-underline',
+    'ui-btn-shine inline-flex items-center justify-center rounded-sm font-semibold no-underline',
     'transition-[box-shadow,opacity,background-color,color,border-color] duration-[var(--duration-normal)] ease-[var(--ease-standard)]',
     'disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none',
     sizeClasses[size],
@@ -65,9 +65,9 @@ export function ReusableButton({
     resolvedVariant === 'ghost' &&
       'bg-transparent text-foreground shadow-none hover:bg-soft hover:shadow-[var(--shadow-button)] active:shadow-none',
     resolvedVariant === 'navy' &&
-      'rounded-lg bg-inverse text-inverse-foreground shadow-[var(--shadow-button)] hover:bg-inverse/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
+      'bg-inverse text-inverse-foreground shadow-[var(--shadow-button)] hover:bg-inverse/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
     resolvedVariant === 'white' &&
-      'rounded-lg bg-white text-inverse shadow-[var(--shadow-button)] hover:bg-white/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
+      'bg-white text-inverse shadow-[var(--shadow-button)] hover:bg-white/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
     className,
   )
 
