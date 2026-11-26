@@ -1,6 +1,6 @@
 import { Phone } from 'lucide-react'
 import { clinicConfig } from '@/shared/config/clinic'
-import { Button, Container, Reveal, Section } from '@/shared/components/ui'
+import { ReusableButton, Container, Reveal, Section } from '@/shared/components/ui'
 import { aboutCta, aboutHero } from '../constants/content'
 
 export function AboutHero() {
@@ -21,10 +21,10 @@ export function AboutHero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button href={clinicConfig.bookingHref} size="lg" className="rounded-lg">
+              <ReusableButton href={clinicConfig.bookingHref} size="lg" className="rounded-lg">
                 {aboutCta.bookLabel}
-              </Button>
-              <Button
+              </ReusableButton>
+              <ReusableButton
                 href={clinicConfig.phones.appointments.href}
                 variant="outline"
                 size="lg"
@@ -32,7 +32,7 @@ export function AboutHero() {
               >
                 <Phone className="size-4 text-primary" aria-hidden="true" />
                 {aboutCta.callLabel}
-              </Button>
+              </ReusableButton>
             </div>
 
             <p className="mt-6 text-sm text-muted-foreground">{aboutHero.facts}</p>

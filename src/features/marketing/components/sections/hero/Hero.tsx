@@ -1,7 +1,12 @@
 import { FileText, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { siteConfig } from '@/shared/config/site'
-import { Button, Container, GridBackground, SocialIcons } from '@/shared/components/ui'
+import {
+  Container,
+  GridBackground,
+  ReusableButton,
+  SocialIcons,
+} from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
 import heroBgUrl from '../../../assets/hero-bg.png'
 import { heroContent } from '../../../constants/hero'
@@ -113,36 +118,20 @@ export function Hero({
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button
+              <ReusableButton
                 href={siteConfig.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 size="lg"
-                className={cn(
-                  'rounded-lg',
-                  isNavy && 'bg-white text-[#021b44] hover:bg-white/90',
-                )}
+                variant={isNavy ? 'white' : 'primary'}
               >
                 <Play className="size-4 fill-current" aria-hidden="true" />
                 {heroContent.primaryCta.label}
-              </Button>
-              <Button
-                href="/blog"
-                variant="outline"
-                size="lg"
-                className={cn(
-                  'rounded-lg',
-                  isNavy
-                    ? 'border-white/30 bg-transparent text-white hover:border-white/50 hover:bg-white/10'
-                    : 'border-primary/45 bg-surface/90 text-foreground hover:bg-soft',
-                )}
-              >
-                <FileText
-                  className={cn('size-4', isNavy ? 'text-white' : 'text-primary')}
-                  aria-hidden="true"
-                />
+              </ReusableButton>
+              <ReusableButton href="/blog" size="lg" variant="navy">
+                <FileText className="size-4" aria-hidden="true" />
                 {heroContent.secondaryCta.label}
-              </Button>
+              </ReusableButton>
             </div>
 
             <div className="mt-6 sm:mt-7">

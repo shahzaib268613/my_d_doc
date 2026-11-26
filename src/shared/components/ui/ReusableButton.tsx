@@ -1,7 +1,8 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
+import { Mail } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 
-type Variant = 'primary' | 'outline' | 'ghost' | 'inverse'
+type Variant = 'primary' | 'outline' | 'ghost' | 'navy' | 'white' | 'inverse'
 type Size = 'sm' | 'md' | 'lg'
 
 type SharedProps = {
@@ -9,19 +10,24 @@ type SharedProps = {
   size?: Size
   className?: string
   children: ReactNode
+  /** Show mail icon (handy for Subscribe CTAs). */
+  showIcon?: boolean
 }
 
-type ButtonAsButton = SharedProps &
+type AsButton = SharedProps &
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
     href?: undefined
   }
 
-type ButtonAsLink = SharedProps &
+type AsLink = SharedProps &
   Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'children'> & {
     href: string
   }
 
-export type ButtonProps = ButtonAsButton | ButtonAsLink
+export type ReusableButtonProps = AsButton | AsLink
+
+/** @deprecated Prefer ReusableButtonProps — kept for older imports. */
+export type ButtonProps = ReusableButtonProps
 
 const sizeClasses: Record<Size, string> = {
   sm: 'min-h-9 gap-1 px-2.5 text-[0.8125rem]',
@@ -30,34 +36,44 @@ const sizeClasses: Record<Size, string> = {
 }
 
 /**
- * Shared button — on hover, shadow shifts left→right and a shine
- * animates left→right. The button itself does not move.
+ * Shared app button. Colors:
+ * - `navy` / `inverse` → navy fill
+ * - `white` → white fill
+ * - `outline` → white/surface + border
+ * - `primary` → brand blue
+ * - `ghost` → transparent
  */
-export function Button({
+export function ReusableButton({
   variant = 'primary',
   size = 'md',
   className,
   children,
+  showIcon = false,
   ...props
-}: ButtonProps) {
+}: ReusableButtonProps) {
+  const resolvedVariant = variant === 'inverse' ? 'navy' : variant
+
   const styles = cn(
     'ui-btn-shine inline-flex items-center justify-center rounded-md font-semibold no-underline',
     'transition-[box-shadow,opacity,background-color,color,border-color] duration-[var(--duration-normal)] ease-[var(--ease-standard)]',
     'disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none',
     sizeClasses[size],
-    variant === 'primary' &&
+    resolvedVariant === 'primary' &&
       'bg-primary text-primary-foreground shadow-[var(--shadow-button)] hover:bg-primary/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
-    variant === 'outline' &&
+    resolvedVariant === 'outline' &&
       'border border-border bg-surface text-foreground shadow-[var(--shadow-button)] hover:border-primary/40 hover:bg-soft hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
-    variant === 'ghost' &&
+    resolvedVariant === 'ghost' &&
       'bg-transparent text-foreground shadow-none hover:bg-soft hover:shadow-[var(--shadow-button)] active:shadow-none',
-    variant === 'inverse' &&
-      'bg-inverse text-inverse-foreground shadow-[var(--shadow-button)] hover:bg-inverse/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
+    resolvedVariant === 'navy' &&
+      'rounded-lg bg-inverse text-inverse-foreground shadow-[var(--shadow-button)] hover:bg-inverse/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
+    resolvedVariant === 'white' &&
+      'rounded-lg bg-white text-inverse shadow-[var(--shadow-button)] hover:bg-white/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
     className,
   )
 
   const content = (
     <span className="relative z-10 inline-flex items-center justify-center gap-[inherit]">
+      {showIcon ? <Mail className="size-4 shrink-0" aria-hidden="true" /> : null}
       {children}
     </span>
   )
@@ -71,7 +87,7 @@ export function Button({
     )
   }
 
-  const buttonProps = props as ButtonAsButton
+  const buttonProps = props as AsButton
   return (
     <button type="button" className={styles} {...buttonProps}>
       {content}

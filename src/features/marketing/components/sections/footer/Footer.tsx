@@ -90,14 +90,7 @@ export function Footer() {
             {newsletterContent.heading}
           </h3>
           <p className="mt-3 text-sm text-inverse-muted">{newsletterContent.description}</p>
-          <NewsletterForm
-            variant="stacked"
-            className="mt-5"
-            buttonStyle={{
-              backgroundColor: '#ffffff',
-              color: '#1b2f43',
-            }}
-          />
+          <NewsletterForm variant="stacked" className="mt-5" buttonVariant="white" />
         </div>
       </Container>
 

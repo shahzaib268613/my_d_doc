@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
-import { Button } from './Button'
+import { ReusableButton } from './ReusableButton'
 
 type Props = {
   currentPage: number
@@ -55,49 +55,50 @@ export function Pagination({
   if (hideSingle && safeTotal <= 1) return null
 
   if (mode === 'simple') {
+    // Sticky bar uses --admin-footer-height so it lines up with sidebar Logout.
     return (
       <nav
         aria-label="Pagination"
         className={cn(
           'flex flex-wrap items-center justify-between gap-3 border-t border-border',
           sticky
-            ? 'sticky bottom-0 z-20 mt-auto -mx-3 shrink-0 bg-background px-3 py-1.5 sm:-mx-5 sm:px-5 lg:-mx-6 lg:px-6'
+            ? 'sticky bottom-0 z-20 mt-auto -mx-3 flex h-[var(--admin-footer-height,3.5rem)] min-h-[var(--admin-footer-height,3.5rem)] shrink-0 items-center bg-background px-3 sm:-mx-5 sm:px-5 lg:-mx-6 lg:px-6'
             : 'pt-2 pb-4',
           className,
         )}
       >
         {showPageInfo ? (
-          <p className="text-xs font-medium text-muted-foreground">
+          <p className="text-sm font-medium text-muted-foreground">
             Page {safePage} of {safeTotal}
           </p>
         ) : (
           <span />
         )}
         <div className="flex items-center gap-1.5">
-          <Button
+          <ReusableButton
             type="button"
             variant="outline"
             size="sm"
-            className="min-h-8 rounded-md px-2.5 text-xs shadow-sm"
+            className="h-9 min-h-9 rounded-lg px-3 text-sm shadow-sm"
             disabled={safePage <= 1}
             onClick={() => onPageChange(safePage - 1)}
             aria-label="Previous page"
           >
-            <ChevronLeft className="size-3.5" aria-hidden="true" />
+            <ChevronLeft className="size-4" aria-hidden="true" />
             Previous
-          </Button>
-          <Button
+          </ReusableButton>
+          <ReusableButton
             type="button"
             variant="outline"
             size="sm"
-            className="min-h-8 rounded-md px-2.5 text-xs shadow-sm"
+            className="h-9 min-h-9 rounded-lg px-3 text-sm shadow-sm"
             disabled={safePage >= safeTotal}
             onClick={() => onPageChange(safePage + 1)}
             aria-label="Next page"
           >
             Next
-            <ChevronRight className="size-3.5" aria-hidden="true" />
-          </Button>
+            <ChevronRight className="size-4" aria-hidden="true" />
+          </ReusableButton>
         </div>
       </nav>
     )
@@ -115,7 +116,7 @@ export function Pagination({
           Page {safePage} of {safeTotal}
         </p>
       ) : null}
-      <button
+      <ReusableButton
         type="button"
         className={cn(
           'inline-flex min-h-[var(--spacing-touch)] min-w-[var(--spacing-touch)] items-center justify-center gap-1 rounded-md px-3 text-sm font-semibold text-foreground',
@@ -128,7 +129,7 @@ export function Pagination({
       >
         <ChevronLeft className="size-4" aria-hidden="true" />
         Previous
-      </button>
+      </ReusableButton>
 
       <ul className="flex flex-wrap items-center justify-center gap-1.5">
         {items.map((item, index) =>
@@ -142,7 +143,7 @@ export function Pagination({
             </li>
           ) : (
             <li key={item}>
-              <button
+              <ReusableButton
                 type="button"
                 className={cn(
                   'inline-flex min-h-[var(--spacing-touch)] min-w-[var(--spacing-touch)] items-center justify-center rounded-md px-3 text-sm font-semibold',
@@ -156,13 +157,13 @@ export function Pagination({
                 onClick={() => onPageChange(item)}
               >
                 {item}
-              </button>
+              </ReusableButton>
             </li>
           ),
         )}
       </ul>
 
-      <button
+      <ReusableButton
         type="button"
         className={cn(
           'inline-flex min-h-[var(--spacing-touch)] min-w-[var(--spacing-touch)] items-center justify-center gap-1 rounded-md px-3 text-sm font-semibold text-foreground',
@@ -175,7 +176,7 @@ export function Pagination({
       >
         Next
         <ChevronRight className="size-4" aria-hidden="true" />
-      </button>
+      </ReusableButton>
     </nav>
   )
 }

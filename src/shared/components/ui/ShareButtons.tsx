@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
-import { Button } from './Button'
+import { ReusableButton } from './ReusableButton'
 
 type Props = {
   title: string
@@ -26,14 +26,14 @@ export function ShareButtons({ title }: Props) {
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Button type="button" variant="outline" size="sm" onClick={copyLink}>
+      <ReusableButton type="button" variant="outline" size="sm" onClick={copyLink}>
         {copyStatus === 'Link copied.' ? (
           <Check className="size-4" aria-hidden="true" />
         ) : (
           <Copy className="size-4" aria-hidden="true" />
         )}
         {copyStatus === 'Link copied.' ? 'Copied' : 'Copy link'}
-      </Button>
+      </ReusableButton>
       <a
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
         target="_blank"

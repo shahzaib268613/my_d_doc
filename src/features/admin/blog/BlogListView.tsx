@@ -7,7 +7,7 @@ import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
 import { blogCategories } from '@/shared/config/blogCategories'
 import {
-  Button,
+  ReusableButton,
   ConfirmDialog,
   FilterSelect,
   Pagination,
@@ -301,9 +301,9 @@ export function BlogListView({ variant }: Props) {
               description={getApiErrorMessage(listQuery.error)}
               className="rounded-[16px]"
               action={
-                <Button type="button" size="sm" onClick={() => void listQuery.refetch()}>
+                <ReusableButton type="button" size="sm" onClick={() => void listQuery.refetch()}>
                   Retry
-                </Button>
+                </ReusableButton>
               }
             />
           ) : (

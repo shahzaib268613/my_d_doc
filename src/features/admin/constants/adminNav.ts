@@ -16,10 +16,14 @@ import type { AdminNavSection } from '../types/AdminNav'
 export const ADMIN_BASE = '/admin'
 
 /**
- * Sidebar is scoped to blog work for now.
- * Only these item ids render (logout stays for sign-out).
+ * Only these top-level item ids render in the sidebar (logout stays for sign-out).
  */
-export const VISIBLE_ADMIN_NAV_IDS = new Set(['dashboard', 'blog', 'logout'])
+export const VISIBLE_ADMIN_NAV_IDS = new Set([
+  'dashboard',
+  'blog',
+  'newsletter',
+  'logout',
+])
 
 export function isAdminNavVisible(id: string) {
   return VISIBLE_ADMIN_NAV_IDS.has(id)
@@ -74,24 +78,7 @@ export const adminNavSections: AdminNavSection[] = [
         id: 'newsletter',
         label: 'Newsletter',
         icon: Mail,
-        children: [
-          { id: 'newsletter-overview', label: 'Overview', to: `${ADMIN_BASE}/newsletter` },
-          {
-            id: 'newsletter-subscribers',
-            label: 'All Subscribers',
-            to: `${ADMIN_BASE}/newsletter/subscribers`,
-          },
-          {
-            id: 'newsletter-active',
-            label: 'Active Subscribers',
-            to: `${ADMIN_BASE}/newsletter/active`,
-          },
-          {
-            id: 'newsletter-campaigns',
-            label: 'Campaigns',
-            to: `${ADMIN_BASE}/newsletter/campaigns`,
-          },
-        ],
+        to: `${ADMIN_BASE}/newsletter`,
       },
       {
         id: 'pages',

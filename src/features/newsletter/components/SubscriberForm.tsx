@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { Button, FilterSelect, Input } from '@/shared/components/ui'
+import { FilterSelect, Input, ReusableButton } from '@/shared/components/ui'
 import { FormField } from '@/features/admin/components/FormField'
 import type { NewsletterSubscriber, SubscriberStatus } from '../types'
 
@@ -88,13 +88,13 @@ export function SubscriberForm({
       ) : null}
       <div className="flex flex-wrap justify-end gap-2 border-t border-border pt-4">
         {onCancel ? (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={submitting}>
+          <ReusableButton type="button" variant="outline" onClick={onCancel} disabled={submitting}>
             Cancel
-          </Button>
+          </ReusableButton>
         ) : null}
-        <Button type="submit" disabled={submitting}>
+        <ReusableButton type="submit" variant="navy" disabled={submitting}>
           {submitting ? 'Saving…' : submitLabel}
-        </Button>
+        </ReusableButton>
       </div>
     </form>
   )

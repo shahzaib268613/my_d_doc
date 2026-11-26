@@ -1,5 +1,5 @@
 import { useEffect, useId } from 'react'
-import { Button } from '@/shared/components/ui/Button'
+import { ReusableButton } from '@/shared/components/ui/ReusableButton'
 import { cn } from '@/shared/utils/cn'
 
 type Props = {
@@ -64,15 +64,15 @@ export function ConfirmDialog({
           {description}
         </p>
         <div className="mt-6 flex flex-wrap justify-end gap-3">
-          <Button id={cancelId} variant="outline" onClick={onCancel}>
+          <ReusableButton id={cancelId} variant="outline" onClick={onCancel}>
             {cancelLabel}
-          </Button>
-          <Button
+          </ReusableButton>
+          <ReusableButton
             className={cn(danger && 'bg-danger text-primary-foreground hover:opacity-90')}
             onClick={onConfirm}
           >
             {confirmLabel}
-          </Button>
+          </ReusableButton>
         </div>
       </div>
     </div>

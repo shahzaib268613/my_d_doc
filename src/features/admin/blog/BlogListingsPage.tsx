@@ -8,7 +8,7 @@ import { LoadingState } from '@/features/admin/components/LoadingState'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import {
-  Button,
+  ReusableButton,
   ConfirmDialog,
   FilterSelect,
   Pagination,
@@ -153,7 +153,7 @@ export function BlogListingsPage() {
           >
             <Pencil className="size-4" aria-hidden="true" />
           </Link>
-          <button
+          <ReusableButton
             type="button"
             title="Delete"
             aria-label={`Delete ${blog.title}`}
@@ -162,7 +162,7 @@ export function BlogListingsPage() {
             onClick={() => setDeleteTarget(blog)}
           >
             <Trash2 className="size-4" aria-hidden="true" />
-          </button>
+          </ReusableButton>
         </div>
       ),
     },
@@ -228,9 +228,9 @@ export function BlogListingsPage() {
             description={getApiErrorMessage(listQuery.error)}
             className="rounded-[16px]"
             action={
-              <Button type="button" size="sm" onClick={() => void listQuery.refetch()}>
+              <ReusableButton type="button" size="sm" onClick={() => void listQuery.refetch()}>
                 Retry
-              </Button>
+              </ReusableButton>
             }
           />
         ) : (

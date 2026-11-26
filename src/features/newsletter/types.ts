@@ -1,56 +1,55 @@
 export type SubscriberStatus = 'active' | 'unsubscribed'
-export type SubscriberSource = 'homepage' | 'admin'
+export type SubscriberSource = 'homepage' | 'admin' | 'import'
 
 export type NewsletterSubscriber = {
   id: string
   name: string | null
   email: string
   status: SubscriberStatus
-  subscribedAt: string
-  updatedAt: string
   source: SubscriberSource
-}
-
-export type CampaignStatus = 'draft' | 'ready' | 'not_sent'
-
-export type NewsletterCampaign = {
-  id: string
-  title: string
-  subject: string
-  content: string
-  status: CampaignStatus
   createdAt: string
   updatedAt: string
 }
 
 export type NewsletterStats = {
   total: number
-  active: number
-  unsubscribed: number
 }
 
 export type CreateSubscriberInput = {
   email: string
   name?: string | null
-  source: SubscriberSource
+  source?: SubscriberSource
 }
 
-export type UpdateSubscriberInput = {
-  name?: string | null
-  email?: string
-  status?: SubscriberStatus
+export type Paginated<T> = {
+  items: T[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
 }
 
-export type CreateCampaignInput = {
-  title: string
+export type NewsletterBatchStatus = {
+  id: string
+  total: number
+  sent: number
+  failed: number
+  status: string
   subject: string
-  content: string
-  status?: CampaignStatus
 }
 
-export type UpdateCampaignInput = {
-  title?: string
-  subject?: string
-  content?: string
-  status?: CampaignStatus
+export type NewsletterEmailLog = {
+  id: string
+  batchId: string | null
+  subscriberId: string | null
+  recipient: string
+  subject: string
+  status: 'sent' | 'failed' | 'pending'
+  error: string | null
+  createdAt: string
 }
+
+export type ComposeMode =
+  | { type: 'single'; subscriber: NewsletterSubscriber }
+  | { type: 'selected'; subscriberIds: string[]; count: number }
+  | { type: 'all'; total: number }

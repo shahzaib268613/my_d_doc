@@ -1,4 +1,4 @@
-import { Button, Container, Section } from '@/shared/components/ui'
+import { ReusableButton, Container, Section } from '@/shared/components/ui'
 
 type Props = {
   title?: string
@@ -17,7 +17,7 @@ export function ComingSoonPage({ title = 'Coming soon' }: Props) {
           education and the latest articles.
         </p>
         <div className="mt-8 flex justify-center">
-          <Button href="/">Back to home</Button>
+          <ReusableButton href="/">Back to home</ReusableButton>
         </div>
       </Container>
     </Section>
