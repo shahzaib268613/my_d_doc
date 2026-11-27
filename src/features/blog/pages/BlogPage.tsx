@@ -15,6 +15,7 @@ import {
 } from '@/shared/components/ui'
 import { BlogCard } from '../components/BlogCard'
 import { BlogCardSkeleton } from '../components/BlogCardSkeleton'
+import { BlogHero } from '../components/BlogHero'
 import { blogCardGridClassName } from '../components/blogGrid'
 import { useDebounce } from '@/shared/hooks/useDebounce'
 import { usePublishedPostsList } from '../hooks/usePublishedPosts'
@@ -67,7 +68,7 @@ export function BlogPage() {
   const debouncedQuery = useDebounce(qParam.trim().toLowerCase(), 300)
   const selectedCategory = resolveCategoryTitle(categoryParam, posts)
   const resultsRef = useRef<HTMLDivElement>(null)
-  const skipScrollRef = useRef(true)
+  const previousPageRef = useRef<number | null>(null)
 
   const categories = useMemo(() => {
     const unique = new Set(posts.map((post) => post.category).filter(Boolean))
@@ -125,77 +126,78 @@ export function BlogPage() {
   }, [page, totalPages])
 
   useEffect(() => {
-    if (skipScrollRef.current) {
-      skipScrollRef.current = false
+    // First visit / remount: stay at the hero (don't jump to results).
+    if (previousPageRef.current === null) {
+      previousPageRef.current = safePage
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
       return
     }
+
+    if (previousPageRef.current === safePage) return
+    previousPageRef.current = safePage
     resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [safePage])
 
   return (
-    <Section>
-      <Container>
-        <div>
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Blog</h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground">
-            Practical diabetes education on nutrition, movement, monitoring, and everyday self-care.
-          </p>
-        </div>
+    <>
+      <BlogHero />
 
-        <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between md:gap-4">
-          <SearchInput
-            className="w-full md:max-w-md lg:max-w-lg"
-            value={qParam}
-            onChange={(value) => writeParams({ q: value, page: 1 })}
-            placeholder="Search articles"
-            ariaLabel="Search articles"
-          />
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end md:w-auto md:justify-end">
-            {filtersActive ? (
-              <ReusableButton
-                type="button"
-                variant="ghost"
-                className="shrink-0 self-start px-2 text-sm font-semibold text-primary sm:self-end"
-                onClick={clearFilters}
-              >
-                Clear filters
-              </ReusableButton>
-            ) : null}
-            <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
-              <FilterSelect
-                className="sm:w-44 lg:w-52"
-                label="Category"
-                value={selectedCategory}
-                searchable
-                onChange={(value) =>
-                  writeParams({
-                    category: value ? categoryToParam(value) : '',
-                    page: 1,
-                  })
-                }
-                options={[
-                  { value: '', label: 'All categories' },
-                  ...categories.map((category) => ({
-                    value: category,
-                    label: category,
-                  })),
-                ]}
-              />
-              <FilterSelect
-                className="sm:w-40 lg:w-44"
-                label="Sort"
-                value={sortParam}
-                onChange={(value) => writeParams({ sort: value, page: 1 })}
-                options={[
-                  { value: SORT_NEWEST, label: 'Newest first' },
-                  { value: SORT_OLDEST, label: 'Oldest first' },
-                ]}
-              />
+      <Section className="pt-5 sm:pt-6 lg:pt-8">
+        <Container>
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-4">
+            <SearchInput
+              className="w-full lg:max-w-md xl:max-w-lg"
+              value={qParam}
+              onChange={(value) => writeParams({ q: value, page: 1 })}
+              placeholder="Search articles"
+              ariaLabel="Search articles"
+            />
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end lg:w-auto lg:justify-end">
+              {filtersActive ? (
+                <ReusableButton
+                  type="button"
+                  variant="ghost"
+                  className="shrink-0 self-start px-2 text-sm font-semibold text-primary sm:self-end"
+                  onClick={clearFilters}
+                >
+                  Clear filters
+                </ReusableButton>
+              ) : null}
+              <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
+                <FilterSelect
+                  className="sm:w-44 lg:w-52"
+                  label="Category"
+                  value={selectedCategory}
+                  searchable
+                  onChange={(value) =>
+                    writeParams({
+                      category: value ? categoryToParam(value) : '',
+                      page: 1,
+                    })
+                  }
+                  options={[
+                    { value: '', label: 'All categories' },
+                    ...categories.map((category) => ({
+                      value: category,
+                      label: category,
+                    })),
+                  ]}
+                />
+                <FilterSelect
+                  className="sm:w-40 lg:w-44"
+                  label="Sort"
+                  value={sortParam}
+                  onChange={(value) => writeParams({ sort: value, page: 1 })}
+                  options={[
+                    { value: SORT_NEWEST, label: 'Newest first' },
+                    { value: SORT_OLDEST, label: 'Oldest first' },
+                  ]}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div ref={resultsRef} className="mt-8 scroll-mt-28">
+          <div ref={resultsRef} className="mt-8 scroll-mt-28">
           {isPending ? (
             <>
               <div className="h-5 w-48 animate-pulse rounded bg-soft" aria-hidden="true" />
@@ -248,8 +250,9 @@ export function BlogPage() {
               </div>
             </>
           )}
-        </div>
-      </Container>
-    </Section>
+          </div>
+        </Container>
+      </Section>
+    </>
   )
 }
