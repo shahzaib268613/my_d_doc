@@ -11,5 +11,5 @@ export const speakingEngagementsCta = {
   description:
     'Book Dr. Leibowitz for keynotes, panels, and workshops on diabetes education and patient care.',
   ctaLabel: 'Book a Speaking Event',
-  to: '#',
+  to: '/speaking-engagements',
 } as const

@@ -17,6 +17,7 @@ import {
 } from '@/features/admin/blog'
 import { LatestPosts } from '@/features/blog/components/LatestPosts'
 import { AboutPage } from '@/features/about'
+import { SpeakingEngagementsPage } from '@/features/speaking-engagements'
 import { BlogPage } from '@/features/blog/pages/BlogPage'
 import { BlogPostPage } from '@/features/blog/pages/BlogPostPage'
 import { Container, Section, Spinner } from '@/shared/components/ui'
@@ -112,6 +113,7 @@ const router = createBrowserRouter([
       { path: '/home3', element: <Navigate to="/" replace /> },
       { path: '/home4', element: <Navigate to="/" replace /> },
       { path: '/about', element: <AboutPage /> },
+      { path: '/speaking-engagements', element: <SpeakingEngagementsPage /> },
       { path: '/blog', element: <BlogPage /> },
       { path: '/blog/:slug', element: <BlogPostPage /> },
       { path: '/unsubscribe', element: <UnsubscribePage /> },

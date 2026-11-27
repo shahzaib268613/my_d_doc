@@ -6,7 +6,7 @@ export const navItems: NavItem[] = [
   { label: 'About', to: '/about' },
   { label: 'Blog', to: '/blog' },
   { label: 'Brand Partnerships', to: '#' },
-  { label: 'Speaking Engagements', to: '#' },
+  { label: 'Speaking Engagements', to: '/speaking-engagements' },
 ]
 
 /** Blog nav is active on public blog routes. */
@@ -38,7 +38,7 @@ export const footerQuickLinks: NavItem[] = [
 /** Footer column 3 — Resources */
 export const footerResourceLinks: NavItem[] = [
   { label: 'Brand Partnerships', to: '#' },
-  { label: 'Speaking Engagements', to: '#' },
+  { label: 'Speaking Engagements', to: '/speaking-engagements' },
   { label: 'Privacy', to: '#' },
   { label: 'Terms', to: '#' },
 ]
