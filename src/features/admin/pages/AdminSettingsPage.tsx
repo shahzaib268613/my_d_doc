@@ -301,7 +301,7 @@ export function AdminSettingsPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!isEditing) return
+    if (!isEditing || !form) return
 
     const nextTouched = Object.fromEntries(fieldOrder.map((key) => [key, true])) as TouchedFields
     setTouched(nextTouched)
