@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { ChevronDown, LogOut, Menu, User } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ChevronDown, LogOut, Menu, Settings, User } from 'lucide-react'
 import { siteConfig } from '@/shared/config/site'
 import { IconButton } from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
@@ -26,13 +27,16 @@ function headerSubtitle(pathname: string, title: string) {
   if (path.startsWith(`${ADMIN_BASE}/blogs`)) {
     return 'Manage diabetes education articles and publishing.'
   }
+  if (path.startsWith(`${ADMIN_BASE}/settings`)) {
+    return 'Manage your account credentials, contact info, and security preferences.'
+  }
   return `${title} · ${siteConfig.name} admin`
 }
 
 export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
   const [profileOpenPath, setProfileOpenPath] = useState<string | null>(null)
   const profileOpen = profileOpenPath === pathname
-  const { openProfile, profile } = useAdminProfileModal()
+  const { profile } = useAdminProfileModal()
   const menuId = useId()
   const rootRef = useRef<HTMLDivElement>(null)
   const meta = useMemo(() => getAdminRouteMeta(pathname), [pathname])
@@ -120,18 +124,15 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
                 <p className="px-3 py-2 text-xs text-muted-foreground">
                   {profile?.fullName?.trim() || siteConfig.doctor.name}
                 </p>
-                <button
-                  type="button"
+                <Link
+                  to={`${ADMIN_BASE}/settings`}
                   role="menuitem"
-                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground hover:bg-soft"
-                  onClick={() => {
-                    setProfileOpenPath(null)
-                    openProfile()
-                  }}
+                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground no-underline hover:bg-soft"
+                  onClick={() => setProfileOpenPath(null)}
                 >
-                  <User className="size-4 text-primary" aria-hidden="true" />
-                  My Profile
-                </button>
+                  <Settings className="size-4 text-primary" aria-hidden="true" />
+                  Settings
+                </Link>
                 <button
                   type="button"
                   role="menuitem"

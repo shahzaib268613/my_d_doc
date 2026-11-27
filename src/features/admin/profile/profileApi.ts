@@ -5,7 +5,7 @@ export type AdminProfilePayload = {
   fullName: string
   email: string
   phone: string
-  username: string
+  contactEmail: string
 }
 
 export type AdminProfileResponse = AdminProfile & {

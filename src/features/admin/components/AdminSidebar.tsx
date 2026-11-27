@@ -34,7 +34,7 @@ export function AdminSidebar({
   const location = useLocation()
   const pathname = location.pathname
   const brandTitleId = useId()
-  const { openProfile, profile } = useAdminProfileModal()
+  const { profile } = useAdminProfileModal()
   const displayName = profileDisplayName(profile)
   const initials = profileInitials(profile)
 
@@ -220,17 +220,6 @@ export function AdminSidebar({
                           />
                         </div>
                       </>
-                    ) : item.id === 'profile' ? (
-                      <SidebarMenuItem
-                        label={item.label}
-                        icon={item.icon}
-                        collapsed={collapsed}
-                        active={false}
-                        onClick={() => {
-                          closeMobile()
-                          openProfile()
-                        }}
-                      />
                     ) : (
                       <SidebarMenuItem
                         label={item.label}
@@ -285,7 +274,7 @@ export function AdminSidebar({
             {initials}
           </span>
           <div className="min-w-0 flex-1 leading-tight">
-            <p className="truncate text-sm font-bold uppercase text-inverse">{displayName}</p>
+            <p className="truncate text-sm font-bold text-inverse">{displayName}</p>
             <p className="truncate text-[0.6875rem] font-medium text-muted-foreground">
               Admin Dashboard
             </p>

@@ -35,7 +35,7 @@ export function useAdminProfile({ enabled = true }: Options = {}) {
           fullName: data.fullName,
           email: data.email,
           phone: data.phone,
-          username: data.username,
+          contactEmail: data.contactEmail,
           role: data.role || 'Admin',
         })
       })
@@ -64,13 +64,13 @@ export function useAdminProfile({ enabled = true }: Options = {}) {
         fullName: next.fullName,
         email: next.email,
         phone: next.phone,
-        username: next.username,
+        contactEmail: next.contactEmail,
       })
       const profile: AdminProfile = {
         fullName: saved.fullName,
         email: saved.email,
         phone: saved.phone,
-        username: saved.username,
+        contactEmail: saved.contactEmail,
         role: saved.role || 'Admin',
       }
       setProfile(profile)

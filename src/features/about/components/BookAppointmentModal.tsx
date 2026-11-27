@@ -360,7 +360,7 @@ export function BookAppointmentModal({ open, onClose }: Props) {
         <IconButton
           label="Close"
           data-appointment-close=""
-          className="absolute right-2.5 top-2.5 z-20 bg-white/90 text-[#1b2f43]/80 shadow-sm hover:bg-white hover:text-[#1b2f43] sm:right-3.5 sm:top-3.5"
+          className="absolute right-2.5 top-2.5 z-20 cursor-pointer bg-white/90 text-[#1b2f43]/80 shadow-sm transition-colors duration-[var(--duration-fast)] hover:bg-soft hover:text-inverse sm:right-3.5 sm:top-3.5"
           onClick={onClose}
         >
           <X className="size-5" aria-hidden="true" strokeWidth={2.1} />

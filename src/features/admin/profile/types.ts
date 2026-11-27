@@ -2,6 +2,6 @@ export type AdminProfile = {
   fullName: string
   email: string
   phone: string
-  username: string
+  contactEmail: string
   role: string
 }
