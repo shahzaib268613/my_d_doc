@@ -5,7 +5,7 @@ export const navItems: NavItem[] = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
   { label: 'Blog', to: '/blog' },
-  { label: 'Brand Partnerships', to: '#' },
+  { label: 'Brand Partnerships', to: '/brand-partnerships' },
   { label: 'Speaking Engagements', to: '/speaking-engagements' },
 ]
 
@@ -37,7 +37,7 @@ export const footerQuickLinks: NavItem[] = [
 
 /** Footer column 3 — Resources */
 export const footerResourceLinks: NavItem[] = [
-  { label: 'Brand Partnerships', to: '#' },
+  { label: 'Brand Partnerships', to: '/brand-partnerships' },
   { label: 'Speaking Engagements', to: '/speaking-engagements' },
   { label: 'Privacy', to: '#' },
   { label: 'Terms', to: '#' },
