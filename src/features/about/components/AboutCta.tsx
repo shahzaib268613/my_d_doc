@@ -3,7 +3,11 @@ import { clinicConfig } from '@/shared/config/clinic'
 import { ReusableButton, Container, Reveal, Section } from '@/shared/components/ui'
 import { aboutCta } from '../constants/content'
 
-export function AboutCta() {
+type Props = {
+  onBookAppointment: () => void
+}
+
+export function AboutCta({ onBookAppointment }: Props) {
   return (
     <Section>
       <Container>
@@ -20,9 +24,10 @@ export function AboutCta() {
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <ReusableButton
-                  href={clinicConfig.bookingHref}
+                  type="button"
                   size="lg"
                   className="rounded-lg bg-surface text-foreground hover:bg-soft"
+                  onClick={onBookAppointment}
                 >
                   {aboutCta.bookLabel}
                   <ArrowUpRight className="size-4" aria-hidden="true" />

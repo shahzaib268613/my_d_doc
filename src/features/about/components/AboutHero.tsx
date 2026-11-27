@@ -3,7 +3,11 @@ import { clinicConfig } from '@/shared/config/clinic'
 import { ReusableButton, Container, Reveal, Section } from '@/shared/components/ui'
 import { aboutCta, aboutHero } from '../constants/content'
 
-export function AboutHero() {
+type Props = {
+  onBookAppointment: () => void
+}
+
+export function AboutHero({ onBookAppointment }: Props) {
   return (
     <Section className="relative overflow-hidden bg-[image:var(--gradient-hero)]">
       <div
@@ -21,7 +25,12 @@ export function AboutHero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <ReusableButton href={clinicConfig.bookingHref} size="lg" className="rounded-lg">
+              <ReusableButton
+                type="button"
+                size="lg"
+                className="rounded-lg"
+                onClick={onBookAppointment}
+              >
                 {aboutCta.bookLabel}
               </ReusableButton>
               <ReusableButton
