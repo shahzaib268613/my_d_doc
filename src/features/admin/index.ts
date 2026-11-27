@@ -17,6 +17,11 @@ export { ResponsiveDrawer } from './components/ResponsiveDrawer'
 /** Prefer shared UI: ReusableTable, SearchInput, FilterSelect from `@/shared/components/ui`. */
 export { AdminToolbar } from './components/AdminToolbar'
 export { AdminPlaceholderPage } from './pages/AdminPlaceholderPage'
+export { AdminSettingsPage } from './pages/AdminSettingsPage'
+export {
+  AdminProfileModalProvider,
+  useAdminProfileModal,
+} from './components/AdminProfileModalContext'
 export { adminNavSections, ADMIN_BASE } from './constants/adminNav'
 export { adminRouteDefs, getAdminRouteMeta } from './constants/adminRoutes'
 export {

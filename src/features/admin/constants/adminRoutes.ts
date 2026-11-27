@@ -212,11 +212,11 @@ export const adminRouteDefs: AdminRouteDef[] = [
   {
     path: 'settings',
     meta: {
-      title: 'General Settings',
-      breadcrumbs: crumb(
-        { label: 'Settings', to: `${ADMIN_BASE}/settings` },
-        { label: 'General Settings' },
-      ),
+      title: 'Settings',
+      breadcrumbs: [
+        { label: 'Dashboard', to: ADMIN_BASE },
+        { label: 'Settings' },
+      ],
     },
   },
   {
@@ -237,13 +237,6 @@ export const adminRouteDefs: AdminRouteDef[] = [
         { label: 'Settings', to: `${ADMIN_BASE}/settings` },
         { label: 'Email Settings' },
       ),
-    },
-  },
-  {
-    path: 'profile',
-    meta: {
-      title: 'My Profile',
-      breadcrumbs: crumb({ label: 'My Profile' }),
     },
   },
 ]

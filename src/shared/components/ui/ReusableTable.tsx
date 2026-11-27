@@ -6,7 +6,7 @@ export type ReusableTableColumn<T> = {
   id: string
   header: ReactNode
   className?: string
-  cell: (row: T) => ReactNode
+  cell: (row: T, index: number) => ReactNode
 }
 
 type PaginationProps = {
@@ -96,7 +96,7 @@ export function ReusableTable<T>({
                 </td>
               </tr>
             ) : (
-              rows.map((row) => (
+              rows.map((row, rowIndex) => (
                 <tr
                   key={rowKey(row)}
                   className="border-b border-border/70 transition-colors hover:bg-soft/40"
@@ -109,7 +109,7 @@ export function ReusableTable<T>({
                         column.className,
                       )}
                     >
-                      {column.cell(row)}
+                      {column.cell(row, rowIndex)}
                     </td>
                   ))}
                 </tr>

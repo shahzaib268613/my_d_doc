@@ -1,9 +1,17 @@
 import { Phone } from 'lucide-react'
-import { clinicConfig } from '@/shared/config/clinic'
+import { toTelHref } from '@/shared/api/contactApi'
 import { ReusableButton, Container, Reveal, Section } from '@/shared/components/ui'
+import { usePublicContact } from '@/shared/hooks/usePublicContact'
 import { aboutCta, aboutHero } from '../constants/content'
 
-export function AboutHero() {
+type Props = {
+  onBookAppointment: () => void
+}
+
+export function AboutHero({ onBookAppointment }: Props) {
+  const { contact } = usePublicContact()
+  const callHref = toTelHref(contact.phone)
+
   return (
     <Section className="relative overflow-hidden bg-[image:var(--gradient-hero)]">
       <div
@@ -21,11 +29,16 @@ export function AboutHero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <ReusableButton href={clinicConfig.bookingHref} size="lg" className="rounded-lg">
+              <ReusableButton
+                type="button"
+                size="lg"
+                className="rounded-lg"
+                onClick={onBookAppointment}
+              >
                 {aboutCta.bookLabel}
               </ReusableButton>
               <ReusableButton
-                href={clinicConfig.phones.appointments.href}
+                href={callHref}
                 variant="outline"
                 size="lg"
                 className="rounded-lg"

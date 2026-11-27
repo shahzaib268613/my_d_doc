@@ -4,6 +4,7 @@ import { MarketingLayout } from './layouts/MarketingLayout'
 import { AdminLayout } from './layouts/AdminLayout'
 import { adminRouteDefs } from '@/features/admin/constants/adminRoutes'
 import { AdminPlaceholderPage } from '@/features/admin/pages/AdminPlaceholderPage'
+import { AdminSettingsPage } from '@/features/admin/pages/AdminSettingsPage'
 import { NewsletterPage, UnsubscribePage } from '@/features/newsletter'
 import {
   AllBlogsPage,
@@ -78,6 +79,13 @@ function adminElementForPath(path: string) {
     case 'newsletter/campaigns':
     case 'newsletter/campaigns/edit/:id':
       return <Navigate to="/admin/newsletter" replace />
+    case 'profile':
+      return <Navigate to="/admin/settings" replace />
+    case 'settings':
+      return <AdminSettingsPage />
+    case 'settings/social-links':
+    case 'settings/email':
+      return <Navigate to="/admin/settings" replace />
     default:
       return <AdminPlaceholderPage />
   }

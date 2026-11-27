@@ -13,6 +13,8 @@ import { ErrorState } from '@/features/admin/components/ErrorState'
 import { StatusBadge } from '@/features/admin/components/StatusBadge'
 import { ADMIN_BASE } from '@/features/admin/constants/adminNav'
 import { ReusableButton, StatsCard, StatsCardGrid } from '@/shared/components/ui'
+import { useAdminProfileModal } from '@/features/admin/components/AdminProfileModalContext'
+import { profileDisplayName } from '@/features/admin/profile/profileDisplay'
 import { useBlogCreateModal } from './BlogCreateModalContext'
 import { getApiErrorMessage } from '@/shared/api/axiosInstance'
 import { useAdminBlogs, useBlogCounts } from './hooks/useAdminBlogs'
@@ -21,6 +23,8 @@ import { blogStatusLabel, blogStatusTone } from './utils/blogStatusLabels'
 
 export function BlogDashboardPage() {
   const { openCreateBlog } = useBlogCreateModal()
+  const { profile } = useAdminProfileModal()
+  const displayName = profileDisplayName(profile)
   const countsQuery = useBlogCounts()
   const recentQuery = useAdminBlogs({ page: 1, limit: 3 })
   const today = new Intl.DateTimeFormat(undefined, {
@@ -62,7 +66,7 @@ export function BlogDashboardPage() {
         <div className="relative z-10 max-w-xl">
           <p className="text-xs font-medium text-inverse-muted sm:text-sm">{today}</p>
           <h1 className="mt-1.5 font-display text-xl font-bold tracking-tight sm:mt-2 sm:text-3xl">
-            Welcome back, Admin!
+            Welcome back, {displayName}!
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-inverse-muted sm:text-base">
             Manage diabetes education content, track publishing, and keep your library fresh.

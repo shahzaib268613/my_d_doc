@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ImageIcon, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Eye, ImageIcon, Pencil, Plus, Trash2 } from 'lucide-react'
 import { AdminButton } from '@/features/admin/components/AdminButton'
 import { ErrorState } from '@/features/admin/components/ErrorState'
 import { LoadingState } from '@/features/admin/components/LoadingState'
@@ -23,6 +23,7 @@ import { useBlogCategories } from './hooks/useBlogCategories'
 import { useDebounce } from '@/shared/hooks/useDebounce'
 import { BLOG_STATUS_FILTER_OPTIONS, blogStatusLabel, blogStatusTone } from './utils/blogStatusLabels'
 import { formatBlogDate } from '@/features/blog/utils/formatDate'
+import { BlogDetailsModal } from './BlogDetailsModal'
 import { useBlogCreateModal } from './BlogCreateModalContext'
 import { BlogPageHero } from './BlogPageHero'
 
@@ -37,7 +38,9 @@ export function BlogListingsPage() {
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [page, setPage] = useState(1)
   const [deleteTarget, setDeleteTarget] = useState<Blog | null>(null)
+  const [viewTargetId, setViewTargetId] = useState<string | null>(null)
   const debouncedSearch = useDebounce(search, 350)
+  const pageSize = 10
 
   useEffect(() => {
     setPage(1)
@@ -47,7 +50,7 @@ export function BlogListingsPage() {
     status: statusFilter === 'all' ? undefined : statusFilter,
     search: debouncedSearch || undefined,
     page,
-    limit: 10,
+    limit: pageSize,
   })
 
   const busyId = remove.isPending ? (remove.variables ?? null) : null
@@ -74,6 +77,16 @@ export function BlogListingsPage() {
   }
 
   const columns: ReusableTableColumn<Blog>[] = [
+    {
+      id: 'no',
+      header: 'No',
+      className: 'w-12',
+      cell: (_blog, index) => (
+        <span className="tabular-nums text-sm font-semibold text-muted-foreground">
+          {(page - 1) * pageSize + index + 1}
+        </span>
+      ),
+    },
     {
       id: 'image',
       header: 'Featured Image',
@@ -144,6 +157,15 @@ export function BlogListingsPage() {
       className: 'text-right',
       cell: (blog) => (
         <div className="flex items-center justify-end gap-1.5">
+          <ReusableButton
+            type="button"
+            title="View"
+            aria-label={`View ${blog.title}`}
+            className="inline-flex size-9 items-center justify-center rounded-[10px] border border-border bg-surface text-foreground shadow-sm hover:bg-background"
+            onClick={() => setViewTargetId(blog.id)}
+          >
+            <Eye className="size-4" aria-hidden="true" />
+          </ReusableButton>
           <Link
             to={`${ADMIN_BASE}/blogs/edit/${blog.id}`}
             title="Edit"
@@ -171,7 +193,7 @@ export function BlogListingsPage() {
     <div className="flex min-w-0 flex-col gap-5">
       <BlogPageHero
         variant="all"
-        title="Blog Listings"
+        title="All Blog"
         description="Browse, filter, and manage every blog from one listings table."
       />
 
@@ -261,6 +283,12 @@ export function BlogListingsPage() {
           />
         )}
       </div>
+
+      <BlogDetailsModal
+        open={Boolean(viewTargetId)}
+        blogId={viewTargetId}
+        onClose={() => setViewTargetId(null)}
+      />
 
       <ConfirmDialog
         open={Boolean(deleteTarget)}

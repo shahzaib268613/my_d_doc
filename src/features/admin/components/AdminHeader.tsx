@@ -1,10 +1,16 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { ChevronDown, LogOut, Menu, User } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ChevronDown, LogOut, Menu, Settings, User } from 'lucide-react'
 import { siteConfig } from '@/shared/config/site'
 import { IconButton } from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
 import { getAdminRouteMeta } from '../constants/adminRoutes'
 import { ADMIN_BASE } from '../constants/adminNav'
+import {
+  profileDisplayName,
+  profileInitials,
+} from '@/features/admin/profile/profileDisplay'
+import { useAdminProfileModal } from './AdminProfileModalContext'
 import { AdminNotificationsMenu } from './AdminNotificationsMenu'
 
 type Props = {
@@ -21,16 +27,22 @@ function headerSubtitle(pathname: string, title: string) {
   if (path.startsWith(`${ADMIN_BASE}/blogs`)) {
     return 'Manage diabetes education articles and publishing.'
   }
+  if (path.startsWith(`${ADMIN_BASE}/settings`)) {
+    return 'Manage your account credentials, contact info, and security preferences.'
+  }
   return `${title} · ${siteConfig.name} admin`
 }
 
 export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
   const [profileOpenPath, setProfileOpenPath] = useState<string | null>(null)
   const profileOpen = profileOpenPath === pathname
+  const { profile } = useAdminProfileModal()
   const menuId = useId()
   const rootRef = useRef<HTMLDivElement>(null)
   const meta = useMemo(() => getAdminRouteMeta(pathname), [pathname])
   const subtitle = headerSubtitle(pathname, meta.title)
+  const displayName = profileDisplayName(profile)
+  const initials = profileInitials(profile)
 
   useEffect(() => {
     if (!profileOpen) return
@@ -90,10 +102,10 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
                 setProfileOpenPath((current) => (current === pathname ? null : pathname))
               }
             >
-              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-soft text-primary">
-                <User className="size-3.5" aria-hidden="true" />
+              <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-soft text-[0.6875rem] font-bold text-primary">
+                {initials || <User className="size-3.5" aria-hidden="true" />}
               </span>
-              <span className="hidden max-w-[7rem] truncate sm:inline">Admin</span>
+              <span className="hidden max-w-[7rem] truncate sm:inline">{displayName}</span>
               <ChevronDown
                 className={cn(
                   'hidden size-4 shrink-0 text-muted-foreground transition-transform sm:block',
@@ -110,17 +122,17 @@ export function AdminHeader({ pathname, onMenuClick, onLogout }: Props) {
                 className="absolute right-0 z-50 mt-2 w-52 overflow-hidden rounded-[12px] border border-border bg-surface py-1 shadow-lg"
               >
                 <p className="px-3 py-2 text-xs text-muted-foreground">
-                  {siteConfig.doctor.name}
+                  {profile?.fullName?.trim() || siteConfig.doctor.name}
                 </p>
-                <button
-                  type="button"
+                <Link
+                  to={`${ADMIN_BASE}/settings`}
                   role="menuitem"
-                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground hover:bg-soft"
+                  className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-foreground no-underline hover:bg-soft"
                   onClick={() => setProfileOpenPath(null)}
                 >
-                  <User className="size-4 text-primary" aria-hidden="true" />
-                  My Profile
-                </button>
+                  <Settings className="size-4 text-primary" aria-hidden="true" />
+                  Settings
+                </Link>
                 <button
                   type="button"
                   role="menuitem"
