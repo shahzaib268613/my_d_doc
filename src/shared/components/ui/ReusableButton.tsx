@@ -54,9 +54,9 @@ export function ReusableButton({
   const resolvedVariant = variant === 'inverse' ? 'navy' : variant
 
   const styles = cn(
-    'ui-btn-shine inline-flex items-center justify-center rounded-sm font-semibold no-underline',
+    'ui-btn-shine inline-flex cursor-pointer items-center justify-center rounded-sm font-semibold no-underline',
     'transition-[box-shadow,opacity,background-color,color,border-color] duration-[var(--duration-normal)] ease-[var(--ease-standard)]',
-    'disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none',
     sizeClasses[size],
     resolvedVariant === 'primary' &&
       'bg-primary text-primary-foreground shadow-[var(--shadow-button)] hover:bg-primary/90 hover:shadow-[var(--shadow-button-hover)] active:shadow-[var(--shadow-button)]',
