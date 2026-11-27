@@ -11,6 +11,9 @@ import {
   Section,
   Textarea,
 } from '@/shared/components/ui'
+import { getApiErrorMessage } from '@/shared/api/axiosInstance'
+import { inquiriesApi } from '@/shared/api/inquiriesApi'
+import { useToast } from '@/shared/hooks/useToast'
 import {
   eventTypeOptions,
   formatOptions,
@@ -63,6 +66,7 @@ function validate(form: FormState): FormErrors {
 }
 
 export function SpeakingInvite() {
+  const { toast } = useToast()
   const [form, setForm] = useState<FormState>(emptyForm)
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitting, setSubmitting] = useState(false)
@@ -86,12 +90,26 @@ export function SpeakingInvite() {
 
     setSubmitting(true)
 
-    // TODO: Replace with a real speaking invitation API / backend endpoint.
-    await new Promise((resolve) => window.setTimeout(resolve, 700))
-
-    setSubmitting(false)
-    setSubmitted(true)
-    setForm(emptyForm)
+    try {
+      await inquiriesApi.submitSpeaking({
+        name: form.name.trim(),
+        organization: form.organization.trim(),
+        email: form.email.trim(),
+        eventType: form.eventType,
+        eventDate: form.eventDate,
+        audienceSize: form.audienceSize.trim(),
+        format: form.format,
+        location: form.location.trim(),
+        message: form.message.trim(),
+      })
+      setSubmitted(true)
+      setForm(emptyForm)
+      setErrors({})
+    } catch (error) {
+      toast(getApiErrorMessage(error, 'Could not send your inquiry. Please try again.'), 'danger')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (

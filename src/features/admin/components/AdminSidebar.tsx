@@ -7,6 +7,11 @@ import { IconButton } from '@/shared/components/ui'
 import { cn } from '@/shared/utils/cn'
 import { adminNavSections, isAdminNavVisible } from '../constants/adminNav'
 import { isNavPathActive, isNavSectionActive } from '../utils/navMatch'
+import {
+  profileDisplayName,
+  profileInitials,
+} from '@/features/admin/profile/profileDisplay'
+import { useAdminProfileModal } from './AdminProfileModalContext'
 import { ResponsiveDrawer } from './ResponsiveDrawer'
 import { SidebarMenuItem } from './SidebarMenuItem'
 import { SidebarSubmenu } from './SidebarSubmenu'
@@ -29,6 +34,9 @@ export function AdminSidebar({
   const location = useLocation()
   const pathname = location.pathname
   const brandTitleId = useId()
+  const { openProfile, profile } = useAdminProfileModal()
+  const displayName = profileDisplayName(profile)
+  const initials = profileInitials(profile)
 
   const visibleSections = useMemo(
     () =>
@@ -212,6 +220,17 @@ export function AdminSidebar({
                           />
                         </div>
                       </>
+                    ) : item.id === 'profile' ? (
+                      <SidebarMenuItem
+                        label={item.label}
+                        icon={item.icon}
+                        collapsed={collapsed}
+                        active={false}
+                        onClick={() => {
+                          closeMobile()
+                          openProfile()
+                        }}
+                      />
                     ) : (
                       <SidebarMenuItem
                         label={item.label}
@@ -263,10 +282,10 @@ export function AdminSidebar({
             className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[#e8f1f8] text-sm font-bold text-inverse"
             aria-hidden="true"
           >
-            A
+            {initials}
           </span>
           <div className="min-w-0 flex-1 leading-tight">
-            <p className="truncate text-sm font-bold text-inverse">ADMIN</p>
+            <p className="truncate text-sm font-bold uppercase text-inverse">{displayName}</p>
             <p className="truncate text-[0.6875rem] font-medium text-muted-foreground">
               Admin Dashboard
             </p>

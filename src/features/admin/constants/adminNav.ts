@@ -139,7 +139,6 @@ export const adminNavSections: AdminNavSection[] = [
         id: 'profile',
         label: 'My Profile',
         icon: User,
-        to: `${ADMIN_BASE}/profile`,
       },
       {
         id: 'logout',

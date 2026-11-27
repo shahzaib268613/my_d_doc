@@ -11,6 +11,9 @@ import {
   Section,
   Textarea,
 } from '@/shared/components/ui'
+import { getApiErrorMessage } from '@/shared/api/axiosInstance'
+import { inquiriesApi } from '@/shared/api/inquiriesApi'
+import { useToast } from '@/shared/hooks/useToast'
 import { cn } from '@/shared/utils/cn'
 import {
   budgetRangeOptions,
@@ -132,6 +135,7 @@ function RequiredMark() {
 }
 
 export function PartnershipInquiry() {
+  const { toast } = useToast()
   const [form, setForm] = useState<FormState>(emptyForm)
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<TouchedFields>({})
@@ -188,14 +192,25 @@ export function PartnershipInquiry() {
 
     setSubmitting(true)
 
-    // TODO: Replace with a real partnership inquiry API / backend endpoint.
-    await new Promise((resolve) => window.setTimeout(resolve, 700))
-
-    setSubmitting(false)
-    setSubmitted(true)
-    setForm(emptyForm)
-    setErrors({})
-    setTouched({})
+    try {
+      await inquiriesApi.submitPartnership({
+        name: form.name.trim(),
+        company: form.company.trim(),
+        email: form.email.trim(),
+        collaborationType: form.collaborationType,
+        budgetRange: form.budgetRange,
+        timeline: form.timeline.trim(),
+        message: form.message.trim(),
+      })
+      setSubmitted(true)
+      setForm(emptyForm)
+      setErrors({})
+      setTouched({})
+    } catch (error) {
+      toast(getApiErrorMessage(error, 'Could not send your inquiry. Please try again.'), 'danger')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function inputClass(hasError: boolean) {

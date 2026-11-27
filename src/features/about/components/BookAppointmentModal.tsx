@@ -15,6 +15,8 @@ import {
   X,
 } from 'lucide-react'
 import logoUrl from '@/shared/assets/logo.jpg'
+import { getApiErrorMessage } from '@/shared/api/axiosInstance'
+import { inquiriesApi } from '@/shared/api/inquiriesApi'
 import {
   FilterSelect,
   IconButton,
@@ -23,6 +25,7 @@ import {
   ReusableButton,
   Textarea,
 } from '@/shared/components/ui'
+import { useToast } from '@/shared/hooks/useToast'
 import { cn } from '@/shared/utils/cn'
 import {
   appointmentModalCopy,
@@ -164,6 +167,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 }
 
 export function BookAppointmentModal({ open, onClose }: Props) {
+  const { toast } = useToast()
   const titleId = useId()
   const descriptionId = useId()
   const formIds = {
@@ -303,12 +307,28 @@ export function BookAppointmentModal({ open, onClose }: Props) {
     }
 
     setSubmitting(true)
-    await new Promise((resolve) => window.setTimeout(resolve, 700))
-    setSubmitting(false)
-    setSubmitted(true)
-    setForm(emptyForm)
-    setErrors({})
-    setTouched({})
+
+    try {
+      await inquiriesApi.submitAppointment({
+        fullName: form.fullName.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        date: form.date,
+        preferredTime: form.preferredTime,
+        message: form.message.trim(),
+      })
+      setSubmitted(true)
+      setForm(emptyForm)
+      setErrors({})
+      setTouched({})
+    } catch (error) {
+      toast(
+        getApiErrorMessage(error, 'Could not submit your appointment request. Please try again.'),
+        'danger',
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function controlClass(hasError: boolean) {

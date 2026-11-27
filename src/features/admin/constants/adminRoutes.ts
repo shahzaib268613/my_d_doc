@@ -239,13 +239,6 @@ export const adminRouteDefs: AdminRouteDef[] = [
       ),
     },
   },
-  {
-    path: 'profile',
-    meta: {
-      title: 'My Profile',
-      breadcrumbs: crumb({ label: 'My Profile' }),
-    },
-  },
 ]
 
 function matchRoutePath(pattern: string, relative: string) {

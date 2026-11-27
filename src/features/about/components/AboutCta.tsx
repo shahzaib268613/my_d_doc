@@ -1,6 +1,7 @@
 import { ArrowUpRight, Phone } from 'lucide-react'
-import { clinicConfig } from '@/shared/config/clinic'
+import { toTelHref } from '@/shared/api/contactApi'
 import { ReusableButton, Container, Reveal, Section } from '@/shared/components/ui'
+import { usePublicContact } from '@/shared/hooks/usePublicContact'
 import { aboutCta } from '../constants/content'
 
 type Props = {
@@ -8,6 +9,9 @@ type Props = {
 }
 
 export function AboutCta({ onBookAppointment }: Props) {
+  const { contact } = usePublicContact()
+  const callHref = toTelHref(contact.phone)
+
   return (
     <Section>
       <Container>
@@ -33,7 +37,7 @@ export function AboutCta({ onBookAppointment }: Props) {
                   <ArrowUpRight className="size-4" aria-hidden="true" />
                 </ReusableButton>
                 <ReusableButton
-                  href={clinicConfig.phones.appointments.href}
+                  href={callHref}
                   size="lg"
                   className="rounded-lg border border-primary-foreground/40 bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/25"
                 >

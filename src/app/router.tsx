@@ -78,6 +78,8 @@ function adminElementForPath(path: string) {
     case 'newsletter/campaigns':
     case 'newsletter/campaigns/edit/:id':
       return <Navigate to="/admin/newsletter" replace />
+    case 'profile':
+      return <Navigate to="/admin" replace />
     default:
       return <AdminPlaceholderPage />
   }
