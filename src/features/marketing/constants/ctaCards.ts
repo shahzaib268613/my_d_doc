@@ -3,7 +3,7 @@ export const brandPartnershipsCta = {
   description:
     'Collaborate with a trusted endocrinology voice to educate audiences with clarity and credibility.',
   ctaLabel: 'Partner With Us',
-  to: '#',
+  to: '/brand-partnerships',
 } as const
 
 export const speakingEngagementsCta = {
